@@ -1,0 +1,58 @@
+.mat-card-actions {
+    margin: 25px 0px 10px 0px !important;
+  }
+  
+  .mat-header-row {
+    font-family: 'Open Sans', semibold;
+  }
+  
+  .mat-coloumn-matCellDef {
+    font-family: 'Open Sans', Regular;
+  }
+  
+  // centers the delete box icon in list
+  .delete-box {
+    margin-left: 10px;
+  }
+  // centers the preview icons
+  .center {
+    margin-left: 10px;
+  }
+  
+  /* desktop*/
+  @media screen and (max-width: 1920px) and (min-width: 1367px) {
+  }
+  
+  /* laptop*/
+  @media screen and (max-width: 1366px) and (min-width: 1025px) {
+    .priority-1 {
+      display: none;
+    }
+  
+    .priority-2 {
+      display: none;
+    }
+  
+    .mat-column-Status {
+      min-width: 85px;
+    }
+  
+    .mat-column-Title {
+      max-width: 335px;
+      padding-right: 10px;
+    }
+    //shortens padding left of table
+    td.mat-cell:first-of-type,
+    td.mat-footer-cell:first-of-type,
+    th.mat-header-cell:first-of-type {
+      padding-left: 10px !important;
+    }
+  
+    //removes right padding of table
+    td.mat-cell:last-of-type,
+    td.mat-footer-cell:last-of-type,
+    th.mat-header-cell:last-of-type {
+      padding: unset !important;
+    }
+  }
+  
