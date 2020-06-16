@@ -32,7 +32,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatInputModule} from '@angular/material/input';
 
 
-
+import { QuillModule } from 'ngx-quill';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
 
@@ -79,7 +79,15 @@ const mats=[
     MatButtonModule,
     LayoutModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    QuillModule.forRoot({
+      modules: {
+        syntax: true,
+        toolbar: true,
+        readonly:true
+      }
+    }
+    )
   ],
   exports:[mats,HttpClientModule],
   providers: [],

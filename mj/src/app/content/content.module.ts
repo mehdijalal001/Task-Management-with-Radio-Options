@@ -27,6 +27,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { OfficetasksComponent } from './components/tasks/officetasks/officetasks.component';
 import { HometasksComponent } from './components/tasks/hometasks/hometasks.component';
 import { OfficetaskformComponent } from './components/tasks/officetasks/officetaskform/officetaskform.component';
+import { QuillModule } from 'ngx-quill';
 
 
 
@@ -56,7 +57,9 @@ import { OfficetaskformComponent } from './components/tasks/officetasks/officeta
     MatCheckboxModule,
     FormsModule,
     ReactiveFormsModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    QuillModule.forRoot(),
+
   ],
   exports:[
     MatGridListModule,
