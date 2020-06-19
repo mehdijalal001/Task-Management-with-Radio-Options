@@ -7,7 +7,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import * as _moment from 'moment';
-import { DialogService } from '../../../../services/dialog.service';
+import { DialogService } from '../../../../../shared/services/dialog.service';
 import { OfficetasksService } from '../../../../services/officetasks.service';
 import { IOfficeTasks } from '../../../../models/tasks.model';
 
@@ -69,7 +69,7 @@ export class OfficetaskformComponent implements OnInit {
 
     this.sDate = new Date();
     this.taskForm = this._formBuilder.group({
-      OfficeTaskId: [0, null],
+      OfficeTaskID: [0, null],
       TaskName: ['', Validators.required],
       StartDate: ['', Validators.required],
       EndDate: ['', Validators.required],
@@ -83,11 +83,12 @@ export class OfficetaskformComponent implements OnInit {
     //----------for edit-----------------//
     this._activatedRoute.paramMap.subscribe(params => {
       //---in the route we created edit route we set id as param so we get it here---//
-      const OfficeTaskId = +params.get('officetaskid');
+      const OfficeTaskID = +params.get('officetaskid');
+      console.log('---------here-------');
       //console.log(OfficeTaskId);
-      if (OfficeTaskId) {
-        this.id = OfficeTaskId;
-        this.getTaskById(OfficeTaskId);
+      if (OfficeTaskID) {
+        this.id = OfficeTaskID;
+        this.getTaskById(OfficeTaskID);
       }
     });
   }
@@ -107,7 +108,7 @@ export class OfficetaskformComponent implements OnInit {
   }
   editTask(thetask: IOfficeTasks) {
     this.taskForm.patchValue({
-      OfficeTaskId: thetask[0].OfficeTaskId,
+      OfficeTaskID: thetask[0].OfficeTaskID,
       TaskName: thetask[0].TaskName,
       StartDate: thetask[0].StartDate,
       EndDate: thetask[0].EndDate,
@@ -119,10 +120,10 @@ export class OfficetaskformComponent implements OnInit {
   callNext(time) {
     setTimeout(() => {
       this._activatedRoute.paramMap.subscribe(params => {
-        const OfficeTaskId = +params.get('officetaskid');
-        if (OfficeTaskId) {
-          this.id = OfficeTaskId;
-          this.getTaskById(OfficeTaskId);
+        const OfficeTaskID = +params.get('officetaskid');
+        if (OfficeTaskID) {
+          this.id = OfficeTaskID;
+          this.getTaskById(OfficeTaskID);
         }
       });
     }, time);
@@ -130,6 +131,60 @@ export class OfficetaskformComponent implements OnInit {
 
   taskAction(){
     console.log('----action ----');
+    const result = this.taskForm.value;
+    console.log(result);
+    if(result.OfficeTaskID>0){
+      console.log('-----Update task-----');
+      this.taskService.updateTask(result, result.OfficeTaskID, '/officetasks/update/').subscribe(
+        res => {
+          if (res) {
+            this.dialogService.MessageBox('Updated', 'X', 100, 'SuccessMessage');
+            this.callNext(5000);
+          } else {
+            this.dialogService.MessageBox('Error updating record', 'X', 5000, 'ErrorMessage');
+          }
+        },
+        error => {
+          const res = this.dialogService.ErrorDialog(
+            'Server Error',
+            'Sorry, the system is unavailable at the moment.',
+            'Close',
+            'Try Again'
+          );
+          res.afterClosed().subscribe(dialogResult => {
+            if (dialogResult) {
+              this.callNext(200);
+            }
+          });
+        }
+      );
+    }else{
+      console.log('---------add task-------');
+      this.taskService.insertTask(result, '/officetasks/insert').subscribe(
+        res => {
+          if (res) {
+            console.log(res);
+            this.dialogService.MessageBox('Record inserted successfully', 'X', 3000, 'SuccessMessage');
+            this.dialogService.callRedirect('../tasks/officetasks/addtask/' + res, 4000);
+          } else {
+            this.dialogService.MessageBox('Error insert record', 'X', 5000, 'ErrorMessage');
+          }
+        },
+        error => {
+          const res = this.dialogService.ErrorDialog(
+            'Server Error',
+            'Sorry, the system is unavailable at the moment.',
+            'Close',
+            'Try Again'
+          );
+          res.afterClosed().subscribe(dialogResult => {
+            if (dialogResult) {
+              this.callNext(200);
+            }
+          });
+        }
+      );
+    }
   }
 
 }

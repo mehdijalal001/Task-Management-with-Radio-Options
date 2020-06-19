@@ -8,10 +8,12 @@ class OfficeTasksController implements IOfficeTasks {
         router.get('/', this.getAllTasks.bind(this));
         router.get('/current', this.getCurrentTasks.bind(this));
         router.get('/complete', this.getCompletedTasks.bind(this));
-        router.get('/:id', this.viewTasks.bind(this));
+        router.get('/view/:id', this.viewTasks.bind(this));
+        router.get('/:id', this.getTaskById.bind(this));
         router.post('/insert', this.insertTasks.bind(this));
         router.post('/update/:id', this.updateTasks.bind(this));
         router.delete('/:id', this.deleteTasks.bind(this));
+
     }
     
     getAllTasks(req: any, res: any, next: any): Promise<any> {
@@ -37,6 +39,16 @@ class OfficeTasksController implements IOfficeTasks {
     getCompletedTasks(req: any, res: any, next: any): Promise<any> {
         return this.service
         .getCompletedTasks(req, res, next)
+        .then(results =>{
+            res.json(results)
+            })
+            .catch(err => {
+                next(err);
+            });
+    }
+    getTaskById(req: any, res: any, next: any): Promise<any> {
+        return this.service
+        .getTaskById(req, res, next)
         .then(results =>{
             res.json(results)
             })

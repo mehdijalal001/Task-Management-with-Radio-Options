@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 
 //---------dialog------------------/
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CustomBox, DialogComponent } from '../shared/components/dialog/dialog.component';
-import { SnackbarComponent } from '../shared/components/snackbar/snackbar.component';
+import { CustomBox, DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { MysnackbarComponent } from '../../shared/components/mysnackbar/mysnackbar.component';
 @Injectable({
   providedIn: 'root'
 })
@@ -20,7 +20,7 @@ export class DialogService {
     //   panelClass: [BoxColorClass]
     // });
     // use custom snackbar to have icon
-    this._snackBar.openFromComponent(SnackbarComponent, {
+    this._snackBar.openFromComponent(MysnackbarComponent, {
       data: {
         message: message
       },

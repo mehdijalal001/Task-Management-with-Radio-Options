@@ -7,11 +7,7 @@ import { AppComponent } from './app.component';
 import {HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule} from '@angular/forms';
 
-import { PostsComponent } from './content/components/posts/posts.component';
-import { DefaultComponent } from './default/default.component';
-import {DashboardsComponent} from './content/components/dashboards/dashboards.component';
-import {DialogComponent} from './content/shared/components/dialog/dialog.component';
-import {SnackbarComponent} from './content/shared/components/snackbar/snackbar.component';
+
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatSidenavModule} from '@angular/material/sidenav';
@@ -30,11 +26,21 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatInputModule} from '@angular/material/input';
+import { MAT_SNACK_BAR_DATA, MatSnackBarRef, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+
+
+
 
 
 import { QuillModule } from 'ngx-quill';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
+
+import { PostsComponent } from './content/components/posts/posts.component';
+import { DefaultComponent } from './default/default.component';
+import {DashboardsComponent} from './content/components/dashboards/dashboards.component';
+import {DialogComponent} from './shared/components/dialog/dialog.component';
+import {MysnackbarComponent} from './shared/components/mysnackbar/mysnackbar.component';
 
 const mats=[
   BrowserAnimationsModule,
@@ -64,7 +70,7 @@ const mats=[
     DefaultComponent,
     DashboardsComponent,
     DialogComponent,
-    SnackbarComponent
+    MysnackbarComponent
   ],
   imports: [
     BrowserModule,
@@ -90,8 +96,12 @@ const mats=[
     )
   ],
   exports:[mats,HttpClientModule],
-  providers: [],
-  entryComponents:[DialogComponent],
+  providers: [
+    { provide: MAT_SNACK_BAR_DATA, useValue: {} },
+    { provide: MatSnackBarRef, useValue: {} },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 3000, verticalPosition: 'top' } }
+  ],
+  entryComponents:[DialogComponent,MysnackbarComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

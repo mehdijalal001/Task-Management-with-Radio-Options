@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 
 
 import { OfficetasksService } from '../../../services/officetasks.service';
-import { DialogService } from '../../../services/dialog.service';
+import { DialogService } from '../../../../shared/services/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IOfficeTasks } from '../../../models/tasks.model';
 

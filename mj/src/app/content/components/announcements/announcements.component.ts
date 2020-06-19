@@ -11,11 +11,11 @@ import { IAnnouncement } from '../../models/announcement.model';
 import { Router } from '@angular/router';
 //import { AnnouncementListData, AnnouncementlistpopComponent } from '../announcements/announcementlistpop/announcementlistpop.component';
 //import { AnnouncementData, AnnouncementpreboxComponent } from '../announcements/announcementprebox/announcementprebox.component';
-import { DialogService } from '../../services/dialog.service';
+import { DialogService } from '../../../shared/services/dialog.service';
 @Component({
   selector: 'app-announcements',
   templateUrl: './announcements.component.html',
-  styleUrls: ['../../shared/css/liststyle.scss','./announcements.component.scss']
+  styleUrls: ['../../../shared/css/liststyle.scss','./announcements.component.scss']
 })
 export class AnnouncementsComponent implements OnInit {
 

@@ -17,6 +17,7 @@ export class OfficeTasks {
   public Stage: string = '';
   public Percentage:number = 0;
   public Status:number = 0;
+  public Description:string = '';
 
 
   constructor() {}
@@ -32,6 +33,7 @@ export class OfficeTasks {
     dataModel.Stage = row.Stage;
     dataModel.Percentage = row.Percentage;
     dataModel.Status = row.Status;
+    dataModel.Description = row.Description;
  
     //announcement.ModifiedDate = DataFormatter.DateToString(row.ModifiedDate);
 

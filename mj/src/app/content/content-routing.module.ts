@@ -20,6 +20,9 @@ const routes: Routes = [
           },
           {
             path:'addtask',component:OfficetaskformComponent
+          },
+          {
+            path:'addtask/:officetaskid',component:OfficetaskformComponent
           }
         ]
       },

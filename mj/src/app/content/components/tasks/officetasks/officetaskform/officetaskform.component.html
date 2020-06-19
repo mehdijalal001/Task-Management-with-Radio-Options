@@ -52,7 +52,8 @@
                       </div>
                     </div>
                     <div class="row-five">
-                      <button mat-raised-button color="info" [routerLink]="['./officetasks']" class="mjbuttons" type="button">Cancel</button>
+                      <button mat-raised-button color="info" *ngIf="id>0" [routerLink]="['../../../officetasks']" class="mjbuttons" type="button">Cancel</button>
+                      <button mat-raised-button color="info" *ngIf="id<=0" [routerLink]="['../../officetasks']" class="mjbuttons" type="button">Cancel</button>
                       <button mat-raised-button color="primary" type="submit" class="mjbuttons">Save</button>
                     </div>
                 </form>

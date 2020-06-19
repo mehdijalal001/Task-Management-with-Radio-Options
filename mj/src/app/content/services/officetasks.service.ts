@@ -23,15 +23,29 @@ export class OfficetasksService {
   getAllTasks(urn: string) {
     return this.http.get(this.baseurl + urn);
   }
-  getAll(urn: string) {
-    return this.http.get(this.baseurl + urn);
-  }
-
   getTaskById(id: number, urn: string){
     try {
       return this.http.get(this.baseurl + urn + id);
     } catch (err) {
       console.log('---------Unexpected error occured-------');
+    }
+  }
+
+  insertTask(formdata: any, urn: string) {
+    try {
+      return this.http.post(this.baseurl + urn, formdata);
+    } catch (err) {
+      console.log('-------Error occurred posting----' + err);
+    }
+  }
+
+  updateTask(formdata: any, id: number, urn: string) {
+    try {
+      return this.http.post(this.baseurl + urn + id, formdata);
+      //.subscribe(result => console.log(result));
+    } catch (err) {
+      //this.handleError(err);
+      console.log(err);
     }
   }
   // getById(id: number,urn:string): Observable<IAnnouncement> {

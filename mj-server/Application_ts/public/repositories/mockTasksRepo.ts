@@ -11,6 +11,9 @@ export class MockTasksRepo implements IOfficeTasks {
     getCompletedTasks(): Promise<any> {
         throw new Error('Method not implemented.');
     }
+    getTaskById(): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
     viewTasks(): Promise<any> {
         throw new Error('Method not implemented.');
     }

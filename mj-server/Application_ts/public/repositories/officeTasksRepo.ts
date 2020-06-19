@@ -1,4 +1,4 @@
-import * as sql from 'mssql';
+//import * as sql from 'mssql';
 
 import { LogErrors } from '../common/logErrors.controller';
 import { IOfficeTasks } from '../interfaces/iOfficeTasks';
@@ -24,7 +24,7 @@ export class OfficeTasksRepo implements IOfficeTasks {
     let provider = new SQLDBProvider();
     let inputParameters: any[] = [];
     let CustomQuery = `SELECT ts.* 
-    FROM OfficeTasks AS ts `;
+    FROM MJ.OfficeTasks AS ts `;
     await provider
       .executeQuery(CustomQuery)
       .then(results => {
@@ -43,6 +43,28 @@ export class OfficeTasksRepo implements IOfficeTasks {
   public async getCompletedTasks(req:any,res:any,next:any): Promise<any> {}
 
 
+  public async getTaskById(req:any,res:any,next:any): Promise<any> {
+    let provider = new SQLDBProvider();
+    let modelData: OfficeTasks = new OfficeTasks();
+    let id = req.params.id;
+
+    let inputParameters = [{ name: 'id', dataType: sql.Int, value: id }];
+    let CustomQuery = `SELECT ts.*
+    FROM MJ.OfficeTasks  AS ts 
+    WHERE ts.OfficeTaskID = @id;`;
+    await provider
+      .executeQuery(CustomQuery, inputParameters)
+      .then(results => {
+        if (results) {
+            modelData = OfficeTasks.MapDBToObject(results.recordset[0]);
+        }
+      })
+      .catch(err => {
+        return LogErrors.logErrors(err);
+      });
+
+    return [modelData];
+  }
   public async viewTasks(req:any,res:any,next:any): Promise<any> {
     let provider = new SQLDBProvider();
     let modelData: OfficeTasks = new OfficeTasks();
@@ -68,35 +90,36 @@ export class OfficeTasksRepo implements IOfficeTasks {
   }
 
   public async insertTasks(req:any,res:any){
+    console.log('-----inserting--------');
     //let returnValue: boolean = true;
     let body = req.body;
     console.log(body);
-    let CreatedBy = req.authInfo.name;
-    let ModifiedBy = req.authInfo.name;
+    //let CreatedBy = req.authInfo.name;
+    //let ModifiedBy = req.authInfo.name;
+    let CreatedBy = 'Mehdi Jalal';
+    let ModifiedBy = 'Mehdi Jalal';
     let CreatedDate = new Date();
     let ModifiedDate = new Date();
-    let PublishedFrom = new Date(DataFormatter.formatDate(body.PublishedFrom));
-    let PublishedTo = new Date(DataFormatter.formatDate(body.PublishedTo));
+    let StartDate = new Date(DataFormatter.formatDate(body.StartDate));
+    let EndDate = new Date(DataFormatter.formatDate(body.EndDate));
 
     let provider = new SQLDBProvider();
 
     let inputParameters = [
-      { name: 'Priority', dataType: sql.Int, value: body.Priority },
-      { name: 'Title', dataType: sql.VarChar, value: body.Title },
-      { name: 'StatusID', dataType: sql.Int, value: 1 },
-      { name: 'PublishedFrom', dataType: sql.DateTime, value: PublishedFrom },
-      { name: 'PublishedTo', dataType: sql.DateTime, value: PublishedTo },
-      { name: 'AnnouncementContent', dataType: sql.VarChar, value: body.AnnouncementContent },
+      { name: 'TaskName', dataType: sql.VarChar, value: body.TaskName },
+      { name: 'StartDate', dataType: sql.DateTime, value: StartDate },
+      { name: 'EndDate', dataType: sql.DateTime, value: EndDate },
+      { name: 'Description', dataType: sql.VarChar, value: body.Description },
       { name: 'CreatedDate', dataType: sql.DateTime, value: CreatedDate },
       { name: 'ModifiedDate', dataType: sql.DateTime, value: ModifiedDate },
       { name: 'CreatedBy', dataType: sql.VarChar, value: CreatedBy },
       { name: 'ModifiedBy', dataType: sql.VarChar, value: ModifiedBy }
 
     ];
-    let CustomQuery = `INSERT INTO IAP.AA_Announcement 
-    (Priority, PublishedFrom, PublishedTo, Title, AnnouncementContent, StatusID, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy)
+    let CustomQuery = `INSERT INTO MJ.OfficeTasks
+    (TaskName, StartDate, EndDate, Description, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy)
      VALUES 
-    (@Priority, @PublishedFrom, @PublishedTo, @Title, @AnnouncementContent, @StatusID, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy); SELECT @@IDENTITY AS id`;
+    (@TaskName, @StartDate, @EndDate, @Description, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy); SELECT @@IDENTITY AS id`;
 
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
        LogErrors.logErrors(err);
@@ -113,35 +136,33 @@ export class OfficeTasksRepo implements IOfficeTasks {
   public async updateTasks(req:any,res:any){
     //let returnValue: boolean = true;
     let body = req.body;
-    let ModifiedBy = req.authInfo.name;
+    //console.log(body);
+    let ModifiedBy = 'Mehdi Jalal';
+    //let ModifiedBy = req.authInfo.name;
     let ModifiedDate = new Date();
-    let PublishedFrom = new Date(DataFormatter.formatDate(body.PublishedFrom));
-    let PublishedTo = new Date(DataFormatter.formatDate(body.PublishedTo));
+    let StartDate = new Date(DataFormatter.formatDate(body.StartDate));
+    let EndDate = new Date(DataFormatter.formatDate(body.EndDate));
 
     let provider = new SQLDBProvider();
 
     let inputParameters = [
-      { name: 'AnnouncementID', dataType: sql.VarChar, value: body.AnnouncementID },
-      { name: 'Priority', dataType: sql.Int, value: body.Priority },
-      { name: 'Title', dataType: sql.VarChar, value: body.Title },
-      { name: 'StatusID', dataType: sql.Int, value: 1 },
-      { name: 'PublishedFrom', dataType: sql.DateTime, value: PublishedFrom },
-      { name: 'PublishedTo', dataType: sql.DateTime, value: PublishedTo },
-      { name: 'AnnouncementContent', dataType: sql.VarChar, value: body.AnnouncementContent },
+      { name: 'OfficeTaskID', dataType: sql.VarChar, value: body.OfficeTaskID },
+      { name: 'TaskName', dataType: sql.VarChar, value: body.TaskName },
+      { name: 'StartDate', dataType: sql.DateTime, value: StartDate },
+      { name: 'EndDate', dataType: sql.DateTime, value: EndDate },
+      { name: 'Description', dataType: sql.VarChar, value: body.Description },
       { name: 'ModifiedDate', dataType: sql.DateTime, value: ModifiedDate },
       { name: 'ModifiedBy', dataType: sql.VarChar, value: ModifiedBy }
 
   ];
-    let CustomQuery = `UPDATE IAP.AA_Announcement 
-    SET Priority = @Priority, 
-        PublishedFrom = @PublishedFrom, 
-        PublishedTo = @PublishedTo, 
-        Title = @Title, 
-        AnnouncementContent = @AnnouncementContent, 
-        StatusID = @StatusID,
+    let CustomQuery = `UPDATE MJ.OfficeTasks
+    SET TaskName = @TaskName,
+        StartDate = @StartDate, 
+        EndDate = @EndDate, 
+        Description = @Description, 
         ModifiedDate = @ModifiedDate,
         ModifiedBy = @ModifiedBy
-     WHERE AnnouncementID = @AnnouncementID`;
+     WHERE OfficeTaskID = @OfficeTaskID`;
 
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
       return LogErrors.logErrors(err);
