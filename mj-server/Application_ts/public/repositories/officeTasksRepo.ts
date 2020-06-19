@@ -1,10 +1,10 @@
-//import * as sql from 'mssql';
+import {TYPES} from 'mssql';
 
 import { LogErrors } from '../common/logErrors.controller';
 import { IOfficeTasks } from '../interfaces/iOfficeTasks';
 import { OfficeTasks } from '../models/officetasks';
 import { DataFormatter } from '../providers/dataFormatter/dbFormatData';
-import { SQLDBProvider } from '../providers/dbProvider/sqlDBPovider';
+import { SQLDBProvider } from '../providers/dbProvider/sqlDBProvider';
 
 // The repository class implements the calls to the database.
 // The repository class's responsabilities are the following:
@@ -24,7 +24,8 @@ export class OfficeTasksRepo implements IOfficeTasks {
     let provider = new SQLDBProvider();
     let inputParameters: any[] = [];
     let CustomQuery = `SELECT ts.* 
-    FROM MJ.OfficeTasks AS ts `;
+    FROM MJ.OfficeTasks AS ts
+    ORDER BY ts.OfficeTaskID DESC`;
     await provider
       .executeQuery(CustomQuery)
       .then(results => {
@@ -48,7 +49,7 @@ export class OfficeTasksRepo implements IOfficeTasks {
     let modelData: OfficeTasks = new OfficeTasks();
     let id = req.params.id;
 
-    let inputParameters = [{ name: 'id', dataType: sql.Int, value: id }];
+    let inputParameters = [{ name: 'id', dataType: TYPES.Int, value: id }];
     let CustomQuery = `SELECT ts.*
     FROM MJ.OfficeTasks  AS ts 
     WHERE ts.OfficeTaskID = @id;`;
@@ -70,7 +71,7 @@ export class OfficeTasksRepo implements IOfficeTasks {
     let modelData: OfficeTasks = new OfficeTasks();
     let id = req.params.id;
 
-    let inputParameters = [{ name: 'id', dataType: sql.Int, value: id }];
+    let inputParameters = [{ name: 'id', dataType: TYPES.Int, value: id }];
     let CustomQuery = `SELECT nf.*, st.Name
     FROM IAP.AA_Announcement  AS nf 
     LEFT JOIN IAP.AA_Lookup_Status AS st ON nf.StatusID = st.ID
@@ -106,14 +107,14 @@ export class OfficeTasksRepo implements IOfficeTasks {
     let provider = new SQLDBProvider();
 
     let inputParameters = [
-      { name: 'TaskName', dataType: sql.VarChar, value: body.TaskName },
-      { name: 'StartDate', dataType: sql.DateTime, value: StartDate },
-      { name: 'EndDate', dataType: sql.DateTime, value: EndDate },
-      { name: 'Description', dataType: sql.VarChar, value: body.Description },
-      { name: 'CreatedDate', dataType: sql.DateTime, value: CreatedDate },
-      { name: 'ModifiedDate', dataType: sql.DateTime, value: ModifiedDate },
-      { name: 'CreatedBy', dataType: sql.VarChar, value: CreatedBy },
-      { name: 'ModifiedBy', dataType: sql.VarChar, value: ModifiedBy }
+      { name: 'TaskName', dataType: TYPES.VarChar, value: body.TaskName },
+      { name: 'StartDate', dataType: TYPES.DateTime, value: StartDate },
+      { name: 'EndDate', dataType: TYPES.DateTime, value: EndDate },
+      { name: 'Description', dataType: TYPES.VarChar, value: body.Description },
+      { name: 'CreatedDate', dataType: TYPES.DateTime, value: CreatedDate },
+      { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
+      { name: 'CreatedBy', dataType: TYPES.VarChar, value: CreatedBy },
+      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy }
 
     ];
     let CustomQuery = `INSERT INTO MJ.OfficeTasks
@@ -146,13 +147,13 @@ export class OfficeTasksRepo implements IOfficeTasks {
     let provider = new SQLDBProvider();
 
     let inputParameters = [
-      { name: 'OfficeTaskID', dataType: sql.VarChar, value: body.OfficeTaskID },
-      { name: 'TaskName', dataType: sql.VarChar, value: body.TaskName },
-      { name: 'StartDate', dataType: sql.DateTime, value: StartDate },
-      { name: 'EndDate', dataType: sql.DateTime, value: EndDate },
-      { name: 'Description', dataType: sql.VarChar, value: body.Description },
-      { name: 'ModifiedDate', dataType: sql.DateTime, value: ModifiedDate },
-      { name: 'ModifiedBy', dataType: sql.VarChar, value: ModifiedBy }
+      { name: 'OfficeTaskID', dataType: TYPES.VarChar, value: body.OfficeTaskID },
+      { name: 'TaskName', dataType: TYPES.VarChar, value: body.TaskName },
+      { name: 'StartDate', dataType: TYPES.DateTime, value: StartDate },
+      { name: 'EndDate', dataType: TYPES.DateTime, value: EndDate },
+      { name: 'Description', dataType: TYPES.VarChar, value: body.Description },
+      { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
+      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy }
 
   ];
     let CustomQuery = `UPDATE MJ.OfficeTasks
@@ -179,7 +180,7 @@ export class OfficeTasksRepo implements IOfficeTasks {
   public async deleteTasks(req:any,res:any,next:any): Promise<boolean> {
     let provider = new SQLDBProvider();
     let id = req.params.id;
-    let inputParameters = [{ name: 'AnnouncementID', dataType: sql.Int, value: id }];
+    let inputParameters = [{ name: 'AnnouncementID', dataType: TYPES.Int, value: id }];
     let CustomQuery = `DELETE FROM IAP.AA_Announcement WHERE AnnouncementID = @AnnouncementID`;
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
       return LogErrors.logErrors(err);
