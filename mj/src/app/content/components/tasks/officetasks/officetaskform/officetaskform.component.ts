@@ -12,7 +12,6 @@ import { OfficetasksService } from '../../../../services/officetasks.service';
 import { IOfficeTasks } from '../../../../models/tasks.model';
 
 
-
 //const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
   parse: {
@@ -164,8 +163,10 @@ export class OfficetaskformComponent implements OnInit {
         res => {
           if (res) {
             console.log(res);
-            this.dialogService.MessageBox('Record inserted successfully', 'X', 3000, 'SuccessMessage');
-            this.dialogService.callRedirect('../tasks/officetasks/addtask/' + res, 4000);
+            this.dialogService.callRedirect('../tasks/officetasks', 1);
+            this.dialogService.MessageBox('Record inserted successfully', 'X', 6000, 'SuccessMessage');
+
+            //this.dialogService.callRedirect('../tasks/officetasks/addtask/' + res, 4000);
           } else {
             this.dialogService.MessageBox('Error insert record', 'X', 5000, 'ErrorMessage');
           }
@@ -186,5 +187,7 @@ export class OfficetaskformComponent implements OnInit {
       );
     }
   }
+
+
 
 }

@@ -91,11 +91,35 @@ export class OfficeTaskService implements IOfficeTasks {
         });
         return modelClass;
     }
+    async updateStatus(req: any, res: any, next: any): Promise<any>  {
+        let modelClass = new OfficeTasks();
+        await this.repo
+        .updateStatus(req,res,next)
+        .then(result => {
+            modelClass = result;
+        })
+        .catch(err => {
+            next(err);
+        });
+        return modelClass;
+    }
     
     async deleteTasks(req: any, res: any, next: any): Promise<any> {
         let bIsSuccess = false;
         await this.repo
         .deleteTasks(req,res,next)
+        .then(result => {
+            bIsSuccess = true;
+        })
+        .catch(err => {
+            next(err);
+        });
+        return bIsSuccess;
+    }
+    async deleteAll(req: any, res: any, next: any): Promise<any> {
+        let bIsSuccess = false;
+        await this.repo
+        .deleteAll(req,res,next)
         .then(result => {
             bIsSuccess = true;
         })

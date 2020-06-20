@@ -71,6 +71,7 @@ const mats=[
     DashboardsComponent,
     DialogComponent,
     MysnackbarComponent
+    
   ],
   imports: [
     BrowserModule,

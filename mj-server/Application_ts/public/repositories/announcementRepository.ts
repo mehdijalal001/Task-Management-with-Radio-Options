@@ -3,7 +3,7 @@ import { LogErrors } from '../common/logErrors.controller';
 import { IAnnouncementRepository } from '../interfaces/iAnnouncementRepository';
 import { Announcement } from '../models/announcement';
 import { DataFormatter } from '../providers/dataFormatter/dbFormatData';
-import { SQLDBProvider } from '../providers/dbProvider/sqlDBPovider';
+import { SQLDBProvider } from '../providers/dbProvider/sqlDBProvider';
 
 // The repository class implements the calls to the database.
 // The repository class's responsabilities are the following:

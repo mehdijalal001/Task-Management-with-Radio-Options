@@ -34,12 +34,9 @@ export class OfficetasksComponent implements OnInit {
 
   displayedColumns: string[] = [
     'select',
-    'taskid',
     'taskname', 
-    'duration', 
     'startdate',
     'enddate',
-    'percentage',
     'status',
     'actions'
     ];
@@ -94,11 +91,6 @@ export class OfficetasksComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  callNext(timeout) {
-    setTimeout(() => {
-      this.refreshData();
-    }, timeout);
-  }
 
   /*----Work to be done as planned-----*/
   callRedirect(route, time) {
@@ -109,6 +101,7 @@ export class OfficetasksComponent implements OnInit {
 
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {
+     
       const numSelected = this.selection.selected.length;
       const numRows = this.dataSource.data.length;
       return numSelected === numRows;
@@ -129,8 +122,123 @@ export class OfficetasksComponent implements OnInit {
       return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
     }
 
-    deleteTask(taksId){
-      console.log(taksId);
+    deleteTask(TaskId){
+      console.log(TaskId);
+      const result = this.dialogService.openDialog(TaskId, 'Confirm Action', 'Are you sure you want to delete?', 'Cancel', 'Delete Now');
+      result.afterClosed().subscribe(dialogResult => {
+        if (dialogResult) {
+          this.deleteTaskById(TaskId);
+        }
+      });
+    }
+
+    deleteTaskById(TaskId){
+      if(TaskId>0){
+        this.taskservice.deleteTaskById(TaskId, '/officetasks/').subscribe(
+          res => {
+            if (res) {
+              this.dialogService.MessageBox('Deleted', 'X', 4000, 'SuccessMessage');
+              this.callNext(1);
+            } else {
+              this.dialogService.MessageBox('Error Deleting', 'X', 5000, 'ErrorMessage');
+            }
+          },
+          error => {
+            const res = this.dialogService.ErrorDialog(
+              'Server Error',
+              'Sorry, the system is unavailable at the moment.',
+              'Close',
+              'Try Again'
+            );
+            res.afterClosed().subscribe(dialogResult => {
+              if (dialogResult) {
+                this.callNext(200);
+              }
+            });
+          }
+        );
+      }
+    }
+    //------Next call--------//
+ 
+    callNext(timeout) {
+      setTimeout(() => {
+        this.refreshData();
+      }, timeout);
+    }
+
+    updateStatus(id:any,event:any){
+      console.log(id);
+      console.log(event.checked);
+      let status = event.checked;
+
+      if(id>0){
+        console.log('-----Update task-----');
+        const result = {"OfficeTaskID":id,"Status":status};
+        this.taskservice.updateStatus(result, id, '/officetasks/updatestatus/').subscribe(
+          res => {
+            if (res) {
+              this.dialogService.MessageBox('Updated', 'X', 100, 'SuccessMessage');
+              //this.callNext(1000);
+            } else {
+              this.dialogService.MessageBox('Error updating record', 'X', 5000, 'ErrorMessage');
+            }
+          },
+          error => {
+            const res = this.dialogService.ErrorDialog(
+              'Server Error',
+              'Sorry, the system is unavailable at the moment.',
+              'Close',
+              'Try Again'
+            );
+            res.afterClosed().subscribe(dialogResult => {
+              if (dialogResult) {
+                this.callNext(200);
+              }
+            });
+          }
+        );
+      }
+    }
+  
+    deleteAllSelectedTasks(){
+      console.log('-----deleting all selection---');
+      let sel = this.selection.selected;
+      const result = this.dialogService.openDialog(sel, 'Confirm Action', 'Are you sure you want to delete?', 'Cancel', 'Delete Now');
+      result.afterClosed().subscribe(dialogResult => {
+        if (dialogResult) {
+          this.deleteAll(sel);
+        }
+      });
+    }
+    deleteAll(list){
+      let lng = list.length;
+   
+      if (lng > 0) {
+        this.taskservice.deleteAll(list,'/officetasks/deleteall').subscribe(
+          res => {
+            if (res) {
+              this.dialogService.MessageBox('Deleted', 'X', 4000, 'SuccessMessage');
+              this.callNext(1);
+            } else {
+              this.dialogService.MessageBox('Error Deleting', 'X', 5000, 'ErrorMessage');
+            }
+          },
+          error => {
+            const res = this.dialogService.ErrorDialog(
+              'Server Error',
+              'Sorry, the system is unavailable at the moment.',
+              'Close',
+              'Try Again'
+            );
+            res.afterClosed().subscribe(dialogResult => {
+              if (dialogResult) {
+                this.callNext(200);
+              }
+            });
+          }
+        );
+      }
     }
 
 }

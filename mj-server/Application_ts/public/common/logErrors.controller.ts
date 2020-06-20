@@ -1,6 +1,6 @@
 import * as sql from 'mssql';
 
-import { SQLDBProvider } from '../providers/dbProvider/sqlDBPovider';
+import { SQLDBProvider } from '../providers/dbProvider/sqlDBProvider';
 
 // This class static method is used to log the application's errors into the database.
 

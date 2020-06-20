@@ -1,4 +1,4 @@
-import { SQLDBProvider } from '../providers/dbProvider/sqlDBPovider';
+import { SQLDBProvider } from '../providers/dbProvider/sqlDBProvider';
 import { ILookupRepository } from "../interfaces/iLookupRepository";
 import { Lookup } from '../models/lookup';
 import { LogErrors } from '../common/logErrors.controller';

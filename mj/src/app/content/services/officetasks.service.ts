@@ -39,6 +39,15 @@ export class OfficetasksService {
     }
   }
 
+  updateStatus(formdata: any, id: number, urn: string) {
+    try {
+      return this.http.post(this.baseurl + urn + id, formdata);
+      //.subscribe(result => console.log(result));
+    } catch (err) {
+      //this.handleError(err);
+      console.log(err);
+    }
+  }
   updateTask(formdata: any, id: number, urn: string) {
     try {
       return this.http.post(this.baseurl + urn + id, formdata);
@@ -48,13 +57,6 @@ export class OfficetasksService {
       console.log(err);
     }
   }
-  // getById(id: number,urn:string): Observable<IAnnouncement> {
-  //   try{
-  //     return this.http.get<IAnnouncement>(this.baseurl + urn + id);
-  //   }catch(err){
-  //     console.log('---------Unexpected error occured-------');
-  //   }
-  // }
 
   insertRecord(formdata: any, urn: string) {
     try {
@@ -72,20 +74,17 @@ export class OfficetasksService {
       console.log(err);
     }
   }
-  archiveRecord(formdata: any, id: number, urn: string) {
-    try {
-      return this.http.post(this.baseurl + urn + id, formdata);
-      //.subscribe(result => console.log(result));
-    } catch (err) {
-      //this.handleError(err);
-      console.log(err);
-    }
-  }
-  deleteRecord(id, urn: string) {
+  //---delete task------//
+  deleteTaskById(id, urn: string) {
     return this.http.delete(this.baseurl + urn + id, {
       headers: {},
-      params: { announcementid: id }
+      params: { TaskId: id }
     });
+  }
+
+  deleteAll(list:any,uri:string) {
+    console.log('---delete is called----');
+    return this.http.post(this.baseurl + uri,list);
   }
 
   // private handleError(err: HttpErrorResponse) {

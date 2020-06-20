@@ -1,5 +1,5 @@
 import * as sql from 'mssql';
-import { SQLDBProvider } from '../providers/dbProvider/sqlDBPovider';
+import { SQLDBProvider } from '../providers/dbProvider/sqlDBProvider';
 import { LogErrors } from '../common/logErrors.controller';
 import { IAuthenticationRepository } from '../interfaces/iAuthenticationRepository';
 import { Authentication } from '../models/authentication';

@@ -3,7 +3,7 @@ import { LogErrors } from '../common/logErrors.controller';
 import { INewsFeedRepository } from '../interfaces/iNewsFeedRepository';
 import { NewsFeed } from '../models/newsfeed';
 import { DataFormatter } from '../providers/dataFormatter/dbFormatData';
-import { SQLDBProvider } from '../providers/dbProvider/sqlDBPovider';
+import { SQLDBProvider } from '../providers/dbProvider/sqlDBProvider';
 
 
 // The repository class implements the calls to the database.

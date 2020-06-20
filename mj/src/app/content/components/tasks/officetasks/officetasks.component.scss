@@ -30,4 +30,14 @@ table {
 }
 .taskaction-box{
   margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  
+}
+.delete-box:hover{
+  color:  #ee3030;
+}
+.mat-row:hover {
+  /*background-color: red;*/
+  cursor: pointer;
 }

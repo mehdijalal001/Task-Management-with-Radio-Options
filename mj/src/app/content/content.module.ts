@@ -22,6 +22,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { QuillModule } from 'ngx-quill';
+import { ReplacePipe } from './shared/pipes/replace-pipes';
+
 
 import { OfficetasksComponent } from './components/tasks/officetasks/officetasks.component';
 import { HometasksComponent } from './components/tasks/hometasks/hometasks.component';
@@ -31,16 +33,16 @@ import { AdminComponent } from './components/admin/admin.component';
 import { UsersComponent } from './components/admin/users/users.component';
 
 
-
-
-
-
-
-
-
-
 @NgModule({
-  declarations: [AdminComponent, UsersComponent, AnnouncementsComponent, OfficetasksComponent, HometasksComponent, OfficetaskformComponent],
+  declarations: [
+    AdminComponent, 
+    UsersComponent, 
+    AnnouncementsComponent, 
+    OfficetasksComponent, 
+    HometasksComponent, 
+    OfficetaskformComponent,
+    ReplacePipe
+  ],
   imports: [
     CommonModule,
     ContentRoutingModule,

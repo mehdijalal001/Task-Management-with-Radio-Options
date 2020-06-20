@@ -12,6 +12,8 @@ class OfficeTasksController implements IOfficeTasks {
         router.get('/:id', this.getTaskById.bind(this));
         router.post('/insert', this.insertTasks.bind(this));
         router.post('/update/:id', this.updateTasks.bind(this));
+        router.post('/updatestatus/:id', this.updateStatus.bind(this));
+        router.post('/deleteall', this.deleteAll.bind(this));
         router.delete('/:id', this.deleteTasks.bind(this));
 
     }
@@ -83,11 +85,27 @@ class OfficeTasksController implements IOfficeTasks {
             next(err);
         });
     }
+    updateStatus(req: any, res: any, next: any):  Promise<any> {
+        return this.service
+        .updateStatus(req, res, next)
+        .then(results => res.json(results))
+        .catch(err => {
+            next(err);
+        });
+    }
 
 
     deleteTasks(req: any, res: any, next: any): Promise<any> {
         return this.service
         .deleteTasks(req, res, next)
+        .then(results => res.json(results))
+        .catch(err => {
+            next(err);
+        });
+    }
+    deleteAll(req: any, res: any, next: any): Promise<any> {
+        return this.service
+        .deleteAll(req, res, next)
         .then(results => res.json(results))
         .catch(err => {
             next(err);

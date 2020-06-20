@@ -137,7 +137,7 @@ export class OfficeTasksRepo implements IOfficeTasks {
   public async updateTasks(req:any,res:any){
     //let returnValue: boolean = true;
     let body = req.body;
-    //console.log(body);
+    console.log(body);
     let ModifiedBy = 'Mehdi Jalal';
     //let ModifiedBy = req.authInfo.name;
     let ModifiedDate = new Date();
@@ -152,6 +152,7 @@ export class OfficeTasksRepo implements IOfficeTasks {
       { name: 'StartDate', dataType: TYPES.DateTime, value: StartDate },
       { name: 'EndDate', dataType: TYPES.DateTime, value: EndDate },
       { name: 'Description', dataType: TYPES.VarChar, value: body.Description },
+      { name: 'Status', dataType: TYPES.VarChar, value: body.Status },
       { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
       { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy }
 
@@ -161,6 +162,40 @@ export class OfficeTasksRepo implements IOfficeTasks {
         StartDate = @StartDate, 
         EndDate = @EndDate, 
         Description = @Description, 
+        Status = @Status, 
+        ModifiedDate = @ModifiedDate,
+        ModifiedBy = @ModifiedBy
+     WHERE OfficeTaskID = @OfficeTaskID`;
+
+    const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
+      return LogErrors.logErrors(err);
+    });
+    if(result.rowsAffected[0]>0){
+       return result.rowsAffected[0];
+    }else{
+      throw new console.error('Un expected error, updating newsfeed');
+    }
+    
+  }
+  public async updateStatus(req:any,res:any){
+    //let returnValue: boolean = true;
+    let body = req.body;
+    console.log(body);
+    let ModifiedBy = 'Mehdi Jalal';
+    //let ModifiedBy = req.authInfo.name;
+    let ModifiedDate = new Date();
+
+    let provider = new SQLDBProvider();
+
+    let inputParameters = [
+      { name: 'OfficeTaskID', dataType: TYPES.VarChar, value: body.OfficeTaskID },
+      { name: 'Status', dataType: TYPES.VarChar, value: body.Status },
+      { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
+      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy }
+
+  ];
+    let CustomQuery = `UPDATE MJ.OfficeTasks
+    SET Status = @Status, 
         ModifiedDate = @ModifiedDate,
         ModifiedBy = @ModifiedBy
      WHERE OfficeTaskID = @OfficeTaskID`;
@@ -180,14 +215,40 @@ export class OfficeTasksRepo implements IOfficeTasks {
   public async deleteTasks(req:any,res:any,next:any): Promise<boolean> {
     let provider = new SQLDBProvider();
     let id = req.params.id;
-    let inputParameters = [{ name: 'AnnouncementID', dataType: TYPES.Int, value: id }];
-    let CustomQuery = `DELETE FROM IAP.AA_Announcement WHERE AnnouncementID = @AnnouncementID`;
+    let inputParameters = [{ name: 'OfficeTaskID', dataType: TYPES.Int, value: id }];
+    let CustomQuery = `DELETE FROM MJ.OfficeTasks WHERE OfficeTaskID = @OfficeTaskID`;
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
       return LogErrors.logErrors(err);
     });
     console.log(result.rowsAffected);
     if(result.rowsAffected>0){
       return result.rowsAffected;
+    }
+  }
+
+  public async deleteAll(req:any,res:any,next:any): Promise<any> {
+    let provider = new SQLDBProvider();
+    let body = req.body;
+    var rfinal:number[] = [];
+    await Promise.all(body.map(async items=>{
+      let inputParameters = [{ name: 'OfficeTaskID', dataType: TYPES.Int, value: items.OfficeTaskID }];
+      let CustomQuery = `DELETE FROM MJ.OfficeTasks WHERE OfficeTaskID = @OfficeTaskID`;
+      const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
+        return LogErrors.logErrors(err);
+      });
+      console.log(result.rowsAffected);
+      if(result.rowsAffected>0){
+        //return result.rowsAffected;
+        rfinal.push(result.rowsAffected[0]);
+      }else{
+        throw new console.error('Un expected error, updating newsfeed');
+      }
+    }));
+    if(rfinal.includes(1)){
+        return 1
+    }else{
+        console.log('------Error update---------');
+        return 0;
     }
   }
 
