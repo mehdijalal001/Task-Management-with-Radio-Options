@@ -1,43 +1,70 @@
 <div class="grid-container">
   <h1 class="mat-h1">Dashboard</h1>
 
-   <mat-card class="example-card">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Office Task</mat-card-title>
-      <mat-card-subtitle>Office important tasks</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <button mat-raised-button color="primary">Office Tasks</button>&nbsp;
-      <button mat-raised-button color="warn">Home Tasks</button>&nbsp;
-      <button mat-raised-button color="basic">Todays Tasks</button>&nbsp;
-      <button mat-raised-button color="accent">This Week Tasks</button><br /><br />
-      <button mat-raised-button color="warn">This Month Tasks</button>&nbsp;
-      <button mat-raised-button color="accent">General Learning</button>&nbsp;
-      <button mat-raised-button color="primary">Col/Uni Learning</button>&nbsp;
-      <button mat-raised-button color="basic">Assignments</button><br /><br />
-      <button mat-raised-button color="accent">Personal Notes</button>&nbsp;
-      <button mat-raised-button color="primary">Sports</button>&nbsp;
-      <button mat-raised-button color="warn">Meetings</button>&nbsp;
-
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>LIKE</button>
-      <button mat-button>SHARE</button>
-    </mat-card-actions>
+   <mat-card>
+     <mat-card-content>
+      <div fxLayout="row wrap" fxLayoutAlign="space-between">
+        <div class="duetoday">
+          <mat-card>
+            <mat-card-header>
+                <span>Due Today</span>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="btn-div">
+                <button mat-raised-button color="primary"
+                  [matBadge]="bgHome" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks">Office Tasks
+                </button>
+              </div>
+              <div class="btn-div">
+                <button mat-raised-button color="warn"
+                  [matBadge]="bgOffice" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks">General Tasks
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="duetomorrow">
+          <mat-card>
+            <mat-card-header>
+                <span>Due Tomorrow</span>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="btn-div">
+                <button mat-raised-button color="primary"
+                  [matBadge]="bgHome" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks">Office Tasks
+                </button>
+              </div>
+              <div class="btn-div">
+                <button mat-raised-button color="warn"
+                  [matBadge]="bgOffice" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks">General Tasks
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="duenextsevendays">
+          <mat-card>
+            <mat-card-header>
+                <span>Due Next 7 days</span>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="btn-div">
+                <button mat-raised-button color="primary"
+                  [matBadge]="bgHome" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks">Office Tasks
+                </button>
+              </div>
+              <div class="btn-div">
+                <button mat-raised-button color="warn"
+                  [matBadge]="bgOffice" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks">General Tasks
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+     </mat-card-content>
   </mat-card>
   
  
-  <!-- <mat-grid-list cols="4" rowHeight="100px">
-    <mat-grid-tile
-        *ngFor="let tile of tiles"
-        [colspan]="tile.cols"
-        [rowspan]="tile.rows"
-        [style.background]="tile.color">
-      {{tile.text}}
-    </mat-grid-tile>
-  </mat-grid-list>  -->
-  <!-- Copyright 2019 Google LLC. All Rights Reserved.
-      Use of this source code is governed by an MIT-style license that
-      can be found in the LICENSE file at http://angular.io/license -->
+
 </div>

@@ -1,21 +1,21 @@
-import { IOfficeTasks } from './../interfaces/iTasks';
-import { OfficeTasksRepo } from '../repositories/officeTasksRepo';
-import { OfficeTasks } from '../models/officetasks';
+import { ITasks } from '../interfaces/iTasks';
+import { TasksRepo } from '../repositories/tasksRepository';
+import { TasksModel } from '../models/tasksModel';
 import { MockTasksRepo } from '../repositories/mockTasksRepo';
-export class OfficeTaskService implements IOfficeTasks {
-    private repo: IOfficeTasks;
+export class TasksService implements ITasks {
+    private repo: ITasks;
     constructor() {
         let envName = process.env.ENV;
 
         if (envName !== 'test') {
-            this.repo = new OfficeTasksRepo();
+            this.repo = new TasksRepo();
         } else {
             this.repo = new MockTasksRepo();
         }
     }
     //---get all--------//
     async getAllTasks(req: any, res: any, next: any): Promise<any> {
-      let modelClass: OfficeTasks[] = [];
+      let modelClass: TasksModel[] = [];
       await this.repo
       .getAllTasks(req, res, next)
       .then(results => (modelClass = results))
@@ -25,7 +25,7 @@ export class OfficeTaskService implements IOfficeTasks {
         return modelClass;
     }
     async getCurrentTasks(req: any, res: any, next: any): Promise<any> {
-      let modelClass: OfficeTasks[] = [];
+      let modelClass: TasksModel[] = [];
       await this.repo
       .getCurrentTasks(req, res, next)
       .then(results => (modelClass = results))
@@ -35,7 +35,7 @@ export class OfficeTaskService implements IOfficeTasks {
         return modelClass;
     }
     async getCompletedTasks(req: any, res: any, next: any): Promise<any> {
-      let modelClass: OfficeTasks[] = [];
+      let modelClass: TasksModel[] = [];
       await this.repo
       .getCompletedTasks(req, res, next)
       .then(results => (modelClass = results))
@@ -45,7 +45,7 @@ export class OfficeTaskService implements IOfficeTasks {
         return modelClass;
     }
     async getTaskById(req: any, res: any, next: any): Promise<any> {
-      let modelClass: OfficeTasks[] = [];
+      let modelClass: TasksModel[] = [];
       await this.repo
       .getTaskById(req, res, next)
       .then(results => (modelClass = results))
@@ -55,7 +55,7 @@ export class OfficeTaskService implements IOfficeTasks {
         return modelClass;
     }
     async viewTasks(req: any, res: any, next: any): Promise<any> {
-      let modelClass: OfficeTasks[] = [];
+      let modelClass: TasksModel[] = [];
       await this.repo
       .viewTasks(req, res, next)
       .then(results => (modelClass = results))
@@ -80,7 +80,7 @@ export class OfficeTaskService implements IOfficeTasks {
     }
     
     async updateTasks(req: any, res: any, next: any): Promise<any>  {
-        let modelClass = new OfficeTasks();
+        let modelClass = new TasksModel();
         await this.repo
         .updateTasks(req,res,next)
         .then(result => {
@@ -92,7 +92,7 @@ export class OfficeTaskService implements IOfficeTasks {
         return modelClass;
     }
     async updateStatus(req: any, res: any, next: any): Promise<any>  {
-        let modelClass = new OfficeTasks();
+        let modelClass = new TasksModel();
         await this.repo
         .updateStatus(req,res,next)
         .then(result => {

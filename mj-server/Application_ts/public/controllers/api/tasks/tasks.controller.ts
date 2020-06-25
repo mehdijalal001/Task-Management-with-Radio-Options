@@ -1,10 +1,10 @@
-import { IOfficeTasks } from '../../../interfaces/iTasks';
-import { OfficeTaskService } from '../../../services/officeTasksService';
+import { ITasks } from '../../../interfaces/iTasks';
+import { TasksService } from '../../../services/taskService';
 
-class OfficeTasksController implements IOfficeTasks {
-    private service: IOfficeTasks;
+class TasksController implements ITasks {
+    private service: ITasks;
     constructor(router) {
-        this.service = new OfficeTaskService();
+        this.service = new TasksService();
         router.get('/', this.getAllTasks.bind(this));
         router.get('/current', this.getCurrentTasks.bind(this));
         router.get('/complete', this.getCompletedTasks.bind(this));
@@ -113,4 +113,4 @@ class OfficeTasksController implements IOfficeTasks {
     }
 }
 
-module.exports = OfficeTasksController;
+module.exports = TasksController;

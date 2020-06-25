@@ -9,24 +9,22 @@ import { MatSort} from '@angular/material/sort';
 import { Router } from '@angular/router';
 
 
-import { OfficetasksService } from '../../../services/officetasks.service';
-import { DialogService } from '../../../../shared/services/dialog.service';
+
+import { DialogService } from './../../../shared/services/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
-import { IOfficeTasks } from '../../../models/tasks.model';
-
-
-
+import { ITasks } from './../../models/tasks.model';
+import { TasksService } from './../../services/tasks.service';
 
 @Component({
-  selector: 'app-officetasks',
-  templateUrl: './officetasks.component.html',
-  styleUrls: ['./officetasks.component.scss']
+  selector: 'app-tasks',
+  templateUrl: './tasks.component.html',
+  styleUrls: ['./tasks.component.scss']
 })
-export class OfficetasksComponent implements OnInit {
+export class TasksComponent implements OnInit {
 
   tableResponsiveColumns=false;
   theTasks;
-  tasksList: IOfficeTasks[];
+  tasksList: ITasks[];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -35,7 +33,8 @@ export class OfficetasksComponent implements OnInit {
 
   displayedColumns: string[] = [
     'select',
-    'taskname', 
+    'taskname',
+    'category',
     'startdate',
     'enddate',
     'status',
@@ -59,7 +58,7 @@ export class OfficetasksComponent implements OnInit {
 
 
   //screenWidth2;
-  constructor(private taskservice:OfficetasksService,  
+  constructor(private taskservice:TasksService,  
     public dialog: MatDialog,
     private dialogService: DialogService,private router: Router,private breakpointObserver: BreakpointObserver) {
 
@@ -80,9 +79,9 @@ export class OfficetasksComponent implements OnInit {
   }
   refreshData() {
     console.log('-----------got here--------');
-    this.taskservice.getAllTasks('/officetasks/').subscribe(
-      (modelData: IOfficeTasks[]) => {
-        console.log(modelData);
+    this.taskservice.getAllTasks('/tasks/').subscribe(
+      (modelData: ITasks[]) => {
+        //console.log(modelData);
         this.tasksList = modelData;
         this.ELEMENT_DATA = modelData;
         this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
@@ -137,19 +136,19 @@ export class OfficetasksComponent implements OnInit {
       return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
     }
 
-    deleteTask(TaskId){
-      console.log(TaskId);
-      const result = this.dialogService.openDialog(TaskId, 'Confirm Action', 'Are you sure you want to delete?', 'Cancel', 'Delete Now');
+    deleteTask(TaskID){
+      console.log(TaskID);
+      const result = this.dialogService.openDialog(TaskID, 'Confirm Action', 'Are you sure you want to delete?', 'Cancel', 'Delete Now');
       result.afterClosed().subscribe(dialogResult => {
         if (dialogResult) {
-          this.deleteTaskById(TaskId);
+          this.deleteTaskById(TaskID);
         }
       });
     }
 
-    deleteTaskById(TaskId){
-      if(TaskId>0){
-        this.taskservice.deleteTaskById(TaskId, '/officetasks/').subscribe(
+    deleteTaskById(TaskID){
+      if(TaskID>0){
+        this.taskservice.deleteTaskById(TaskID, '/tasks/').subscribe(
           res => {
             if (res) {
               this.dialogService.MessageBox('Deleted', 'X', 4000, 'SuccessMessage');
@@ -182,15 +181,15 @@ export class OfficetasksComponent implements OnInit {
       }, timeout);
     }
 
-    updateStatus(id:any,event:any){
-      console.log(id);
+    updateStatus(TaskID:any,event:any){
+      console.log(TaskID);
       console.log(event.checked);
       let status = event.checked;
 
-      if(id>0){
+      if(TaskID>0){
         console.log('-----Update task-----');
-        const result = {"OfficeTaskID":id,"Status":status};
-        this.taskservice.updateStatus(result, id, '/officetasks/updatestatus/').subscribe(
+        const result = {"TaskID":TaskID,"Status":status};
+        this.taskservice.updateStatus(result, TaskID, '/tasks/updatestatus/').subscribe(
           res => {
             if (res) {
               this.dialogService.MessageBox('Updated', 'X', 100, 'SuccessMessage');
@@ -230,7 +229,7 @@ export class OfficetasksComponent implements OnInit {
       let lng = list.length;
    
       if (lng > 0) {
-        this.taskservice.deleteAll(list,'/officetasks/deleteall').subscribe(
+        this.taskservice.deleteAll(list,'/tasks/deleteall').subscribe(
           res => {
             if (res) {
               this.dialogService.MessageBox('Deleted', 'X', 4000, 'SuccessMessage');

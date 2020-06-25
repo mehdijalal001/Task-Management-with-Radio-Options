@@ -19,3 +19,35 @@
 .dashboard-card-content {
   text-align: center;
 }
+
+.btn-div{
+  margin: 1rem;
+}
+.btn-tasks{
+  min-width: 120px;
+  width: 10vw;
+}
+
+/*---When you put ::ng-deep it will effect other components when load through rout---*/
+// ::ng-deep .mat-card-header{
+//   background-color:rgb(241, 47, 47) ;
+//   padding:5px;
+//   border-top-left-radius: 5px;
+//   border-top-right-radius: 5px;
+//   color: #ffffff;
+// }
+ .mat-card-header{
+  background-color:rgb(241, 47, 47) ;
+  padding:5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  color: #ffffff;
+}
+
+::ng-deep .mat-card{
+  padding:0 !important;
+}
+
+::ng-deep .mat-card-content{
+  padding:1rem;
+}

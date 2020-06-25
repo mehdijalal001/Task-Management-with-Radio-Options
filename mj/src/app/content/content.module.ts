@@ -17,6 +17,10 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSelectModule} from '@angular/material/select';
+import {MatBadgeModule} from '@angular/material/badge';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 
@@ -31,6 +35,10 @@ import { OfficetaskformComponent } from './components/tasks/officetasks/officeta
 import { AnnouncementsComponent } from './components/announcements/announcements.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { UsersComponent } from './components/admin/users/users.component';
+import { TasksComponent } from './components/tasks/tasks.component';
+import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
+import {DashboardsComponent} from './components/dashboards/dashboards.component';
+
 
 
 @NgModule({
@@ -41,7 +49,10 @@ import { UsersComponent } from './components/admin/users/users.component';
     OfficetasksComponent, 
     HometasksComponent, 
     OfficetaskformComponent,
-    ReplacePipe
+    ReplacePipe,
+    DashboardsComponent,
+    TasksComponent,
+    TasksformComponent
   ],
   imports: [
     CommonModule,
@@ -62,7 +73,10 @@ import { UsersComponent } from './components/admin/users/users.component';
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerModule,
+    MatSelectModule,
+    MatBadgeModule,
     QuillModule.forRoot(),
+    FlexLayoutModule
 
   ],
   exports:[

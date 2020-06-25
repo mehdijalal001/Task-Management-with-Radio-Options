@@ -3,7 +3,6 @@ import { ILookupRepository } from "../interfaces/iLookupRepository";
 import { Lookup } from '../models/lookup';
 import { LogErrors } from '../common/logErrors.controller';
 
-
 export class LookupRepository implements ILookupRepository {
     constructor() {}
 
@@ -13,20 +12,20 @@ export class LookupRepository implements ILookupRepository {
 
         console.log(tbl);
         var tablename = "";
-        var tableArray: string[] = ['status', 'priority', 'country', 'province'];
+        var tableArray: string[] = ['status', 'category', 'country', 'province'];
         if (tableArray.includes(tbl)) {
             switch (tbl) {
                 case "status":
-                    tablename = "IAP.AA_Lookup_Status";
+                    tablename = "MJ.Lookup_Status";
                     break;
-                case "priority":
-                    tablename = "IAP.AA_Lookup_Priority";
+                case "category":
+                    tablename = "MJ.Lookup_Category";
                     break;
                 case "country":
-                    tablename = "IAP.AA_Lookup_Countries";
+                    tablename = "MJ.Lookup_Countries";
                     break;
                 case "province":
-                    tablename = "IAP.AA_Lookup_ProvincesStates";
+                    tablename = "MJ.Lookup_Provinces";
                     break;
                 default:
                     tablename = "";

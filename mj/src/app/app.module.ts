@@ -27,6 +27,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatInputModule} from '@angular/material/input';
 import { MAT_SNACK_BAR_DATA, MatSnackBarRef, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 
@@ -38,7 +39,6 @@ import { LayoutModule } from '@angular/cdk/layout';
 
 import { PostsComponent } from './content/components/posts/posts.component';
 import { DefaultComponent } from './default/default.component';
-import {DashboardsComponent} from './content/components/dashboards/dashboards.component';
 import {DialogComponent} from './shared/components/dialog/dialog.component';
 import {MysnackbarComponent} from './shared/components/mysnackbar/mysnackbar.component';
 
@@ -68,7 +68,6 @@ const mats=[
     AppComponent,
     PostsComponent,
     DefaultComponent,
-    DashboardsComponent,
     DialogComponent,
     MysnackbarComponent
     
@@ -94,7 +93,8 @@ const mats=[
         readonly:true
       }
     }
-    )
+    ),
+    FlexLayoutModule
   ],
   exports:[mats,HttpClientModule],
   providers: [

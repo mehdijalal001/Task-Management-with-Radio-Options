@@ -6,12 +6,28 @@ import { OfficetasksComponent } from './components/tasks/officetasks/officetasks
 import { HometasksComponent } from './components/tasks/hometasks/hometasks.component';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { OfficetaskformComponent } from './components/tasks/officetasks/officetaskform/officetaskform.component';
+import { TasksComponent } from './components/tasks/tasks.component';
+import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
 
 
 const routes: Routes = [
   {
     path:'',
     children:[
+      {
+        path:'alltasks',
+        children:[
+          {
+            path:'',component:TasksComponent
+          },
+          {
+            path:'addtask',component:TasksformComponent
+          },
+          {
+            path:'addtask/:taskid',component:TasksformComponent
+          }
+        ]
+      },
       {
         path:'officetasks',
         children:[

@@ -72,6 +72,12 @@ export class AppComponent {
         children:[
           {
             index:0,
+            label: 'Tasks',
+            link: '/tasks/alltasks',
+            iconName: 'customer'
+          },
+          {
+            index:0,
             label: 'Office Tasks',
             link: '/tasks/officetasks',
             iconName: 'customer'
