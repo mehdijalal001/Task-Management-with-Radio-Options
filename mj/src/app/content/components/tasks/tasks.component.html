@@ -23,7 +23,8 @@
               </mat-form-field>
               <div class="taskaction-box"  >
                 <button mat-raised-button color="warn" (click)="deleteAllSelectedTasks()" [disabled]="!selection.hasValue() && !isAllSelected()">Delete All</button>
-                <button mat-raised-button color="primary" [routerLink]="['../addtask']">Add Task</button>
+                <button *ngIf="!isCategoryView" mat-raised-button color="primary" [routerLink]="['../addtask']">Add Task</button>
+                <button *ngIf="isCategoryView" mat-raised-button color="warn" [routerLink]="['../../../addtask']">Add Task</button>
               </div>
               <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                 <!-- Checkbox Column -->

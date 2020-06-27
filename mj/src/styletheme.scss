@@ -7,9 +7,11 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
-$mj-app-primary: mat-palette($mj-primary-indigo-palette,A400, A100, A400);
+$mj-app-primary: mat-palette($mj-primary-indigo-palette,A900, A100, A400);
+/*---------To have customized the color-------------*/
+//$mj-app-primary: mat-palette($mj-primary-indigo-palette,A400, A100, A400);
 $mj-app-accent: mat-palette($mat-pink, A200, A100, A400);
-$mj-app-warn: mat-palette($mat-red, A400, A100, A400);
+$mj-app-warn: mat-palette($mat-red, A700, A200, A400);
 
 $mj-app-theme: mat-light-theme(
   $mj-app-primary,

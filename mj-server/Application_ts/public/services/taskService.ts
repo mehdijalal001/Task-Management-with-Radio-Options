@@ -14,6 +14,16 @@ export class TasksService implements ITasks {
         }
     }
     //---get all--------//
+    async getMyTasksDueToday(req: any, res: any, next: any): Promise<any> {
+      let modelClass: TasksModel[] = [];
+      await this.repo
+      .getMyTasksDueToday(req, res, next)
+      .then(results => (modelClass = results))
+      .catch(err => {
+          next(err);
+        });
+        return modelClass;
+    }
     async getAllTasks(req: any, res: any, next: any): Promise<any> {
       let modelClass: TasksModel[] = [];
       await this.repo
@@ -48,6 +58,16 @@ export class TasksService implements ITasks {
       let modelClass: TasksModel[] = [];
       await this.repo
       .getTaskById(req, res, next)
+      .then(results => (modelClass = results))
+      .catch(err => {
+          next(err);
+        });
+        return modelClass;
+    }
+    async getTaskByCategoryIdAndDueDate(req: any, res: any, next: any): Promise<any> {
+      let modelClass: TasksModel[] = [];
+      await this.repo
+      .getTaskByCategoryIdAndDueDate(req, res, next)
       .then(results => (modelClass = results))
       .catch(err => {
           next(err);

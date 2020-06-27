@@ -21,6 +21,9 @@ const routes: Routes = [
             path:'',component:TasksComponent
           },
           {
+            path:'category/:categoryid/:duedate',component:TasksComponent
+          },
+          {
             path:'addtask',component:TasksformComponent
           },
           {

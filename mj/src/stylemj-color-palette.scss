@@ -13,6 +13,8 @@ $mj-primary-indigo-palette: (
     A200: #536dfe,
     A400: #3d5afe,
     A700: #304ffe,
+    A800: #283593,
+    A900: #1A237E,
     contrast: (
       50: rgba(black, 0.87),
       100: rgba(black, 0.87),
@@ -28,5 +30,7 @@ $mj-primary-indigo-palette: (
       A200: white,
       A400: white,
       A700: white,
+      A800: white,
+      A900: white,
     )
 );

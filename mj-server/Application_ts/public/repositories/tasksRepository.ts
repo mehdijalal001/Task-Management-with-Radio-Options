@@ -18,17 +18,49 @@ import { SQLDBProvider } from '../providers/dbProvider/sqlDBProvider';
 export class TasksRepo implements ITasks {
   constructor() {}
 
+  public async getMyTasksDueToday(req:any,res:any,next:any): Promise<any> {
+
+    console.log('---geting due today------');
+    let modelToArray: TasksModel[] = [];
+    let provider = new SQLDBProvider();
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'UserId', dataType: TYPES.Int, value: UserID }
+    ];
+    let CustomQuery = `SELECT ts.CategoryID, COUNT(ts.CategoryID) AS totaltasks, ct.Name AS CategoryName
+    FROM MJ.Tasks AS ts
+    LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+    WHERE ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) = CAST(GETDATE() AS DATE)
+    GROUP BY ts.CategoryID, ct.Name
+    ORDER BY ct.Name ASC`;
+    await provider
+      .executeQuery(CustomQuery,inputParameters)
+      .then(results => {
+        if (results) {
+            modelToArray = TasksModel.MapDBToArray(results);
+        }
+      })
+      .catch(err => {
+        return LogErrors.logErrors(err);
+      });
+
+    return modelToArray;
+  }
   public async getAllTasks(req:any,res:any,next:any): Promise<any> {
 
     let modelToArray: TasksModel[] = [];
     let provider = new SQLDBProvider();
-    let inputParameters: any[] = [];
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'UserId', dataType: TYPES.Int, value: UserID }
+    ];
     let CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
     FROM MJ.Tasks AS ts
     LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+    WHERE ts.UserID = @UserID
     ORDER BY ts.TaskID DESC`;
     await provider
-      .executeQuery(CustomQuery)
+      .executeQuery(CustomQuery,inputParameters)
       .then(results => {
         if (results) {
             modelToArray = TasksModel.MapDBToArray(results);
@@ -49,12 +81,15 @@ export class TasksRepo implements ITasks {
     let provider = new SQLDBProvider();
     let modelData: TasksModel = new TasksModel();
     let id = req.params.id;
-
-    let inputParameters = [{ name: 'id', dataType: TYPES.Int, value: id }];
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'id', dataType: TYPES.Int, value: id },
+      { name: 'UserId', dataType: TYPES.Int, value: UserID }
+    ];
     let CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
     FROM MJ.Tasks  AS ts 
     LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-    WHERE ts.TaskID = @id;`;
+    WHERE ts.TaskID = @id AND ts.UserID = @UserID`;
     await provider
       .executeQuery(CustomQuery, inputParameters)
       .then(results => {
@@ -67,6 +102,44 @@ export class TasksRepo implements ITasks {
       });
 
     return [modelData];
+  }
+  public async getTaskByCategoryIdAndDueDate(req:any,res:any,next:any): Promise<any> {
+    let provider = new SQLDBProvider();
+    let modelToArray: TasksModel[] = [];
+    let categoryID = req.params.categoryId;
+    let DueDate = req.params.DueDate;
+    //console.log(req.params);
+    console.log('--------');
+    console.log(categoryID);
+    console.log(DueDate);
+    
+    let newDuedate = DataFormatter.formatDate(DueDate);
+    let newDuedate2 = new Date(newDuedate);
+    console.log(newDuedate);
+    console.log(newDuedate2);
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'CategoryID', dataType: TYPES.Int, value: categoryID },
+      { name: 'EndDate', dataType: TYPES.DateTime, value: newDuedate2 },
+      { name: 'UserId', dataType: TYPES.Int, value: UserID }
+    ];
+    let CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
+    FROM MJ.Tasks  AS ts 
+    LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+    WHERE ts.CategoryID = @CategoryID AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)`;
+    await provider
+      .executeQuery(CustomQuery, inputParameters)
+      .then(results => {
+        //console.log(results);
+        if (results) {
+            modelToArray = TasksModel.MapDBToArray(results);
+        }
+      })
+      .catch(err => {
+        return LogErrors.logErrors(err);
+      });
+
+    return modelToArray;
   }
   public async viewTasks(req:any,res:any,next:any): Promise<any> {
     let provider = new SQLDBProvider();
@@ -99,6 +172,7 @@ export class TasksRepo implements ITasks {
     console.log(body);
     //let CreatedBy = req.authInfo.name;
     //let ModifiedBy = req.authInfo.name;
+    let UserID = 1007;
     let CreatedBy = 'Mehdi Jalal';
     let ModifiedBy = 'Mehdi Jalal';
     let CreatedDate = new Date();
@@ -117,13 +191,14 @@ export class TasksRepo implements ITasks {
       { name: 'CreatedDate', dataType: TYPES.DateTime, value: CreatedDate },
       { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
       { name: 'CreatedBy', dataType: TYPES.VarChar, value: CreatedBy },
-      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy }
+      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy },
+      { name: 'UserID', dataType: TYPES.VarChar, value: UserID }
 
     ];
     let CustomQuery = `INSERT INTO MJ.Tasks
-    (TaskName, CategoryID, StartDate, EndDate, Description, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy)
+    (TaskName, CategoryID, StartDate, EndDate, Description, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy, UserID)
      VALUES 
-    (@TaskName, @CategoryID, @StartDate, @EndDate, @Description, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy); SELECT @@IDENTITY AS id`;
+    (@TaskName, @CategoryID, @StartDate, @EndDate, @Description, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy, @UserID); SELECT @@IDENTITY AS id`;
 
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
        LogErrors.logErrors(err);
@@ -142,6 +217,7 @@ export class TasksRepo implements ITasks {
     let body = req.body;
     console.log('-------updating tasks-----');
     console.log(body);
+    let UserID = 1007;
     let ModifiedBy = 'Mehdi Jalal';
     //let ModifiedBy = req.authInfo.name;
     let ModifiedDate = new Date();
@@ -159,7 +235,9 @@ export class TasksRepo implements ITasks {
       { name: 'Description', dataType: TYPES.VarChar, value: body.Description },
       { name: 'Status', dataType: TYPES.VarChar, value: body.Status },
       { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
-      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy }
+      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy },
+      { name: 'UserID', dataType: TYPES.VarChar, value: UserID }
+
 
   ];
     let CustomQuery = `UPDATE MJ.Tasks
@@ -170,7 +248,8 @@ export class TasksRepo implements ITasks {
         Description = @Description, 
         Status = @Status, 
         ModifiedDate = @ModifiedDate,
-        ModifiedBy = @ModifiedBy
+        ModifiedBy = @ModifiedBy,
+        UserID = @UserID
      WHERE TaskID = @TaskID`;
 
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
@@ -187,6 +266,7 @@ export class TasksRepo implements ITasks {
     //let returnValue: boolean = true;
     let body = req.body;
     console.log(body);
+    let UserID = 1007;
     let ModifiedBy = 'Mehdi Jalal';
     //let ModifiedBy = req.authInfo.name;
     let ModifiedDate = new Date();
@@ -197,14 +277,18 @@ export class TasksRepo implements ITasks {
       { name: 'TaskID', dataType: TYPES.VarChar, value: body.TaskID },
       { name: 'Status', dataType: TYPES.VarChar, value: body.Status },
       { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
-      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy }
+      { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy },
+      { name: 'UserID', dataType: TYPES.VarChar, value: UserID }
+
+      
 
   ];
     let CustomQuery = `UPDATE MJ.Tasks
     SET Status = @Status, 
         ModifiedDate = @ModifiedDate,
-        ModifiedBy = @ModifiedBy
-     WHERE TaskID = @TaskID`;
+        ModifiedBy = @ModifiedBy,
+        UserID = @UserID
+     WHERE TaskID = @TaskID AND UserID = @UserID`;
 
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
       return LogErrors.logErrors(err);
@@ -221,8 +305,12 @@ export class TasksRepo implements ITasks {
   public async deleteTasks(req:any,res:any,next:any): Promise<boolean> {
     let provider = new SQLDBProvider();
     let id = req.params.id;
-    let inputParameters = [{ name: 'TaskID', dataType: TYPES.Int, value: id }];
-    let CustomQuery = `DELETE FROM MJ.Tasks WHERE TaskID = @TaskID`;
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'TaskID', dataType: TYPES.Int, value: id },
+      { name: 'UserID', dataType: TYPES.VarChar, value: UserID }
+    ];
+    let CustomQuery = `DELETE FROM MJ.Tasks WHERE TaskID = @TaskID AND UserID = @UserID`;
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
       return LogErrors.logErrors(err);
     });
@@ -235,10 +323,14 @@ export class TasksRepo implements ITasks {
   public async deleteAll(req:any,res:any,next:any): Promise<any> {
     let provider = new SQLDBProvider();
     let body = req.body;
+    let UserID = 1007;
     var rfinal:number[] = [];
     await Promise.all(body.map(async items=>{
-      let inputParameters = [{ name: 'TaskID', dataType: TYPES.Int, value: items.TaskID }];
-      let CustomQuery = `DELETE FROM MJ.Tasks WHERE TaskID = @TaskID`;
+      let inputParameters = [
+        { name: 'TaskID', dataType: TYPES.Int, value: items.TaskID },
+        { name: 'UserID', dataType: TYPES.VarChar, value: UserID }
+      ];
+      let CustomQuery = `DELETE FROM MJ.Tasks WHERE TaskID = @TaskID AND UserID = @UserID`;
       const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
         return LogErrors.logErrors(err);
       });

@@ -2,6 +2,9 @@ import { ITasks } from "../interfaces/iTasks";
 
 export class MockTasksRepo implements ITasks {
 
+    getMyTasksDueToday(): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
     getAllTasks(): Promise<any> {
         throw new Error('Method not implemented.');
     }
@@ -12,6 +15,9 @@ export class MockTasksRepo implements ITasks {
         throw new Error('Method not implemented.');
     }
     getTaskById(): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
+    getTaskByCategoryIdAndDueDate(): Promise<any> {
         throw new Error('Method not implemented.');
     }
     viewTasks(): Promise<any> {

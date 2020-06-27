@@ -6,7 +6,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 import {MatPaginator} from '@angular/material/paginator';
 import { MatSort} from '@angular/material/sort';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute} from '@angular/router';
 
 
 
@@ -25,6 +25,8 @@ export class TasksComponent implements OnInit {
   tableResponsiveColumns=false;
   theTasks;
   tasksList: ITasks[];
+  currentDate:Date;
+  isCategoryView:boolean = false;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -60,7 +62,10 @@ export class TasksComponent implements OnInit {
   //screenWidth2;
   constructor(private taskservice:TasksService,  
     public dialog: MatDialog,
-    private dialogService: DialogService,private router: Router,private breakpointObserver: BreakpointObserver) {
+    private dialogService: DialogService,
+    private router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private breakpointObserver: BreakpointObserver) {
 
       // this.screenWidth2 = window.innerWidth;
       // window.onresize = ()=>{
@@ -76,12 +81,53 @@ export class TasksComponent implements OnInit {
 
   ngOnInit(): void {
     this.refreshData();
+        
+        //----------for edit-----------------//
+        this._activatedRoute.paramMap.subscribe(params => {
+          //---in the route we created edit route we set id as param so we get it here---//
+          const categoryID = +params.get('categoryid');
+          const duedate = +params.get('duedate');
+          console.log(params);
+          console.log(categoryID);
+          this.currentDate = new Date();
+          console.log('--------------router--------');
+          console.log(this.currentDate);
+          if (categoryID) {
+            // this.id = TaskID;
+            this.refreshDataWithCategoryIDandDueDate(categoryID,this.currentDate);
+          }
+        });
   }
   refreshData() {
+    this.isCategoryView = false;
     console.log('-----------got here--------');
     this.taskservice.getAllTasks('/tasks/').subscribe(
       (modelData: ITasks[]) => {
         //console.log(modelData);
+        this.tasksList = modelData;
+        this.ELEMENT_DATA = modelData;
+        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+        this.selection = new SelectionModel<any>(true, []);
+
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error => {
+        const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
+        res.afterClosed().subscribe(dialogResult => {
+          if (dialogResult) {
+            this.callNext(200);
+          }
+        });
+      }
+    );
+  }
+  refreshDataWithCategoryIDandDueDate(categoryID?,DueDate?) {
+    this.isCategoryView = true;
+    console.log('-----------got here--------');
+    this.taskservice.getAllTasksByCategoryID(categoryID,DueDate,'/tasks/category/').subscribe(
+      (modelData: ITasks[]) => {
+        console.log(modelData);
         this.tasksList = modelData;
         this.ELEMENT_DATA = modelData;
         this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
@@ -177,7 +223,26 @@ export class TasksComponent implements OnInit {
  
     callNext(timeout) {
       setTimeout(() => {
-        this.refreshData();
+        if(!this.isCategoryView){
+          this.refreshData();
+        }else{
+                  //----------for edit-----------------//
+          this._activatedRoute.paramMap.subscribe(params => {
+            //---in the route we created edit route we set id as param so we get it here---//
+            const categoryID = +params.get('categoryid');
+            const duedate = +params.get('duedate');
+            console.log(params);
+            console.log(categoryID);
+            this.currentDate = new Date();
+            console.log('--------------router--------');
+            console.log(this.currentDate);
+            if (categoryID) {
+              // this.id = TaskID;
+              this.refreshDataWithCategoryIDandDueDate(categoryID,this.currentDate);
+            }
+          });
+        }
+        
       }, timeout);
     }
 
@@ -185,7 +250,7 @@ export class TasksComponent implements OnInit {
       console.log(TaskID);
       console.log(event.checked);
       let status = event.checked;
-
+      console.log(this.isCategoryView);
       if(TaskID>0){
         console.log('-----Update task-----');
         const result = {"TaskID":TaskID,"Status":status};

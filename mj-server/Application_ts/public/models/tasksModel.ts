@@ -20,6 +20,7 @@ export class TasksModel {
   public Description:string = '';
   public CategoryID:number = 0;
   public CategoryName:string = '';
+  public totaltasks:number =0;
  
 
   constructor() {}
@@ -38,6 +39,7 @@ export class TasksModel {
     dataModel.Description = row.Description;
     dataModel.CategoryName = row.CategoryName;
     dataModel.CategoryID = row.CategoryID;
+    dataModel.totaltasks = row.totaltasks;
  
     //announcement.ModifiedDate = DataFormatter.DateToString(row.ModifiedDate);
 
