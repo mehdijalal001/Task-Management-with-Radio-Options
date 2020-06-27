@@ -83,9 +83,17 @@
                 <!-- <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;"
                 (click)="selection.toggle(row)" [routerLink]="['/tasks/officetasks/addnew/', element.OfficeTaskID]">
                 </tr> -->
-                <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;"
-                 [routerLink]="['../../alltasks/addtask/', element.TaskID]">
-                </tr>
+                <div *ngIf="!isCategoryView">
+                    <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" 
+                  [routerLink]="['../../alltasks/addtask/', element.TaskID]">
+                  </tr>
+                </div>
+                <div *ngIf="isCategoryView">
+                    <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" 
+                  [routerLink]="['../../../../alltasks/addtask/', element.TaskID]">
+                  </tr>
+                </div>
+
               </table>
               <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons> </mat-paginator>
 

@@ -187,7 +187,9 @@ export class TasksformComponent implements OnInit {
         res => {
           if (res) {
             console.log(res);
-            this.dialogService.callRedirect('../tasks/alltasks', 1);
+            //this.dialogService.callRedirect('../tasks/alltasks', 1);
+            this.callNext(3000);
+            //this.taskForm.controls['TaskName'].reset();
             this.dialogService.MessageBox('Record inserted successfully', 'X', 6000, 'SuccessMessage');
 
             //this.dialogService.callRedirect('../tasks/officetasks/addtask/' + res, 4000);
