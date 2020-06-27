@@ -10,21 +10,23 @@ import { Router,ActivatedRoute} from '@angular/router';
 
 
 
-import { DialogService } from './../../../shared/services/dialog.service';
+import { DialogService } from '../../../../shared/services/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ITasks } from './../../models/tasks.model';
-import { TasksService } from './../../services/tasks.service';
-
+import { ITasks } from '../../../models/tasks.model';
+import { TasksService } from '../../../services/tasks.service';
 @Component({
-  selector: 'app-tasks',
-  templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.scss']
+  selector: 'app-taskscategoryview',
+  templateUrl: './taskscategoryview.component.html',
+  styleUrls: ['./taskscategoryview.component.scss']
 })
-export class TasksComponent implements OnInit {
+export class TaskscategoryviewComponent implements OnInit {
 
   tableResponsiveColumns=false;
   theTasks;
   tasksList: ITasks[];
+  currentDate:Date;
+  isCategoryView:boolean = false;
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -61,6 +63,7 @@ export class TasksComponent implements OnInit {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private router: Router,
+    private _activatedRoute: ActivatedRoute,
     private breakpointObserver: BreakpointObserver) {
 
       // this.screenWidth2 = window.innerWidth;
@@ -76,14 +79,31 @@ export class TasksComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.refreshData();
+  
+        
+        //----------for edit-----------------//
+        this._activatedRoute.paramMap.subscribe(params => {
+          //---in the route we created edit route we set id as param so we get it here---//
+          const categoryID = +params.get('categoryid');
+          const duedate = +params.get('duedate');
+          console.log(params);
+          console.log(categoryID);
+          this.currentDate = new Date();
+          console.log('--------------router--------');
+          console.log(this.currentDate);
+          if (categoryID) {
+            // this.id = TaskID;
+            this.refreshDataWithCategoryIDandDueDate(categoryID,this.currentDate);
+          }
+        });
   }
-  refreshData() {
- 
+
+  refreshDataWithCategoryIDandDueDate(categoryID?,DueDate?) {
+    this.isCategoryView = true;
     console.log('-----------got here--------');
-    this.taskservice.getAllTasks('/tasks/').subscribe(
+    this.taskservice.getAllTasksByCategoryID(categoryID,DueDate,'/tasks/category/').subscribe(
       (modelData: ITasks[]) => {
-        //console.log(modelData);
+        console.log(modelData);
         this.tasksList = modelData;
         this.ELEMENT_DATA = modelData;
         this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
@@ -102,7 +122,6 @@ export class TasksComponent implements OnInit {
       }
     );
   }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -180,7 +199,7 @@ export class TasksComponent implements OnInit {
  
     callNext(timeout) {
       setTimeout(() => {
-          this.refreshData();
+        this.ngOnInit();
       }, timeout);
     }
 
@@ -188,6 +207,7 @@ export class TasksComponent implements OnInit {
       console.log(TaskID);
       console.log(event.checked);
       let status = event.checked;
+      console.log(this.isCategoryView);
       if(TaskID>0){
         console.log('-----Update task-----');
         const result = {"TaskID":TaskID,"Status":status};

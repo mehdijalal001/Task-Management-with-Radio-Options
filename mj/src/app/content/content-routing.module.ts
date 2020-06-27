@@ -8,6 +8,8 @@ import { DashboardsComponent } from './components/dashboards/dashboards.componen
 import { OfficetaskformComponent } from './components/tasks/officetasks/officetaskform/officetaskform.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
+import { TaskscategoryviewComponent } from './components/tasks/taskscategoryview/taskscategoryview.component';
+import { TaskscategoryviewformComponent } from './components/tasks/taskscategoryview/taskscategoryviewform/taskscategoryviewform.component';
 
 
 const routes: Routes = [
@@ -21,14 +23,20 @@ const routes: Routes = [
             path:'',component:TasksComponent
           },
           {
-            path:'category/:categoryid/:duedate',component:TasksComponent
-          },
-          {
             path:'addtask',component:TasksformComponent
           },
           {
             path:'addtask/:taskid',component:TasksformComponent
-          }
+          },
+          {
+            path:'category/:categoryid/:duedate',component:TaskscategoryviewComponent
+          },
+          {
+            path:'category/:categoryid/:duedate/addtask',component:TaskscategoryviewformComponent
+          },
+          {
+            path:'category/:categoryid/:duedate/addtask/:taskid',component:TaskscategoryviewformComponent
+          },
         ]
       },
       {

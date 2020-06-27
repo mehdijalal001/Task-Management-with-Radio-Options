@@ -23,7 +23,7 @@
               </mat-form-field>
               <div class="taskaction-box"  >
                 <button mat-raised-button color="warn" (click)="deleteAllSelectedTasks()" [disabled]="!selection.hasValue() && !isAllSelected()">Delete All</button>
-                <button mat-raised-button color="primary" [routerLink]="['../addtask']">Add Task</button>
+                <button mat-raised-button color="primary" [routerLink]="['./addtask']">Add Task</button>
               </div>
               <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
                 <!-- Checkbox Column -->
@@ -82,11 +82,11 @@
                 <!-- <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;"
                 (click)="selection.toggle(row)" [routerLink]="['/tasks/officetasks/addnew/', element.OfficeTaskID]">
                 </tr> -->
-
+        
                 <tr mat-row *matRowDef="let element; let row; columns: displayedColumns;" 
-                  [routerLink]="['../../alltasks/addtask/', element.TaskID]">
+                  [routerLink]="['./addtask/', element.TaskID]">
                 </tr>
-
+   
 
               </table>
               <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons> </mat-paginator>

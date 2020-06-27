@@ -38,6 +38,8 @@ import { UsersComponent } from './components/admin/users/users.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
 import {DashboardsComponent} from './components/dashboards/dashboards.component';
+import { TaskscategoryviewComponent } from './components/tasks/taskscategoryview/taskscategoryview.component';
+import { TaskscategoryviewformComponent } from './components/tasks/taskscategoryview/taskscategoryviewform/taskscategoryviewform.component';
 
 
 
@@ -52,7 +54,9 @@ import {DashboardsComponent} from './components/dashboards/dashboards.component'
     ReplacePipe,
     DashboardsComponent,
     TasksComponent,
-    TasksformComponent
+    TasksformComponent,
+    TaskscategoryviewComponent,
+    TaskscategoryviewformComponent
   ],
   imports: [
     CommonModule,
