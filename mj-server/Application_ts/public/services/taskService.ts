@@ -14,26 +14,46 @@ export class TasksService implements ITasks {
         }
     }
     //---get all--------//
-    async getMyTasksDueToday(req: any, res: any, next: any): Promise<any> {
+    async getMyGroupedTasksByDueDate(req: any, res: any, next: any): Promise<any> {
       let modelClass: TasksModel[] = [];
       await this.repo
-      .getMyTasksDueToday(req, res, next)
+      .getMyGroupedTasksByDueDate(req, res, next)
       .then(results => (modelClass = results))
       .catch(err => {
           next(err);
         });
         return modelClass;
     }
-    async getMyTasksDueTomorrow(req: any, res: any, next: any): Promise<any> {
+    async getMyGroupedTasksBetweenDates(req: any, res: any, next: any): Promise<any> {
       let modelClass: TasksModel[] = [];
       await this.repo
-      .getMyTasksDueTomorrow(req, res, next)
+      .getMyGroupedTasksBetweenDates(req, res, next)
       .then(results => (modelClass = results))
       .catch(err => {
           next(err);
         });
         return modelClass;
     }
+    async getTaskByCategoryIdAndDueDate(req: any, res: any, next: any): Promise<any> {
+        let modelClass: TasksModel[] = [];
+        await this.repo
+        .getTaskByCategoryIdAndDueDate(req, res, next)
+        .then(results => (modelClass = results))
+        .catch(err => {
+            next(err);
+          });
+          return modelClass;
+      }
+      async getTaskByCategoryIdStartEndDate(req: any, res: any, next: any): Promise<any> {
+        let modelClass: TasksModel[] = [];
+        await this.repo
+        .getTaskByCategoryIdStartEndDate(req, res, next)
+        .then(results => (modelClass = results))
+        .catch(err => {
+            next(err);
+          });
+          return modelClass;
+      }
     async getAllTasks(req: any, res: any, next: any): Promise<any> {
       let modelClass: TasksModel[] = [];
       await this.repo
@@ -74,16 +94,7 @@ export class TasksService implements ITasks {
         });
         return modelClass;
     }
-    async getTaskByCategoryIdAndDueDate(req: any, res: any, next: any): Promise<any> {
-      let modelClass: TasksModel[] = [];
-      await this.repo
-      .getTaskByCategoryIdAndDueDate(req, res, next)
-      .then(results => (modelClass = results))
-      .catch(err => {
-          next(err);
-        });
-        return modelClass;
-    }
+   
     async viewTasks(req: any, res: any, next: any): Promise<any> {
       let modelClass: TasksModel[] = [];
       await this.repo

@@ -27,11 +27,10 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'YYYY'
   }
 };
-
 @Component({
-  selector: 'app-taskscategoryviewform',
-  templateUrl: './taskscategoryviewform.component.html',
-  styleUrls: ['./taskscategoryviewform.component.scss'],
+  selector: 'app-taskcategorystartenddateform',
+  templateUrl: './taskcategorystartenddateform.component.html',
+  styleUrls: ['./taskcategorystartenddateform.component.scss'],
   providers: [
     {
       provide: DateAdapter,
@@ -43,7 +42,7 @@ export const MY_FORMATS = {
     DialogService
   ]
 })
-export class TaskscategoryviewformComponent implements OnInit {
+export class TaskcategorystartenddateformComponent implements OnInit {
   taskForm: FormGroup;
   id = 0;
   data;
@@ -109,7 +108,10 @@ export class TaskscategoryviewformComponent implements OnInit {
     this._activatedRoute.paramMap.subscribe(params => {
       //---in the route we created edit route we set id as param so we get it here---//
       //console.log(params);
+      
       const categoryid = +params.get('categoryid');
+ 
+
       this.params_category_id = categoryid;
       //console.log(categoryid);
       const TaskID = +params.get('taskid');

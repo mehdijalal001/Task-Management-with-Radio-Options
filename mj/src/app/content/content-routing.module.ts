@@ -10,6 +10,8 @@ import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
 import { TaskscategoryviewComponent } from './components/tasks/taskscategoryview/taskscategoryview.component';
 import { TaskscategoryviewformComponent } from './components/tasks/taskscategoryview/taskscategoryviewform/taskscategoryviewform.component';
+import { TaskscategorystartenddateComponent } from './components/tasks/taskscategorystartenddate/taskscategorystartenddate.component';
+import { TaskcategorystartenddateformComponent } from './components/tasks/taskscategorystartenddate/taskcategorystartenddateform/taskcategorystartenddateform.component';
 
 
 const routes: Routes = [
@@ -36,6 +38,15 @@ const routes: Routes = [
           },
           {
             path:'category/:categoryid/:duedate/addtask/:taskid',component:TaskscategoryviewformComponent
+          },
+          {
+            path:'categorywithstartend/:categoryid/:startdate/:enddate',component:TaskscategorystartenddateComponent
+          },
+          {
+            path:'categorywithstartend/:categoryid/:startdate/:enddate/addtask',component:TaskcategorystartenddateformComponent
+          },
+          {
+            path:'categorywithstartend/:categoryid/:startdate/:enddate/addtask/:taskid',component:TaskcategorystartenddateformComponent
           },
         ]
       },

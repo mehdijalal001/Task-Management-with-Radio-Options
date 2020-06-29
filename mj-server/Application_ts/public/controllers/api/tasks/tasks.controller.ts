@@ -8,9 +8,10 @@ class TasksController implements ITasks {
       
 
         router.get('/', this.getAllTasks.bind(this));
-        router.get('/mytasksduetoday', this.getMyTasksDueToday.bind(this));
-        router.get('/mytasksduetomorrow', this.getMyTasksDueTomorrow.bind(this));
+        router.get('/groupedtasksbyduedate/:duedate', this.getMyGroupedTasksByDueDate.bind(this));
+        router.get('/groupedtasksbetweendates/:startdate/:enddate', this.getMyGroupedTasksBetweenDates.bind(this));
         router.get('/category/:categoryId/:DueDate', this.getTaskByCategoryIdAndDueDate.bind(this));
+        router.get('/categorywithstartend/:categoryId/:startdate/:enddate', this.getTaskByCategoryIdStartEndDate.bind(this));
         router.get('/current', this.getCurrentTasks.bind(this));
         router.get('/complete', this.getCompletedTasks.bind(this));
         router.get('/view/:id', this.viewTasks.bind(this));
@@ -23,9 +24,9 @@ class TasksController implements ITasks {
        
     }
     
-    getMyTasksDueToday(req: any, res: any, next: any): Promise<any> {
+    getMyGroupedTasksByDueDate(req: any, res: any, next: any): Promise<any> {
         return this.service
-        .getMyTasksDueToday(req, res, next)
+        .getMyGroupedTasksByDueDate(req, res, next)
         .then(results =>{
             res.json(results)
             })
@@ -33,9 +34,9 @@ class TasksController implements ITasks {
                 next(err);
             });
     }
-    getMyTasksDueTomorrow(req: any, res: any, next: any): Promise<any> {
+    getMyGroupedTasksBetweenDates(req: any, res: any, next: any): Promise<any> {
         return this.service
-        .getMyTasksDueTomorrow(req, res, next)
+        .getMyGroupedTasksBetweenDates(req, res, next)
         .then(results =>{
             res.json(results)
             })
@@ -44,6 +45,7 @@ class TasksController implements ITasks {
             });
     }
     getAllTasks(req: any, res: any, next: any): Promise<any> {
+        console.log('-----all tasks------');
         return this.service
         .getAllTasks(req, res, next)
         .then(results =>{
@@ -54,6 +56,7 @@ class TasksController implements ITasks {
             });
     }
     getCurrentTasks(req: any, res: any, next: any): Promise<any> {
+        console.log('-----current tasks------');
         return this.service
         .getCurrentTasks(req, res, next)
         .then(results =>{
@@ -64,6 +67,7 @@ class TasksController implements ITasks {
             });
     }
     getCompletedTasks(req: any, res: any, next: any): Promise<any> {
+        console.log('-----completed tasks------');
         return this.service
         .getCompletedTasks(req, res, next)
         .then(results =>{
@@ -84,6 +88,17 @@ class TasksController implements ITasks {
                 next(err);
             });
     }
+    getTaskByCategoryIdStartEndDate(req: any, res: any, next: any): Promise<any> {
+        console.log('---geting startdate enddate----');
+        return this.service
+        .getTaskByCategoryIdStartEndDate(req, res, next)
+        .then(results =>{
+            res.json(results)
+            })
+            .catch(err => {
+                next(err);
+            });
+    }
     getTaskById(req: any, res: any, next: any): Promise<any> {
         console.log('--------get task by id-------');
         return this.service
@@ -96,6 +111,7 @@ class TasksController implements ITasks {
             });
     }
     viewTasks(req: any, res: any, next: any): Promise<any> {
+        console.log('-----view tasks------');
         return this.service
         .viewTasks(req, res, next)
         .then(results =>{

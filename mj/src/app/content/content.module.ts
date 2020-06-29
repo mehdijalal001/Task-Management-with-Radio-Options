@@ -40,6 +40,8 @@ import { TasksformComponent } from './components/tasks/tasksform/tasksform.compo
 import {DashboardsComponent} from './components/dashboards/dashboards.component';
 import { TaskscategoryviewComponent } from './components/tasks/taskscategoryview/taskscategoryview.component';
 import { TaskscategoryviewformComponent } from './components/tasks/taskscategoryview/taskscategoryviewform/taskscategoryviewform.component';
+import { TaskscategorystartenddateComponent } from './components/tasks/taskscategorystartenddate/taskscategorystartenddate.component';
+import { TaskcategorystartenddateformComponent } from './components/tasks/taskscategorystartenddate/taskcategorystartenddateform/taskcategorystartenddateform.component';
 
 
 
@@ -56,7 +58,9 @@ import { TaskscategoryviewformComponent } from './components/tasks/taskscategory
     TasksComponent,
     TasksformComponent,
     TaskscategoryviewComponent,
-    TaskscategoryviewformComponent
+    TaskscategoryviewformComponent,
+    TaskscategorystartenddateComponent,
+    TaskcategorystartenddateformComponent
   ],
   imports: [
     CommonModule,

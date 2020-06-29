@@ -6,6 +6,7 @@ import { DialogService } from './../../../shared/services/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ITasks } from './../../models/tasks.model';
 import { DashboardService } from './../../services/dashboard.service';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-dashboards',
@@ -16,13 +17,15 @@ import { DashboardService } from './../../services/dashboard.service';
 
 export class DashboardsComponent implements OnInit {
 
+
   _myTasksDueToday;
   _myTasksDueTomorrow;
+  _myTasksDueNext7days;
   currentDate:any;
   tomorrow:any;
+  next7days:any;
   all = 'all';
-  bgHome;
-  bgOffice;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private dashboardservices:DashboardService,  
@@ -30,15 +33,27 @@ export class DashboardsComponent implements OnInit {
     private dialogService: DialogService) {}
 
   ngOnInit(): void {
-    this.getMyTasksDueToday();
-    this.getMyTasksDueTomorrow();
+    this.currentDate = formatDate(new Date(),'yyyy-MM-dd','en_US');
+    this.tomorrow = new Date();
+    this.tomorrow.setDate(this.tomorrow.getDate()+1);
+    this.tomorrow = formatDate(this.tomorrow, 'yyyy-MM-dd','en_US');
+
+    let todaysdate = new Date();
+    todaysdate.setDate(todaysdate.getDate()+7);
+    this.next7days = formatDate(todaysdate, 'yyyy-MM-dd','en_US');
+    //console.log(this.next7days);
+    this.getMyTasksDueToday('/tasks/groupedtasksbyduedate/',this.currentDate);
+    this.getMyTasksDueTomorrow('/tasks/groupedtasksbyduedate/',this.tomorrow);
+    this.getMyTasksDueNext7Days('/tasks/groupedtasksbetweendates/',this.currentDate,this.next7days);
   }
-  getMyTasksDueToday(){
-    this.dashboardservices.getMyTasksDueToday('/tasks/mytasksduetoday').subscribe(
+  getMyTasksDueToday(url,duedate){
+    console.log(this.currentDate);
+    this.dashboardservices.getGroupedTasksByDueDate(url,duedate).subscribe(
       (modelData: ITasks[]) => {
         //console.log(modelData);
         this._myTasksDueToday = modelData;
-        this.currentDate = new Date().toISOString();
+   
+        
       },
       error => {
         const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
@@ -50,14 +65,14 @@ export class DashboardsComponent implements OnInit {
       }
     );
   }
-  getMyTasksDueTomorrow(){
-    this.dashboardservices.getMyTasksDueTomorrow('/tasks/mytasksduetomorrow').subscribe(
+  getMyTasksDueTomorrow(url,duedate){
+    this.dashboardservices.getGroupedTasksByDueDate(url,duedate).subscribe(
       (modelData: ITasks[]) => {
         console.log(modelData);
         this._myTasksDueTomorrow = modelData;
-        this.tomorrow = new Date();
-        this.tomorrow.setDate(this.tomorrow.getDate()+1);
-        this.tomorrow = this.tomorrow.toISOString();
+       
+        //this.tomorrow = this.tomorrow.toISOString();
+        
       },
       error => {
         const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
@@ -69,18 +84,12 @@ export class DashboardsComponent implements OnInit {
       }
     );
   }
-  getMyTasksDueNext7Days(){
-    this.dashboardservices.getMyTasksDueNext7Days('/tasks/myTasksDueNext7Days').subscribe(
+  getMyTasksDueNext7Days(url,startdate,enddate){
+    this.dashboardservices.getGroupedTasksBetweenDates(url,startdate,enddate).subscribe(
       (modelData: ITasks[]) => {
         console.log(modelData);
-        this._myTasksDueTomorrow = modelData;
-        //this.tomorrow = new Date().toISOString();
-        this.tomorrow = new Date();
-        let tomorrow2 = this.tomorrow.setDate(this.tomorrow.getDate()+1);
-        this.tomorrow = this.tomorrow.toISOString();
-        //console.log('-----------xxxxx-----');
- 
-        //console.log(tomorrow2);
+        this._myTasksDueNext7days = modelData;
+      
       },
       error => {
         const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
@@ -92,5 +101,10 @@ export class DashboardsComponent implements OnInit {
       }
     );
   }
+
+  setTimeZone(date) {
+    date.setHours(date.getHours() + (new Date().getTimezoneOffset() / 60));
+    return date;
+}
 
 }

@@ -20,8 +20,11 @@ export class DashboardService {
     this.baseurl = rootURL;
   }
 
-  getMyTasksDueToday(urn: string) {
-    return this.http.get(this.baseurl + urn);
+  getGroupedTasksByDueDate(urn: string,duedate:any) {
+    return this.http.get(this.baseurl + urn +duedate);
+  }
+  getGroupedTasksBetweenDates(urn: string,startdate:any,enddate:any) {
+    return this.http.get(this.baseurl + urn +startdate+'/'+enddate);
   }
   getMyTasksDueTomorrow(urn: string) {
     return this.http.get(this.baseurl + urn);

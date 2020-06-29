@@ -2,10 +2,16 @@ import { ITasks } from "../interfaces/iTasks";
 
 export class MockTasksRepo implements ITasks {
 
-    getMyTasksDueToday(): Promise<any> {
+    getMyGroupedTasksByDueDate(): Promise<any> {
         throw new Error('Method not implemented.');
     }
-    getMyTasksDueTomorrow(): Promise<any> {
+    getMyGroupedTasksBetweenDates(): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
+    getTaskByCategoryIdAndDueDate(): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
+    getTaskByCategoryIdStartEndDate(): Promise<any> {
         throw new Error('Method not implemented.');
     }
     getAllTasks(): Promise<any> {
@@ -20,9 +26,7 @@ export class MockTasksRepo implements ITasks {
     getTaskById(): Promise<any> {
         throw new Error('Method not implemented.');
     }
-    getTaskByCategoryIdAndDueDate(): Promise<any> {
-        throw new Error('Method not implemented.');
-    }
+ 
     viewTasks(): Promise<any> {
         throw new Error('Method not implemented.');
     }
