@@ -39,6 +39,11 @@ export class DataFormatter {
         replace(/\..+/, '');
         return pubdate;
     }
+    public static dateFormate(date){
+        let mjdate = new Date(date).toISOString();
+        let mjdatex = new Date(mjdate);
+        return mjdatex;
+    }
 
 
 }

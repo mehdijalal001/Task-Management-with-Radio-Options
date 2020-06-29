@@ -17,7 +17,9 @@
                   </button>
                 </div>
               </div>
-              
+              <div class="aligncenter">
+                <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/category/', all,currentDate]">All</button>
+              </div>
             </mat-card-content>
           </mat-card>
         </div>
@@ -27,15 +29,15 @@
                 <span>Due Tomorrow</span>
             </mat-card-header>
             <mat-card-content>
-              <div class="btn-div">
-                <button mat-raised-button color="primary"
-                  [matBadge]="bgHome" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks">Office Tasks
-                </button>
+              <div *ngFor="let rec of _myTasksDueTomorrow">
+                <div class="btn-div">
+                  <button mat-raised-button color="accent"
+                    [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="warn" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,tomorrow]">{{rec.CategoryName}}
+                  </button>
+                </div>
               </div>
-              <div class="btn-div">
-                <button mat-raised-button color="warn"
-                  [matBadge]="bgOffice" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks">General Tasks
-                </button>
+              <div class="aligncenter">
+                <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/category/', all,tomorrow]">All</button>
               </div>
             </mat-card-content>
           </mat-card>

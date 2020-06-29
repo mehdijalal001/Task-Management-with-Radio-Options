@@ -1,5 +1,6 @@
 export interface ITasks {
     getMyTasksDueToday(req:any, res:any,next:any): Promise<any>;
+    getMyTasksDueTomorrow(req:any, res:any,next:any): Promise<any>;
     getAllTasks(req:any, res:any,next:any): Promise<any>;
     getCompletedTasks(req?:any, res?:any,next?:any): Promise<any>;
     getCurrentTasks(req?:any, res?:any,next?:any): Promise<any>;

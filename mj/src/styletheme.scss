@@ -11,11 +11,17 @@ $mj-app-primary: mat-palette($mj-primary-indigo-palette,A900, A100, A400);
 /*---------To have customized the color-------------*/
 //$mj-app-primary: mat-palette($mj-primary-indigo-palette,A400, A100, A400);
 $mj-app-accent: mat-palette($mat-pink, A200, A100, A400);
-$mj-app-warn: mat-palette($mat-red, A700, A200, A400);
+$mj-app-warn: mat-palette($mat-red);
+/*---------adding custom color--------*/
+//$mj-app-warn: mat-palette($mat-red, A400, A100, A100);
+
+$mj-app-cyan: mat-palette($mat-cyan);
+$mj-app-amber: mat-palette($mat-amber);
+$mj-app-indigo: mat-palette($mat-indigo);
 
 $mj-app-theme: mat-light-theme(
-  $mj-app-primary,
-  $mj-app-accent,
+  $mj-app-indigo,
+  $mj-app-amber,
   $mj-app-warn
 );
 

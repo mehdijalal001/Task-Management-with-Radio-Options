@@ -1,5 +1,5 @@
 <div class="grid-container">
-    <h1 class="mat-h1">All Tasks</h1>
+    <!-- <h1 class="mat-h1">All Tasks</h1> -->
     <mat-grid-list cols="2" rowHeight="350px">
       <mat-grid-tile  [colspan]="2" [rowspan]="2">
         <mat-card class="dashboard-card">
@@ -10,8 +10,9 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #menu="matMenu" xPosition="before">
-                <button mat-menu-item>Expand</button>
-                <button mat-menu-item>Remove</button>
+                <button mat-menu-item>All Tasks</button>
+                <button mat-menu-item>Pending</button>
+                <button mat-menu-item>Completed</button>
               </mat-menu>
             </mat-card-title>
           </mat-card-header>

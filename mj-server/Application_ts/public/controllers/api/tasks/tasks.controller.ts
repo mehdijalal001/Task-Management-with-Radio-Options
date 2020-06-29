@@ -9,6 +9,7 @@ class TasksController implements ITasks {
 
         router.get('/', this.getAllTasks.bind(this));
         router.get('/mytasksduetoday', this.getMyTasksDueToday.bind(this));
+        router.get('/mytasksduetomorrow', this.getMyTasksDueTomorrow.bind(this));
         router.get('/category/:categoryId/:DueDate', this.getTaskByCategoryIdAndDueDate.bind(this));
         router.get('/current', this.getCurrentTasks.bind(this));
         router.get('/complete', this.getCompletedTasks.bind(this));
@@ -25,6 +26,16 @@ class TasksController implements ITasks {
     getMyTasksDueToday(req: any, res: any, next: any): Promise<any> {
         return this.service
         .getMyTasksDueToday(req, res, next)
+        .then(results =>{
+            res.json(results)
+            })
+            .catch(err => {
+                next(err);
+            });
+    }
+    getMyTasksDueTomorrow(req: any, res: any, next: any): Promise<any> {
+        return this.service
+        .getMyTasksDueTomorrow(req, res, next)
         .then(results =>{
             res.json(results)
             })

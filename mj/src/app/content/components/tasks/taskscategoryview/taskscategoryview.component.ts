@@ -84,16 +84,17 @@ export class TaskscategoryviewComponent implements OnInit {
         //----------for edit-----------------//
         this._activatedRoute.paramMap.subscribe(params => {
           //---in the route we created edit route we set id as param so we get it here---//
-          const categoryID = +params.get('categoryid');
-          const duedate = +params.get('duedate');
           console.log(params);
+          const categoryID = params.get('categoryid');
+          const duedate = params.get('duedate');
+          //console.log('----- here is date passed-----');
+          //console.log(duedate);
           console.log(categoryID);
-          this.currentDate = new Date();
-          console.log('--------------router--------');
-          console.log(this.currentDate);
+          //this.currentDate = new Date();
+          //console.log(this.currentDate);
           if (categoryID) {
             // this.id = TaskID;
-            this.refreshDataWithCategoryIDandDueDate(categoryID,this.currentDate);
+            this.refreshDataWithCategoryIDandDueDate(categoryID,duedate);
           }
         });
   }

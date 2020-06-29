@@ -26,6 +26,9 @@ export class DashboardService {
   getMyTasksDueTomorrow(urn: string) {
     return this.http.get(this.baseurl + urn);
   }
+  getMyTasksDueNext7Days(urn: string) {
+    return this.http.get(this.baseurl + urn);
+  }
   getTaskById(id: number, urn: string){
     try {
       return this.http.get(this.baseurl + urn + id);

@@ -17,8 +17,10 @@ import { DashboardService } from './../../services/dashboard.service';
 export class DashboardsComponent implements OnInit {
 
   _myTasksDueToday;
+  _myTasksDueTomorrow;
   currentDate:any;
-
+  tomorrow:any;
+  all = 'all';
   bgHome;
   bgOffice;
   constructor(
@@ -29,16 +31,56 @@ export class DashboardsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMyTasksDueToday();
+    this.getMyTasksDueTomorrow();
   }
   getMyTasksDueToday(){
     this.dashboardservices.getMyTasksDueToday('/tasks/mytasksduetoday').subscribe(
       (modelData: ITasks[]) => {
-        console.log(modelData);
+        //console.log(modelData);
         this._myTasksDueToday = modelData;
         this.currentDate = new Date().toISOString();
-        console.log('-----');
-        console.log(this.currentDate);
-        console.log('--ssss----');
+      },
+      error => {
+        const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
+        res.afterClosed().subscribe(dialogResult => {
+          if (dialogResult) {
+            //this.callNext(200);
+          }
+        });
+      }
+    );
+  }
+  getMyTasksDueTomorrow(){
+    this.dashboardservices.getMyTasksDueTomorrow('/tasks/mytasksduetomorrow').subscribe(
+      (modelData: ITasks[]) => {
+        console.log(modelData);
+        this._myTasksDueTomorrow = modelData;
+        this.tomorrow = new Date();
+        this.tomorrow.setDate(this.tomorrow.getDate()+1);
+        this.tomorrow = this.tomorrow.toISOString();
+      },
+      error => {
+        const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
+        res.afterClosed().subscribe(dialogResult => {
+          if (dialogResult) {
+            //this.callNext(200);
+          }
+        });
+      }
+    );
+  }
+  getMyTasksDueNext7Days(){
+    this.dashboardservices.getMyTasksDueNext7Days('/tasks/myTasksDueNext7Days').subscribe(
+      (modelData: ITasks[]) => {
+        console.log(modelData);
+        this._myTasksDueTomorrow = modelData;
+        //this.tomorrow = new Date().toISOString();
+        this.tomorrow = new Date();
+        let tomorrow2 = this.tomorrow.setDate(this.tomorrow.getDate()+1);
+        this.tomorrow = this.tomorrow.toISOString();
+        //console.log('-----------xxxxx-----');
+ 
+        //console.log(tomorrow2);
       },
       error => {
         const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');

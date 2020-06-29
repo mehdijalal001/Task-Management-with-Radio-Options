@@ -27,11 +27,11 @@ export class TasksRepo implements ITasks {
     let inputParameters = [
       { name: 'UserId', dataType: TYPES.Int, value: UserID }
     ];
-    let CustomQuery = `SELECT ts.CategoryID, COUNT(ts.CategoryID) AS totaltasks, ct.Name AS CategoryName
+    let CustomQuery = `SELECT ts.CategoryID, ts.Status, COUNT(ts.CategoryID) AS totaltasks, ct.Name AS CategoryName
     FROM MJ.Tasks AS ts
     LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-    WHERE ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) = CAST(GETDATE() AS DATE)
-    GROUP BY ts.CategoryID, ct.Name
+    WHERE ts.Status !=1 OR ts.Status IS NULL AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) = CAST(GETDATE() AS DATE)
+    GROUP BY ts.CategoryID, ct.Name, ts.Status
     ORDER BY ct.Name ASC`;
     await provider
       .executeQuery(CustomQuery,inputParameters)
@@ -46,6 +46,87 @@ export class TasksRepo implements ITasks {
 
     return modelToArray;
   }
+  public async getMyTasksDueTomorrow(req:any,res:any,next:any): Promise<any> {
+
+    console.log('---geting due tomorrow------');
+    let modelToArray: TasksModel[] = [];
+    let provider = new SQLDBProvider();
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'UserId', dataType: TYPES.Int, value: UserID }
+    ];
+    let CustomQuery = `SELECT ts.CategoryID, ts.Status, COUNT(ts.CategoryID) AS totaltasks, ct.Name AS CategoryName
+    FROM MJ.Tasks AS ts
+    LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+    WHERE ts.Status !=1 OR ts.Status IS NULL AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) = DATEADD(DAY,1,CAST(GETDATE() AS DATE))
+    GROUP BY ts.CategoryID, ct.Name, ts.Status
+    ORDER BY ct.Name ASC`;
+    await provider
+      .executeQuery(CustomQuery,inputParameters)
+      .then(results => {
+        console.log(results);
+        if (results) {
+            modelToArray = TasksModel.MapDBToArray(results);
+        }
+      })
+      .catch(err => {
+        return LogErrors.logErrors(err);
+      });
+
+    return modelToArray;
+  }
+
+  public async getTaskByCategoryIdAndDueDate(req:any,res:any,next:any): Promise<any> {
+    let provider = new SQLDBProvider();
+    let modelToArray: TasksModel[] = [];
+    let categoryID = req.params.categoryId;
+    let DueDate = req.params.DueDate;
+
+    let newDuedate = DataFormatter.dateFormate(DueDate);
+    console.log('----here------');
+    console.log(categoryID);
+    let UserID = 1007;
+    let inputParameters =[];
+    let CustomQuery:any;
+    if(categoryID=='all'){
+       inputParameters = [
+        //{ name: 'CategoryID', dataType: TYPES.Int, value: categoryID },
+        { name: 'EndDate', dataType: TYPES.DateTime, value: newDuedate },
+        { name: 'UserId', dataType: TYPES.Int, value: UserID }
+      ];
+       CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
+      FROM MJ.Tasks  AS ts 
+      LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+      WHERE ts.Status!=1 OR ts.Status IS NULL AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)`;
+      
+    }else{
+       inputParameters = [
+        { name: 'CategoryID', dataType: TYPES.Int, value: categoryID },
+        { name: 'EndDate', dataType: TYPES.DateTime, value: newDuedate },
+        { name: 'UserId', dataType: TYPES.Int, value: UserID }
+      ];
+       CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
+      FROM MJ.Tasks  AS ts 
+      LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+      WHERE ts.Status!=1 OR ts.Status IS NULL AND ts.CategoryID = @CategoryID AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)`;
+      
+    }
+
+    await provider
+      .executeQuery(CustomQuery, inputParameters)
+      .then(results => {
+        //console.log(results);
+        if (results) {
+            modelToArray = TasksModel.MapDBToArray(results);
+        }
+      })
+      .catch(err => {
+        return LogErrors.logErrors(err);
+      });
+
+    return modelToArray;
+  }
+
   public async getAllTasks(req:any,res:any,next:any): Promise<any> {
 
     let modelToArray: TasksModel[] = [];
@@ -103,44 +184,7 @@ export class TasksRepo implements ITasks {
 
     return [modelData];
   }
-  public async getTaskByCategoryIdAndDueDate(req:any,res:any,next:any): Promise<any> {
-    let provider = new SQLDBProvider();
-    let modelToArray: TasksModel[] = [];
-    let categoryID = req.params.categoryId;
-    let DueDate = req.params.DueDate;
-    //console.log(req.params);
-    console.log('--------');
-    console.log(categoryID);
-    console.log(DueDate);
-    
-    let newDuedate = DataFormatter.formatDate(DueDate);
-    let newDuedate2 = new Date(newDuedate);
-    console.log(newDuedate);
-    console.log(newDuedate2);
-    let UserID = 1007;
-    let inputParameters = [
-      { name: 'CategoryID', dataType: TYPES.Int, value: categoryID },
-      { name: 'EndDate', dataType: TYPES.DateTime, value: newDuedate2 },
-      { name: 'UserId', dataType: TYPES.Int, value: UserID }
-    ];
-    let CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
-    FROM MJ.Tasks  AS ts 
-    LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-    WHERE ts.CategoryID = @CategoryID AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)`;
-    await provider
-      .executeQuery(CustomQuery, inputParameters)
-      .then(results => {
-        //console.log(results);
-        if (results) {
-            modelToArray = TasksModel.MapDBToArray(results);
-        }
-      })
-      .catch(err => {
-        return LogErrors.logErrors(err);
-      });
 
-    return modelToArray;
-  }
   public async viewTasks(req:any,res:any,next:any): Promise<any> {
     let provider = new SQLDBProvider();
     let modelData: TasksModel = new TasksModel();
