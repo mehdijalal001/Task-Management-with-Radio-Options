@@ -4,63 +4,132 @@
    <mat-card>
      <mat-card-content>
       <div fxLayout="row wrap" fxLayoutAlign="space-between">
-        <div class="duetoday">
-          <mat-card>
-            <mat-card-header>
-                <span>Due Today</span>
-            </mat-card-header>
-            <mat-card-content >
-              <div *ngFor="let rec of _myTasksDueToday">
-                <div class="btn-div">
-                  <button mat-raised-button color="warn"
-                    [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,currentDate]">{{rec.CategoryName}}
-                  </button>
+         <div id="box-left">
+           <mat-card>
+             <div class="card-div-content"  fxLayout="row wrap" fxFlex="599" fxLayoutAlign="space-between">
+              <div class="tasks-buttons-div">
+                <mat-card>
+                  <mat-card-header>
+                      <span>Due Today</span>
+                  </mat-card-header>
+                  <mat-card-content >
+                    <div *ngFor="let rec of _myTasksDueToday">
+                      <div class="btn-div">
+                        <button mat-raised-button color="warn"
+                          [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,currentDate]">{{rec.CategoryName}}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="aligncenter">
+                      <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/category/', all,currentDate]">All</button>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div class="tasks-buttons-div">
+                <mat-card>
+                  <mat-card-header>
+                      <span>Due Tomorrow</span>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div *ngFor="let rec of _myTasksDueTomorrow">
+                      <div class="btn-div">
+                        <button mat-raised-button color="accent"
+                          [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="warn" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,tomorrow]">{{rec.CategoryName}}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="aligncenter">
+                      <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/category/', all,tomorrow]">All</button>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+              <div class="tasks-buttons-div">
+                <mat-card>
+                  <mat-card-header>
+                      <span>Due next 7 days</span>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <div *ngFor="let rec of _myTasksDueNext7days">
+                      <div class="btn-div">
+                        <button mat-raised-button color="primary"
+                          [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
+                        </button>
+                      </div>
+                    </div>
+                    <div class="aligncenter">
+                      <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/categorywithstartend/', all,currentDate,next7days]">All</button>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+           </mat-card>
+         </div>
+         <div id="box-right">
+            <mat-card>
+              <div class="card-div-content" fxLayout="row wrap" fxFlex="599" fxLayoutAlign="space-between">
+                <div class="tasks-buttons-div">
+                  <mat-card>
+                    <mat-card-header>
+                        <span>Due next 7 days</span>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div *ngFor="let rec of _myTasksDueNext7days">
+                        <div class="btn-div">
+                          <button mat-raised-button color="primary"
+                            [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
+                          </button>
+                        </div>
+                      </div>
+                      <div class="aligncenter">
+                        <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/categorywithstartend/', all,currentDate,next7days]">All</button>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+                <div class="tasks-buttons-div">
+                  <mat-card>
+                    <mat-card-header>
+                        <span>Due next 7 days</span>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div *ngFor="let rec of _myTasksDueNext7days">
+                        <div class="btn-div">
+                          <button mat-raised-button color="primary"
+                            [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
+                          </button>
+                        </div>
+                      </div>
+                      <div class="aligncenter">
+                        <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/categorywithstartend/', all,currentDate,next7days]">All</button>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
+                </div>
+                <div class="tasks-buttons-div">
+                  <mat-card>
+                    <mat-card-header>
+                        <span>Due next 7 days</span>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div *ngFor="let rec of _myTasksDueNext7days">
+                        <div class="btn-div">
+                          <button mat-raised-button color="primary"
+                            [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
+                          </button>
+                        </div>
+                      </div>
+                      <div class="aligncenter">
+                        <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/categorywithstartend/', all,currentDate,next7days]">All</button>
+                      </div>
+                    </mat-card-content>
+                  </mat-card>
                 </div>
               </div>
-              <div class="aligncenter">
-                <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/category/', all,currentDate]">All</button>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-        <div class="duetomorrow">
-          <mat-card>
-            <mat-card-header>
-                <span>Due Tomorrow</span>
-            </mat-card-header>
-            <mat-card-content>
-              <div *ngFor="let rec of _myTasksDueTomorrow">
-                <div class="btn-div">
-                  <button mat-raised-button color="accent"
-                    [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="warn" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,tomorrow]">{{rec.CategoryName}}
-                  </button>
-                </div>
-              </div>
-              <div class="aligncenter">
-                <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/category/', all,tomorrow]">All</button>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-        <div class="duenextsevendays">
-          <mat-card>
-            <mat-card-header>
-                <span>Due next 7 days</span>
-            </mat-card-header>
-            <mat-card-content>
-              <div *ngFor="let rec of _myTasksDueNext7days">
-                <div class="btn-div">
-                  <button mat-raised-button color="primary"
-                    [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
-                  </button>
-                </div>
-              </div>
-              <div class="aligncenter">
-                <button mat-mini-fab color="accent" [routerLink]="['/tasks/alltasks/categorywithstartend/', all,currentDate,next7days]">All</button>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
+            </mat-card>
+         </div>
       </div>
      </mat-card-content>
   </mat-card>

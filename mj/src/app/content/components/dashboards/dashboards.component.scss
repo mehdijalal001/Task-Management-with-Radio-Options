@@ -21,11 +21,17 @@
 }
 
 .btn-div{
-  margin: 1rem;
+  margin: 0.3rem;
 }
 .btn-tasks{
-  min-width: 120px;
-  width: 10vw;
+  min-width: 110px;
+  width: 1vw;
+}
+.tasks-buttons-div{
+  margin: 3px;
+}
+.card-div-content{
+  padding: 5px;
 }
 
 /*---When you put ::ng-deep it will effect other components when load through rout---*/
