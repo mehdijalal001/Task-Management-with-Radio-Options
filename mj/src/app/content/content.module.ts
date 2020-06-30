@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatListModule} from '@angular/material/list';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -27,7 +28,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { QuillModule } from 'ngx-quill';
 import { ReplacePipe } from './shared/pipes/replace-pipes';
-
+//--------charts--------------//
+import { ChartsModule } from 'ng2-charts';
 
 import { OfficetasksComponent } from './components/tasks/officetasks/officetasks.component';
 import { HometasksComponent } from './components/tasks/hometasks/hometasks.component';
@@ -37,7 +39,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { UsersComponent } from './components/admin/users/users.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
-import {DashboardsComponent} from './components/dashboards/dashboards.component';
+import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { TaskscategoryviewComponent } from './components/tasks/taskscategoryview/taskscategoryview.component';
 import { TaskscategoryviewformComponent } from './components/tasks/taskscategoryview/taskscategoryviewform/taskscategoryviewform.component';
 import { TaskscategorystartenddateComponent } from './components/tasks/taskscategorystartenddate/taskscategorystartenddate.component';
@@ -78,13 +80,15 @@ import { TaskcategorystartenddateformComponent } from './components/tasks/tasksc
     MatInputModule,
     MatFormFieldModule,
     MatCheckboxModule,
+    MatListModule,
     FormsModule,
     ReactiveFormsModule,
     MatDatepickerModule,
     MatSelectModule,
     MatBadgeModule,
     QuillModule.forRoot(),
-    FlexLayoutModule
+    FlexLayoutModule,
+    ChartsModule
 
   ],
   exports:[

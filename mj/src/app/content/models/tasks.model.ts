@@ -17,5 +17,6 @@ export interface ITasks {
     Stage?: string;
     Percentage?: string;
     CategoryID: number;
+    totaltasks?:number;
   }
   
