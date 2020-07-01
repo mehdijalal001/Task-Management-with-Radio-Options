@@ -1,6 +1,7 @@
 export interface ITasks {
     getMyGroupedTasksByDueDate(req:any, res:any,next:any): Promise<any>;
-    getMyGroupedTasksBetweenDates(req:any, res:any,next:any): Promise<any>;
+    getMyGroupedPendingTasksBetweenDates(req:any, res:any,next:any): Promise<any>;
+    getAllMyTasksBetweenDates(req:any, res:any,next:any): Promise<any>;
     getTaskByCategoryIdAndDueDate(req?:any, res?:any,next?:any): Promise<any>;
     getTaskByCategoryIdStartEndDate(req?:any, res?:any,next?:any): Promise<any>;
 

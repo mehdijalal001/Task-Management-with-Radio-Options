@@ -26,6 +26,9 @@ export class DashboardService {
   getGroupedTasksBetweenDates(urn: string,startdate:any,enddate:any) {
     return this.http.get(this.baseurl + urn +startdate+'/'+enddate);
   }
+  getAllMyTasksBetweenDates(urn: string,startdate:any,enddate:any) {
+    return this.http.get(this.baseurl + urn +startdate+'/'+enddate);
+  }
   getMyTasksDueTomorrow(urn: string) {
     return this.http.get(this.baseurl + urn);
   }

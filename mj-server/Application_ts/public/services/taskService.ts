@@ -24,10 +24,20 @@ export class TasksService implements ITasks {
         });
         return modelClass;
     }
-    async getMyGroupedTasksBetweenDates(req: any, res: any, next: any): Promise<any> {
+    async getMyGroupedPendingTasksBetweenDates(req: any, res: any, next: any): Promise<any> {
       let modelClass: TasksModel[] = [];
       await this.repo
-      .getMyGroupedTasksBetweenDates(req, res, next)
+      .getMyGroupedPendingTasksBetweenDates(req, res, next)
+      .then(results => (modelClass = results))
+      .catch(err => {
+          next(err);
+        });
+        return modelClass;
+    }
+    async getAllMyTasksBetweenDates(req: any, res: any, next: any): Promise<any> {
+      let modelClass: TasksModel[] = [];
+      await this.repo
+      .getAllMyTasksBetweenDates(req, res, next)
       .then(results => (modelClass = results))
       .catch(err => {
           next(err);

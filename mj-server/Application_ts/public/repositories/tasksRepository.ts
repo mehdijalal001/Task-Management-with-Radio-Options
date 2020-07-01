@@ -22,10 +22,10 @@ export class TasksRepo implements ITasks {
 
     console.log('---geting due today------');
     let DueDate = req.params.duedate;
-    console.log(req.params);
-    console.log(DueDate);
+    //console.log(req.params);
+    //console.log(DueDate);
     DueDate = new Date(DueDate);
-    console.log(DueDate);
+    //console.log(DueDate);
     let modelToArray: TasksModel[] = [];
     let provider = new SQLDBProvider();
     let UserID = 1007;
@@ -52,7 +52,7 @@ export class TasksRepo implements ITasks {
 
     return modelToArray;
   }
-  public async getMyGroupedTasksBetweenDates(req:any,res:any,next:any): Promise<any> {
+  public async getMyGroupedPendingTasksBetweenDates(req:any,res:any,next:any): Promise<any> {
 
     console.log('---geting due today------');
     let StartDate = req.params.startdate;
@@ -80,6 +80,43 @@ export class TasksRepo implements ITasks {
     await provider
       .executeQuery(CustomQuery,inputParameters)
       .then(results => {
+        if (results) {
+            modelToArray = TasksModel.MapDBToArray(results);
+        }
+      })
+      .catch(err => {
+        return LogErrors.logErrors(err);
+      });
+
+    return modelToArray;
+  }
+  public async getAllMyTasksBetweenDates(req:any,res:any,next:any): Promise<any> {
+
+    console.log('---geting all my tasks between dates-----');
+    let StartDate = req.params.startdate;
+    let EndDate = req.params.enddate;
+    //console.log(req.params);
+    //console.log(StartDate);
+    StartDate = new Date(StartDate);
+    EndDate = new Date(EndDate);
+    console.log(StartDate);
+    console.log(EndDate);
+    let modelToArray: TasksModel[] = [];
+    let provider = new SQLDBProvider();
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'UserId', dataType: TYPES.Int, value: UserID },
+      { name: 'StartingDate', dataType: TYPES.DateTime, value: StartDate },
+      { name: 'EndingDate', dataType: TYPES.DateTime, value: EndDate }
+    ];
+    let CustomQuery = `SELECT ts.EndDate, ts.Status
+    FROM MJ.Tasks AS ts
+    WHERE ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(@EndingDate AS DATE)
+    `;
+    await provider
+      .executeQuery(CustomQuery,inputParameters)
+      .then(results => {
+        //console.log(results);
         if (results) {
             modelToArray = TasksModel.MapDBToArray(results);
         }

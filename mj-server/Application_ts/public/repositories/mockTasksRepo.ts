@@ -5,7 +5,10 @@ export class MockTasksRepo implements ITasks {
     getMyGroupedTasksByDueDate(): Promise<any> {
         throw new Error('Method not implemented.');
     }
-    getMyGroupedTasksBetweenDates(): Promise<any> {
+    getMyGroupedPendingTasksBetweenDates(): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
+    getAllMyTasksBetweenDates(): Promise<any> {
         throw new Error('Method not implemented.');
     }
     getTaskByCategoryIdAndDueDate(): Promise<any> {

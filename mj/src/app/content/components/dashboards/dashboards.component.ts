@@ -28,6 +28,7 @@ export class DashboardsComponent implements OnInit {
   currentDate:any;
   tomorrow:any;
   next7days:any;
+  last7days:any;
   all = 'all';
  //---today----//
   _myTasksDueToday_part1;
@@ -69,20 +70,26 @@ export class DashboardsComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.pieChartData = [300, 500, 100]
+    
     this.currentDate = formatDate(new Date(),'yyyy-MM-dd','en_US');
     this.tomorrow = new Date();
     this.tomorrow.setDate(this.tomorrow.getDate()+1);
     this.tomorrow = formatDate(this.tomorrow, 'yyyy-MM-dd','en_US');
 
+    let todaysdateforlast7days = new Date();
+    //------Last 7 days----------//
+    todaysdateforlast7days.setDate(todaysdateforlast7days.getDate()-7);
+    this.last7days = formatDate(todaysdateforlast7days, 'yyyy-MM-dd','en_US');
+    //-----Next 7 days--------//
     let todaysdate = new Date();
     todaysdate.setDate(todaysdate.getDate()+7);
     this.next7days = formatDate(todaysdate, 'yyyy-MM-dd','en_US');
     //console.log(this.next7days);
     this.getMyTasksDueToday('/tasks/groupedtasksbyduedate/',this.currentDate);
     this.getMyTasksDueTomorrow('/tasks/groupedtasksbyduedate/',this.tomorrow);
-    this.getMyTasksDueNext7Days('/tasks/groupedtasksbetweendates/',this.currentDate,this.next7days);
-    this.getMyTasksAllLastAndNext7Days('/tasks/groupedtasksbetweendates/',this.currentDate,this.next7days);
+    this.getMyTasksDueNext7Days('/tasks/groupedpendingtasksbetweendates/',this.currentDate,this.next7days);
+    this.getAllMyTasksBetweenDates('/tasks/getallmytasksbetweendates/',this.last7days,this.next7days);
+    
   }
   chartClicked(e){
     console.log(e);
@@ -131,7 +138,7 @@ export class DashboardsComponent implements OnInit {
   getMyTasksDueTomorrow(url,duedate){
     this.dashboardservices.getGroupedTasksByDueDate(url,duedate).subscribe(
       (modelData: ITasks[]) => {
-        console.log(modelData);
+        //console.log(modelData);
         this._myTasksDueTomorrow = modelData;
        
         let arr1 = [];
@@ -166,14 +173,15 @@ export class DashboardsComponent implements OnInit {
   getMyTasksDueNext7Days(url,startdate,enddate){
     this.dashboardservices.getGroupedTasksBetweenDates(url,startdate,enddate).subscribe(
       (modelData: ITasks[]) => {
-        console.log(modelData);
+        //console.log(modelData);
         this._myTasksDueNext7days = modelData;
 
         let arr1 = [];
         let arr2 = [];
-        let i = 1;
+        let i = 0;
         modelData.forEach((item)=>{
           //console.log(item);
+          //console.log(item.totaltasks);
           this._totalTasksDueNext7days += item.totaltasks;
           //console.log(item.totaltasks);
           if(i<=6){
@@ -198,12 +206,43 @@ export class DashboardsComponent implements OnInit {
     );
   }
   //----get all last and next 7 days-----//
-  getMyTasksAllLastAndNext7Days(url,startdate,enddate){
-    this.dashboardservices.getGroupedTasksBetweenDates(url,startdate,enddate).subscribe(
+  getAllMyTasksBetweenDates(url,startdate,enddate){
+    this.dashboardservices.getAllMyTasksBetweenDates(url,startdate,enddate).subscribe(
       (modelData: ITasks[]) => {
-        console.log(modelData);
+       // console.log(modelData);
 
-      
+        let TodayDate = formatDate(new Date(),'yyyy-MM-dd','en_US');
+ 
+        //let CompletedArr = [];
+        //let NotCompletedArr = [];
+        //let PendingArr = [];
+        let icompleted = 0;
+        let inotcompleted = 0;
+        let ipending =0;
+        modelData.forEach((item)=>{
+          if(item.Status==true){
+            //CompletedArr.push(item);
+            icompleted++;
+          }else{
+   
+           
+            let _enddate = formatDate(item.EndDate,'yyyy-MM-dd','en_US');
+            if(_enddate<TodayDate){
+              //NotCompletedArr.push(item);
+              inotcompleted++;
+            }else{
+              //PendingArr.push(item);
+              ipending++;
+            }
+          }
+        });
+
+        this.pieChartData = [inotcompleted, icompleted, ipending];
+
+        //console.log(CompletedArr);
+        //console.log(NotCompletedArr);
+        //console.log(PendingArr);
+       
       },
       error => {
         const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');

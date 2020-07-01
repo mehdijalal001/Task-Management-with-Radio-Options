@@ -73,14 +73,14 @@
                   <mat-card-content class="task-buttons-content-div">
                     <div fxLayout="row wrap" fxLayoutAlign="space-between">
                       <div>
-                        <div  *ngFor="let rec of _myTasksDueTomorrow_part1"  class="btn-div">
+                        <div  *ngFor="let rec of _myTasksDueNext7days_part1"  class="btn-div">
                           <button mat-raised-button color="primary"
                             [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
                           </button>
                         </div>
                       </div>
                       <div>
-                        <div  *ngFor="let rec of _myTasksDueTomorrow_part2"  class="btn-div">
+                        <div  *ngFor="let rec of _myTasksDueNext7days_part2"  class="btn-div">
                           <button mat-raised-button color="primary"
                             [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
                           </button>
