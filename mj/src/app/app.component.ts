@@ -15,7 +15,9 @@ export class AppComponent {
   activeLinkUrl: string;
   activeLinkIndex: number;
 
-
+  @ViewChild(MatSidenav) sidenav: MatSidenav;
+  
+  opened: boolean = true;
 
 
   constructor(){
@@ -23,10 +25,21 @@ export class AppComponent {
     this.activeLinkIndex = -1;
 
     this.screenWidth = window.innerWidth;
+    //console.log(this.screenWidth);
+    if(this.screenWidth<=599){
+      this.opened = false;
+    }else{
+      this.opened=true;
+    }
     window.onresize = ()=>{
       this.screenWidth = window.innerWidth;
       if(this.screenWidth<=599){
-        this.sidenav.toggle();
+        //this.sidenav.toggle();
+        //console.log(this.screenWidth);
+        this.opened = false;
+      }else{
+        this.opened = true;
+        //console.log('-----else innerwidth----');
       }
     }
     
@@ -109,9 +122,7 @@ export class AppComponent {
 
   }
  
-  @ViewChild(MatSidenav) sidenav: MatSidenav;
-  
-  opened: boolean = true;
+
  
 
   

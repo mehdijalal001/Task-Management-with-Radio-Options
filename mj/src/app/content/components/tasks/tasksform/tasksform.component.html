@@ -1,7 +1,7 @@
 
 <div fxLayout="column">
     <!-- <h1 class="mat-h1">Tasks</h1> -->
-   <div>
+   <div class="tasks-newform-content">
         <mat-card >
           <mat-card-header>
             <mat-card-title>
@@ -18,7 +18,7 @@
           <mat-card-content >
             <div >
                 <form class="form-container" [formGroup]="taskForm" #newsFeedform="ngForm" (ngSubmit)="taskAction()">
-                    <div class="row-one">
+                    <div class="row-one input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                         <mat-form-field id="taskname" appearance="outline">
                             <input matInput placeholder="Task *" formControlName="TaskName" required>
                             <mat-label>Task name</mat-label>
@@ -36,7 +36,7 @@
                           </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="row-two">
+                    <div class="row-two input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
                         <mat-form-field appearance="outline">
                             <input matInput [matDatepicker]="StartDate" placeholder="Start date *" [min]="sDate"
                                 formControlName="StartDate">
@@ -44,8 +44,7 @@
                             <mat-datepicker-toggle matSuffix [for]="StartDate"></mat-datepicker-toggle>
                             <mat-datepicker #StartDate></mat-datepicker>
                         </mat-form-field>
-                    </div>
-                    <div class="row-three">
+        
                         <mat-form-field appearance="outline">
                             <input matInput [matDatepicker]="EndDate" placeholder="End date *" [min]="mDate"
                                 formControlName="EndDate">
