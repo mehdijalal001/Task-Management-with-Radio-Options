@@ -24,6 +24,16 @@ export class TasksComponent implements OnInit {
 
   tableResponsiveColumns=false;
   theTasks;
+
+  //-------for display different views-----//
+  duedate;
+  categoryID;
+  startdate;
+  enddate;
+  isAllTasksView:boolean = false;
+  isCategoryAndDueDateView:boolean = false;
+  isCategoryStartdateDuedateView:boolean = false;
+
   tasksList: ITasks[];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -34,7 +44,6 @@ export class TasksComponent implements OnInit {
     'select',
     'taskname',
     'category',
-    'startdate',
     'enddate',
     'status',
     'actions'
@@ -61,6 +70,7 @@ export class TasksComponent implements OnInit {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private router: Router,
+    private _activatedRoute: ActivatedRoute,
     private breakpointObserver: BreakpointObserver) {
 
       // this.screenWidth2 = window.innerWidth;
@@ -76,7 +86,37 @@ export class TasksComponent implements OnInit {
     }
 
   ngOnInit(): void {
-    this.refreshData();
+
+         //----------for edit-----------------//
+         this._activatedRoute.paramMap.subscribe(params => {
+          //---in the route we created edit route we set id as param so we get it here---//
+          console.log(params);
+          this.categoryID = params.get('categoryid');
+          //=====For Category start here==============//
+          this.duedate = params.get('duedate');
+          //=========Startdate and enddate starts here==========//
+          this.startdate = params.get('startdate');
+          this.enddate = params.get('enddate');
+
+          if (this.categoryID && this.duedate) {
+            this.isAllTasksView = false;
+            this.isCategoryAndDueDateView = true;
+            this.isCategoryStartdateDuedateView = false;
+            this.refreshDataWithCategoryIDandDueDate(this.categoryID,this.duedate);
+          }else if(this.categoryID && this.startdate && this.enddate){
+            this.isAllTasksView = false;
+            this.isCategoryAndDueDateView = false;
+            this.isCategoryStartdateDuedateView = true;
+            this.refreshDataWithCategoryIdStartdateEnddate(this.categoryID,this.startdate,this.enddate);
+          }else{
+            this.isAllTasksView = true;
+            this.isCategoryAndDueDateView = false;
+            this.isCategoryStartdateDuedateView = false;
+            this.refreshData();
+          }
+        });
+
+    
   }
   refreshData() {
  
@@ -84,6 +124,55 @@ export class TasksComponent implements OnInit {
     this.taskservice.getAllTasks('/tasks/').subscribe(
       (modelData: ITasks[]) => {
         //console.log(modelData);
+        this.tasksList = modelData;
+        this.ELEMENT_DATA = modelData;
+        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+        this.selection = new SelectionModel<any>(true, []);
+
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error => {
+        const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
+        res.afterClosed().subscribe(dialogResult => {
+          if (dialogResult) {
+            this.callNext(200);
+          }
+        });
+      }
+    );
+  }
+
+  refreshDataWithCategoryIDandDueDate(categoryID?,DueDate?) {
+    //this.isCategoryView = true;
+    console.log('-----------got here--------');
+    this.taskservice.getAllTasksByCategoryID(categoryID,DueDate,'/tasks/category/').subscribe(
+      (modelData: ITasks[]) => {
+        console.log(modelData);
+        this.tasksList = modelData;
+        this.ELEMENT_DATA = modelData;
+        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+        this.selection = new SelectionModel<any>(true, []);
+
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error => {
+        const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
+        res.afterClosed().subscribe(dialogResult => {
+          if (dialogResult) {
+            this.callNext(200);
+          }
+        });
+      }
+    );
+  }
+
+  refreshDataWithCategoryIdStartdateEnddate(categoryID?,startdate?,enddate?) {
+    console.log('-----------Start end date-------');
+    this.taskservice.getAllTasksByCategoryIdStartdateEnddate(categoryID,startdate,enddate,'/tasks/categorywithstartend/').subscribe(
+      (modelData: ITasks[]) => {
+        console.log(modelData);
         this.tasksList = modelData;
         this.ELEMENT_DATA = modelData;
         this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);

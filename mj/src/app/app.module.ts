@@ -37,7 +37,6 @@ import { QuillModule } from 'ngx-quill';
 import { RouterModule } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
 
-import { PostsComponent } from './content/components/posts/posts.component';
 import { DefaultComponent } from './default/default.component';
 import {DialogComponent} from './shared/components/dialog/dialog.component';
 import {MysnackbarComponent} from './shared/components/mysnackbar/mysnackbar.component';
@@ -66,7 +65,6 @@ const mats=[
 @NgModule({
   declarations: [
     AppComponent,
-    PostsComponent,
     DefaultComponent,
     DialogComponent,
     MysnackbarComponent

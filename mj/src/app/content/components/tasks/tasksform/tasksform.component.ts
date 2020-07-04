@@ -56,8 +56,19 @@ export class TasksformComponent implements OnInit {
   sDate:Date;
   mDate:Date;
   category;
-  startDate = new FormControl(_moment());
-  CategoryID = new FormControl('', [Validators.required]);
+
+   //-------for display different views-----//
+   duedate;
+   categoryID:number;
+   startdate;
+   enddate;
+   isAllTasksView:boolean = false;
+   isCategoryAndDueDateView:boolean = false;
+   isCategoryStartdateDuedateView:boolean = false;
+
+  //startDate = new FormControl(_moment());
+  //CategoryID = new FormControl('', [Validators.required]);
+  selected;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -71,8 +82,71 @@ export class TasksformComponent implements OnInit {
     
   ngOnInit(): void {
 
+
+
+    this.sDate = new Date();
+    this.taskForm = this._formBuilder.group({
+      TaskID: [0, null],
+      TaskName: ['', Validators.required],
+      //StartDate: ['', Validators.required],
+      EndDate: ['', Validators.required],
+      Description: ['', null],
+      Duration: ['',null],
+      CategoryID: [0,null]
+    });
+
+    // this.taskForm.valueChanges.subscribe(res=>{
+    //   this.mDate = new Date(res.StartDate);
+    // });
+    //----------for edit-----------------//
+    this._activatedRoute.paramMap.subscribe(params => {
+      //console.log('----got to tasks form------------');
+      console.log(params);
+      this.categoryID = Number(params.get('categoryid'));
+      //console.log(this.categoryID);
+      //=====For Category start here==============//
+      this.duedate = params.get('duedate');
+      //=========Startdate and enddate starts here==========//
+      this.startdate = params.get('startdate');
+      this.enddate = params.get('enddate');
+      //---in the route we created edit route we set id as param so we get it here---//
+      const TaskID = +params.get('taskid');
+      //console.log(OfficeTaskId);
+      if (TaskID) {
+        console.log(TaskID);
+        console.log('------its edit mode----------');
+        if(this.categoryID && this.duedate){
+          this.isCategoryAndDueDateView = true;
+          this.isCategoryStartdateDuedateView = false;
+          this.isAllTasksView = false;
+        }else if(this.categoryID && this.startdate && this.enddate){
+          this.isCategoryAndDueDateView = false;
+          this.isCategoryStartdateDuedateView = true;
+          this.isAllTasksView = false;
+        }else{
+          this.isCategoryAndDueDateView = false;
+          this.isCategoryStartdateDuedateView = false;
+          this.isAllTasksView = true;
+        }
+        this.id = TaskID;
+        this.getTaskById(TaskID);
+      }else if(this.categoryID && this.duedate){
+        console.log('=======its category and due date=======');
+        this.isCategoryAndDueDateView = true;
+        this.taskForm.patchValue({
+          CategoryID:this.categoryID
+        });
+      }else if(this.categoryID && this.startdate && this.enddate){
+        this.isCategoryStartdateDuedateView = true;
+        this.taskForm.patchValue({
+          CategoryID:this.categoryID
+        });
+      }
+    });
+
     let lookupTablename: string;
-    
+    console.log('------'+this.categoryID);
+    this.selected = this.categoryID;
     this.lookupService.getLookupByTableAlias((lookupTablename = 'category')).subscribe(
       (icategory: ICategory) => {
         this.category = icategory;
@@ -87,31 +161,6 @@ export class TasksformComponent implements OnInit {
         });
       }
     );
-
-    this.sDate = new Date();
-    this.taskForm = this._formBuilder.group({
-      TaskID: [0, null],
-      TaskName: ['', Validators.required],
-      StartDate: ['', Validators.required],
-      EndDate: ['', Validators.required],
-      Description: ['', null],
-      Duration: ['',null],
-      CategoryID: [0,null]
-    });
-
-    this.taskForm.valueChanges.subscribe(res=>{
-      this.mDate = new Date(res.StartDate);
-    });
-    //----------for edit-----------------//
-    this._activatedRoute.paramMap.subscribe(params => {
-      //---in the route we created edit route we set id as param so we get it here---//
-      const TaskID = +params.get('taskid');
-      //console.log(OfficeTaskId);
-      if (TaskID) {
-        this.id = TaskID;
-        this.getTaskById(TaskID);
-      }
-    });
   }
 
   getTaskById(id) {
@@ -132,7 +181,7 @@ export class TasksformComponent implements OnInit {
     this.taskForm.patchValue({
       TaskID: thetask[0].TaskID,
       TaskName: thetask[0].TaskName,
-      StartDate: thetask[0].StartDate,
+      //StartDate: thetask[0].StartDate,
       EndDate: thetask[0].EndDate,
       Description: thetask[0].Description,
       Duration: thetask[0].Duration,

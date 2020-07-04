@@ -31,19 +31,11 @@ import { ReplacePipe } from './shared/pipes/replace-pipes';
 //--------charts--------------//
 import { ChartsModule } from 'ng2-charts';
 
-import { OfficetasksComponent } from './components/tasks/officetasks/officetasks.component';
-import { HometasksComponent } from './components/tasks/hometasks/hometasks.component';
-import { OfficetaskformComponent } from './components/tasks/officetasks/officetaskform/officetaskform.component';
-import { AnnouncementsComponent } from './components/announcements/announcements.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { UsersComponent } from './components/admin/users/users.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
-import { TaskscategoryviewComponent } from './components/tasks/taskscategoryview/taskscategoryview.component';
-import { TaskscategoryviewformComponent } from './components/tasks/taskscategoryview/taskscategoryviewform/taskscategoryviewform.component';
-import { TaskscategorystartenddateComponent } from './components/tasks/taskscategorystartenddate/taskscategorystartenddate.component';
-import { TaskcategorystartenddateformComponent } from './components/tasks/taskscategorystartenddate/taskcategorystartenddateform/taskcategorystartenddateform.component';
 
 
 
@@ -51,18 +43,10 @@ import { TaskcategorystartenddateformComponent } from './components/tasks/tasksc
   declarations: [
     AdminComponent, 
     UsersComponent, 
-    AnnouncementsComponent, 
-    OfficetasksComponent, 
-    HometasksComponent, 
-    OfficetaskformComponent,
     ReplacePipe,
     DashboardsComponent,
     TasksComponent,
     TasksformComponent,
-    TaskscategoryviewComponent,
-    TaskscategoryviewformComponent,
-    TaskscategorystartenddateComponent,
-    TaskcategorystartenddateformComponent
   ],
   imports: [
     CommonModule,
