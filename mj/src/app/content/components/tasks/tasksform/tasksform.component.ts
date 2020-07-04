@@ -5,7 +5,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 //---------dialog------------------/
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import * as _moment from 'moment';
 import { DialogService } from './../../../../shared/services/dialog.service';
 import { TasksService } from './../../../services/tasks.service';
@@ -72,6 +72,7 @@ export class TasksformComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
+    private _router:Router,
     private _activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     private dialogService: DialogService,
@@ -100,10 +101,8 @@ export class TasksformComponent implements OnInit {
     // });
     //----------for edit-----------------//
     this._activatedRoute.paramMap.subscribe(params => {
-      //console.log('----got to tasks form------------');
       console.log(params);
       this.categoryID = Number(params.get('categoryid'));
-      //console.log(this.categoryID);
       //=====For Category start here==============//
       this.duedate = params.get('duedate');
       //=========Startdate and enddate starts here==========//
@@ -111,10 +110,7 @@ export class TasksformComponent implements OnInit {
       this.enddate = params.get('enddate');
       //---in the route we created edit route we set id as param so we get it here---//
       const TaskID = +params.get('taskid');
-      //console.log(OfficeTaskId);
       if (TaskID) {
-        console.log(TaskID);
-        console.log('------its edit mode----------');
         if(this.categoryID && this.duedate){
           this.isCategoryAndDueDateView = true;
           this.isCategoryStartdateDuedateView = false;
@@ -131,7 +127,6 @@ export class TasksformComponent implements OnInit {
         this.id = TaskID;
         this.getTaskById(TaskID);
       }else if(this.categoryID && this.duedate){
-        console.log('=======its category and due date=======');
         this.isCategoryAndDueDateView = true;
         this.taskForm.patchValue({
           CategoryID:this.categoryID
@@ -263,6 +258,49 @@ export class TasksformComponent implements OnInit {
     }
   }
 
+  saveAndClose(){
+    this._activatedRoute.paramMap.subscribe(params => {
+      console.log(params);
+      this.categoryID = Number(params.get('categoryid'));
+      //=====For Category start here==============//
+      this.duedate = params.get('duedate');
+      //=========Startdate and enddate starts here==========//
+      this.startdate = params.get('startdate');
+      this.enddate = params.get('enddate');
+      //---in the route we created edit route we set id as param so we get it here---//
+      const TaskID = +params.get('taskid');
+      if (TaskID) {
+        if(this.categoryID && this.duedate){
+          this.isCategoryAndDueDateView = true;
+          this.isCategoryStartdateDuedateView = false;
+          this.isAllTasksView = false;
+          this._router.navigate(['./tasks/alltasks/category/'+this.categoryID+'/'+this.duedate]);
+          
+        }else if(this.categoryID && this.startdate && this.enddate){
+          this.isCategoryAndDueDateView = false;
+          this.isCategoryStartdateDuedateView = true;
+          this.isAllTasksView = false;
+          this._router.navigate(['./tasks/alltasks/categorywithstartend/'+this.categoryID+'/'+this.startdate+'/'+this.enddate]);
+        }else{
+          this.isCategoryAndDueDateView = false;
+          this.isCategoryStartdateDuedateView = false;
+          this.isAllTasksView = true;
+          this._router.navigate(['./tasks/alltasks']);
+
+        }
+        //this.id = TaskID;
+        //this.getTaskById(TaskID);
+      }else{
+        if(this.categoryID && this.duedate){
+          this._router.navigate(['./tasks/alltasks/category/'+this.categoryID+'/'+this.duedate]);
+        }else if(this.categoryID && this.startdate && this.enddate){
+          this._router.navigate(['./tasks/alltasks/categorywithstartend/'+this.categoryID+'/'+this.startdate+'/'+this.enddate]);
+        }else{
+          this._router.navigate(['./tasks/alltasks']);
+        }
+      } 
+    });
+  }
 
 
 }
