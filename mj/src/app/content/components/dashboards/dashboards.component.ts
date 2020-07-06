@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ITasks } from './../../models/tasks.model';
 import { DashboardService } from './../../services/dashboard.service';
 import { formatDate } from '@angular/common';
+import { Router,ActivatedRoute} from '@angular/router';
 
 //---for charts------------------//
 import { ChartType, ChartOptions } from 'chart.js';
@@ -28,7 +29,8 @@ export class DashboardsComponent implements OnInit {
   currentDate:any;
   tomorrow:any;
   next7days:any;
-  last7days:any;
+  lastdays:any;
+  nextdays:any;
   all = 'all';
  //---today----//
   _myTasksDueToday_part1;
@@ -44,12 +46,15 @@ export class DashboardsComponent implements OnInit {
   _myTasksDueNext7days_part2;
   _totalTasksDueNext7days=0;
   //----------for charts start here-----------------//
+  _totalcompleted=0;
+  _totalpending=0;
+  _totaloverdue=0;
    // Pie
    public pieChartOptions: ChartOptions = {
     responsive: true,
   };
 
-  public pieChartLabels: Label[] = [['Not', 'Completed'], ['Completed'], 'Pending'];
+  public pieChartLabels: Label[] = ['Overdue', 'Completed', 'Pending'];
   public pieChartData: SingleDataSet = [];
   public pieChartType: ChartType = 'pie';
   public pieChartLegend = true;
@@ -62,7 +67,9 @@ export class DashboardsComponent implements OnInit {
   //---------charts ends here----------------------//
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private dashboardservices:DashboardService,  
+    private dashboardservices:DashboardService,
+    private router: Router,
+    private _activatedRoute: ActivatedRoute,  
     public dialog: MatDialog,
     private dialogService: DialogService) {
       monkeyPatchChartJsTooltip();
@@ -76,34 +83,35 @@ export class DashboardsComponent implements OnInit {
     this.tomorrow.setDate(this.tomorrow.getDate()+1);
     this.tomorrow = formatDate(this.tomorrow, 'yyyy-MM-dd','en_US');
 
-    let todaysdateforlast7days = new Date();
-    //------Last 7 days----------//
-    todaysdateforlast7days.setDate(todaysdateforlast7days.getDate()-7);
-    this.last7days = formatDate(todaysdateforlast7days, 'yyyy-MM-dd','en_US');
-    //-----Next 7 days--------//
+
+     //-----Next 7 days--------//
     let todaysdate = new Date();
     todaysdate.setDate(todaysdate.getDate()+7);
     this.next7days = formatDate(todaysdate, 'yyyy-MM-dd','en_US');
     //console.log(this.next7days);
+
+    let todaysdateforLastdays = new Date();
+    //------Last  days----------//
+    todaysdateforLastdays.setDate(todaysdateforLastdays.getDate()-15);
+    this.lastdays = formatDate(todaysdateforLastdays, 'yyyy-MM-dd','en_US');
+    //------Next days--------//
+    let todaysdateforNextdays = new Date();
+    todaysdateforNextdays.setDate(todaysdateforNextdays.getDate()+15);
+    this.nextdays = formatDate(todaysdateforNextdays, 'yyyy-MM-dd','en_US');
+
+
     this.getMyTasksDueToday('/tasks/groupedtasksbyduedate/',this.currentDate);
     this.getMyTasksDueTomorrow('/tasks/groupedtasksbyduedate/',this.tomorrow);
     this.getMyTasksDueNext7Days('/tasks/groupedpendingtasksbetweendates/',this.currentDate,this.next7days);
-    this.getAllMyTasksBetweenDates('/tasks/getallmytasksbetweendates/',this.last7days,this.next7days);
-    
+    this.getAllMyTasksBetweenDates('/tasks/getallmytasksbetweendates/',this.lastdays,this.nextdays);
+  
   }
-  chartClicked(e){
-    console.log(e);
-    console.log('=========Chart clicked============');
-  }
-  chartHovered(e){
-    console.log(e);
-    console.log('=========Chart hovered============');
-  }
+
   getMyTasksDueToday(url,duedate){
-    console.log(this.currentDate);
+    //console.log(this.currentDate);
     this.dashboardservices.getGroupedTasksByDueDate(url,duedate).subscribe(
       (modelData: ITasks[]) => {
-        //console.log(modelData);
+        console.log(modelData);
         this._myTasksDueToday = modelData;
         let arr1 = [];
         let arr2 = [];
@@ -205,11 +213,11 @@ export class DashboardsComponent implements OnInit {
       }
     );
   }
-  //----get all last and next 7 days-----//
+
   getAllMyTasksBetweenDates(url,startdate,enddate){
     this.dashboardservices.getAllMyTasksBetweenDates(url,startdate,enddate).subscribe(
       (modelData: ITasks[]) => {
-       // console.log(modelData);
+        //console.log(modelData);
 
         let TodayDate = formatDate(new Date(),'yyyy-MM-dd','en_US');
  
@@ -217,7 +225,7 @@ export class DashboardsComponent implements OnInit {
         //let NotCompletedArr = [];
         //let PendingArr = [];
         let icompleted = 0;
-        let inotcompleted = 0;
+        let ioverdue = 0;
         let ipending =0;
         modelData.forEach((item)=>{
           if(item.Status==true){
@@ -229,7 +237,7 @@ export class DashboardsComponent implements OnInit {
             let _enddate = formatDate(item.EndDate,'yyyy-MM-dd','en_US');
             if(_enddate<TodayDate){
               //NotCompletedArr.push(item);
-              inotcompleted++;
+              ioverdue++;
             }else{
               //PendingArr.push(item);
               ipending++;
@@ -237,7 +245,7 @@ export class DashboardsComponent implements OnInit {
           }
         });
 
-        this.pieChartData = [inotcompleted, icompleted, ipending];
+        this.pieChartData = [ioverdue, icompleted, ipending];
 
         //console.log(CompletedArr);
         //console.log(NotCompletedArr);
@@ -258,6 +266,24 @@ export class DashboardsComponent implements OnInit {
   setTimeZone(date) {
     date.setHours(date.getHours() + (new Date().getTimezoneOffset() / 60));
     return date;
+  }
+
+  chartHovered(e){
+    //console.log(e);
+    //console.log('=========Chart hovered============');
+  }
+  
+  chartClicked(e,startdate,enddate){
+   // console.log(e);
+
+    console.log('=========Chart clicked============');
+    //console.log(e.active[0]._view.label);
+    let statusType = e.active[0]._view.label;
+    console.log(startdate);
+    console.log(enddate);
+    console.log(statusType);
+
+    this.router.navigate(['./tasks/alltasks/status/',statusType,startdate,enddate]);
   }
 
 }

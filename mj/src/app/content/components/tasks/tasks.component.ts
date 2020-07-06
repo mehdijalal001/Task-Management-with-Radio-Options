@@ -30,9 +30,10 @@ export class TasksComponent implements OnInit {
   categoryID;
   startdate;
   enddate;
-  isAllTasksView:boolean = false;
-  isCategoryAndDueDateView:boolean = false;
-  isCategoryStartdateDuedateView:boolean = false;
+  statusStartdate;
+  statusEnddate;
+  statusType;
+
 
   tasksList: ITasks[];
   @ViewChild(MatSort) sort: MatSort;
@@ -97,21 +98,23 @@ export class TasksComponent implements OnInit {
           //=========Startdate and enddate starts here==========//
           this.startdate = params.get('startdate');
           this.enddate = params.get('enddate');
+          //==========status view===============//
+          this.statusType = params.get('statustype');
+          this.statusStartdate = params.get('fromstatusstartdate');
+          this.statusEnddate = params.get('fromstatusenddate');
 
           if (this.categoryID && this.duedate) {
-            this.isAllTasksView = false;
-            this.isCategoryAndDueDateView = true;
-            this.isCategoryStartdateDuedateView = false;
+            console.log('------cat and duedate------');
             this.refreshDataWithCategoryIDandDueDate(this.categoryID,this.duedate);
           }else if(this.categoryID && this.startdate && this.enddate){
-            this.isAllTasksView = false;
-            this.isCategoryAndDueDateView = false;
-            this.isCategoryStartdateDuedateView = true;
+            console.log('------cat and stardate enddate------');
             this.refreshDataWithCategoryIdStartdateEnddate(this.categoryID,this.startdate,this.enddate);
-          }else{
-            this.isAllTasksView = true;
-            this.isCategoryAndDueDateView = false;
-            this.isCategoryStartdateDuedateView = false;
+          }else if(this.statusType){
+            console.log('------status startdate end------');
+            this.refreshDataWithStatusStartdateEnddate(this.statusType,this.statusStartdate,this.statusEnddate);
+          }
+          else{
+            console.log('------all category------');
             this.refreshData();
           }
         });
@@ -120,7 +123,7 @@ export class TasksComponent implements OnInit {
   }
   refreshData() {
  
-    console.log('-----------got here--------');
+    console.log('-----------got here iss--------');
     this.taskservice.getAllTasks('/tasks/').subscribe(
       (modelData: ITasks[]) => {
         //console.log(modelData);
@@ -145,7 +148,7 @@ export class TasksComponent implements OnInit {
 
   refreshDataWithCategoryIDandDueDate(categoryID?,DueDate?) {
     //this.isCategoryView = true;
-    console.log('-----------got here--------');
+    console.log('-----------cate and only due date--------');
     this.taskservice.getAllTasksByCategoryID(categoryID,DueDate,'/tasks/category/').subscribe(
       (modelData: ITasks[]) => {
         console.log(modelData);
@@ -191,6 +194,29 @@ export class TasksComponent implements OnInit {
       }
     );
   }
+  refreshDataWithStatusStartdateEnddate(statusType?,startdate?,enddate?) {
+    console.log('-----------Start end date-------');
+    this.taskservice.getAlldataWithStatusStartdateEnddate(statusType,startdate,enddate,'/tasks/status/').subscribe(
+      (modelData: ITasks[]) => {
+        console.log(modelData);
+        this.tasksList = modelData;
+        this.ELEMENT_DATA = modelData;
+        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+        this.selection = new SelectionModel<any>(true, []);
+
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      },
+      error => {
+        const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try again');
+        res.afterClosed().subscribe(dialogResult => {
+          if (dialogResult) {
+            this.callNext(200);
+          }
+        });
+      }
+    );
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -198,7 +224,7 @@ export class TasksComponent implements OnInit {
   }
 
 
-  /*----Work to be done as planned-----*/
+  /*--------*/
   callRedirect(route, time) {
     setTimeout(() => {
       this.router.navigate([route]);
@@ -265,13 +291,7 @@ export class TasksComponent implements OnInit {
         );
       }
     }
-    //------Next call--------//
- 
-    callNext(timeout) {
-      setTimeout(() => {
-          this.refreshData();
-      }, timeout);
-    }
+
 
     updateStatus(TaskID:any,event:any){
       console.log(TaskID);
@@ -312,7 +332,7 @@ export class TasksComponent implements OnInit {
       const result = this.dialogService.openDialog(sel, 'Confirm Action', 'Are you sure you want to delete?', 'Cancel', 'Delete Now');
       result.afterClosed().subscribe(dialogResult => {
         if (dialogResult) {
-          this.deleteAll(sel);
+          //this.deleteAll(sel);
         }
       });
     }
@@ -344,6 +364,15 @@ export class TasksComponent implements OnInit {
           }
         );
       }
+    }
+
+    //------Next call--------//
+
+    callNext(timeout) {
+      setTimeout(() => {
+          //this.refreshData();
+          this.ngOnInit();
+      }, timeout);
     }
 
 }

@@ -13,6 +13,7 @@ class TasksController implements ITasks {
         router.get('/getallmytasksbetweendates/:startdate/:enddate', this.getAllMyTasksBetweenDates.bind(this));
         router.get('/category/:categoryId/:DueDate', this.getTaskByCategoryIdAndDueDate.bind(this));
         router.get('/categorywithstartend/:categoryId/:startdate/:enddate', this.getTaskByCategoryIdStartEndDate.bind(this));
+        router.get('/status/:statustype/:startdate/:enddate', this.getTaskByStatusTypeStartEndDate.bind(this));
         router.get('/current', this.getCurrentTasks.bind(this));
         router.get('/complete', this.getCompletedTasks.bind(this));
         router.get('/view/:id', this.viewTasks.bind(this));
@@ -103,6 +104,17 @@ class TasksController implements ITasks {
         console.log('---geting startdate enddate----');
         return this.service
         .getTaskByCategoryIdStartEndDate(req, res, next)
+        .then(results =>{
+            res.json(results)
+            })
+            .catch(err => {
+                next(err);
+            });
+    }
+    getTaskByStatusTypeStartEndDate(req: any, res: any, next: any): Promise<any> {
+        console.log('---geting by Status type startdate and enddate----');
+        return this.service
+        .getTaskByStatusTypeStartEndDate(req, res, next)
         .then(results =>{
             res.json(results)
             })

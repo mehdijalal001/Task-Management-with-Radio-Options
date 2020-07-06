@@ -22,8 +22,8 @@
             <input matInput (keyup)="applyFilter($event)" placeholder="Ex. etc">
           </mat-form-field>
           <div class="taskaction-box">
-            <button mat-raised-button color="warn" (click)="deleteAllSelectedTasks()"
-              [disabled]="!selection.hasValue() && !isAllSelected()">Delete All</button>
+            <!-- <button mat-raised-button color="warn" (click)="deleteAllSelectedTasks()"
+              [disabled]="!selection.hasValue() && !isAllSelected()">Delete All</button> -->
             <button mat-raised-button color="primary" [routerLink]="['./addtask/']">Add Task</button>
 
           </div>

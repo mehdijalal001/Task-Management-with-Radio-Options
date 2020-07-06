@@ -53,8 +53,8 @@ export class TasksService implements ITasks {
             next(err);
           });
           return modelClass;
-      }
-      async getTaskByCategoryIdStartEndDate(req: any, res: any, next: any): Promise<any> {
+    }
+    async getTaskByCategoryIdStartEndDate(req: any, res: any, next: any): Promise<any> {
         let modelClass: TasksModel[] = [];
         await this.repo
         .getTaskByCategoryIdStartEndDate(req, res, next)
@@ -63,7 +63,17 @@ export class TasksService implements ITasks {
             next(err);
           });
           return modelClass;
-      }
+    }
+    async getTaskByStatusTypeStartEndDate(req: any, res: any, next: any): Promise<any> {
+        let modelClass: TasksModel[] = [];
+        await this.repo
+        .getTaskByStatusTypeStartEndDate(req, res, next)
+        .then(results => (modelClass = results))
+        .catch(err => {
+            next(err);
+          });
+          return modelClass;
+    }
     async getAllTasks(req: any, res: any, next: any): Promise<any> {
       let modelClass: TasksModel[] = [];
       await this.repo

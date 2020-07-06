@@ -20,7 +20,7 @@ export class TasksRepo implements ITasks {
 
   public async getMyGroupedTasksByDueDate(req:any,res:any,next:any): Promise<any> {
 
-    console.log('---geting due today------');
+    console.log('---geting due today 55------');
     let DueDate = req.params.duedate;
     //console.log(req.params);
     //console.log(DueDate);
@@ -33,11 +33,11 @@ export class TasksRepo implements ITasks {
       { name: 'UserId', dataType: TYPES.Int, value: UserID },
       { name: 'EndDate', dataType: TYPES.DateTime, value: DueDate }
     ];
-    let CustomQuery = `SELECT ts.CategoryID, ts.Status, COUNT(ts.CategoryID) AS totaltasks, ct.Name AS CategoryName
+    let CustomQuery = `SELECT ts.CategoryID, COUNT(ts.CategoryID) AS totaltasks, ct.Name AS CategoryName
     FROM MJ.Tasks AS ts
     LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-    WHERE ts.Status !=1 OR ts.Status IS NULL AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)
-    GROUP BY ts.CategoryID, ct.Name, ts.Status
+    WHERE ts.Status !=1 AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)
+    GROUP BY ts.CategoryID, ct.Name
     ORDER BY ct.Name ASC`;
     await provider
       .executeQuery(CustomQuery,inputParameters)
@@ -54,7 +54,7 @@ export class TasksRepo implements ITasks {
   }
   public async getMyGroupedPendingTasksBetweenDates(req:any,res:any,next:any): Promise<any> {
 
-    console.log('---geting due today------');
+    console.log('---geting grouped between dates------');
     let StartingDate = req.params.startdate;
     let EndDate = req.params.enddate;
     //console.log(req.params);
@@ -71,11 +71,11 @@ export class TasksRepo implements ITasks {
       { name: 'StartingDate', dataType: TYPES.DateTime, value: StartingDate },
       { name: 'EndingDate', dataType: TYPES.DateTime, value: EndDate }
     ];
-    let CustomQuery = `SELECT ts.CategoryID, ts.Status, COUNT(ts.CategoryID) AS totaltasks, ct.Name AS CategoryName
+    let CustomQuery = `SELECT ts.CategoryID, COUNT(ts.CategoryID) AS totaltasks, ct.Name AS CategoryName
     FROM MJ.Tasks AS ts
     LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-    WHERE ts.Status !=1 OR ts.Status IS NULL AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(@EndingDate AS DATE)
-    GROUP BY ts.CategoryID, ct.Name, ts.Status
+    WHERE ts.Status !=1 AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(@EndingDate AS DATE)
+    GROUP BY ts.CategoryID, ct.Name
     ORDER BY ct.Name ASC`;
     await provider
       .executeQuery(CustomQuery,inputParameters)
@@ -127,6 +127,71 @@ export class TasksRepo implements ITasks {
 
     return modelToArray;
   }
+  public async getTaskByStatusTypeStartEndDate(req:any,res:any,next:any): Promise<any> {
+
+    console.log('---geting all my tasks by status between dates-----');
+    let StatusType = req.params.statustype;
+    let StartingDate = req.params.startdate;
+    let EndDate = req.params.enddate;
+    //console.log(req.params);
+    //console.log(StartDate);
+    StartingDate = new Date(StartingDate);
+    EndDate = new Date(EndDate);
+    console.log(StartingDate);
+    console.log(EndDate);
+    console.log(StatusType);
+    let status = 0;
+    if(StatusType=='Completed'){
+      status = 1;
+    }else if(StatusType=='Pending'){
+      status = 0;
+    }else{
+      status = 0;
+    }
+    
+    let modelToArray: TasksModel[] = [];
+    let provider = new SQLDBProvider();
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'UserId', dataType: TYPES.Int, value: UserID },
+      { name: 'StartingDate', dataType: TYPES.DateTime, value: StartingDate },
+      { name: 'EndingDate', dataType: TYPES.DateTime, value: EndDate },
+      { name: 'PostedStatus', dataType: TYPES.Int, value: status }
+    ];
+    let CustomQuery;
+    if(StatusType=='Completed'){
+      CustomQuery= `SELECT ts.*, ct.Name AS CategoryName
+        FROM MJ.Tasks AS ts
+        LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+        WHERE ts.Status=1 AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(@EndingDate AS DATE)
+        `;
+    }else if(StatusType=='Pending'){
+      CustomQuery= `SELECT ts.*, ct.Name AS CategoryName
+      FROM MJ.Tasks AS ts
+      LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+      WHERE ts.Status!=1 AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) BETWEEN CAST(GETDATE() AS DATE) AND CAST(@EndingDate AS DATE)
+      `;
+    }else if(StatusType=='Overdue'){
+      CustomQuery= `SELECT ts.*, ct.Name AS CategoryName
+        FROM MJ.Tasks AS ts
+        LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+        WHERE ts.Status!=1 AND ts.UserID = @UserID AND CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(GETDATE()-1 AS DATE)
+        `;
+    }
+    await provider
+      .executeQuery(CustomQuery,inputParameters)
+      .then(results => {
+        //console.log(results);
+        if (results) {
+            modelToArray = TasksModel.MapDBToArray(results);
+        }
+      })
+      .catch(err => {
+        return LogErrors.logErrors(err);
+      });
+
+    return modelToArray;
+  }
 
   public async getTaskByCategoryIdAndDueDate(req:any,res:any,next:any): Promise<any> {
     let provider = new SQLDBProvider();
@@ -136,7 +201,8 @@ export class TasksRepo implements ITasks {
 
     let newDuedate = DataFormatter.dateFormate(DueDate);
     //console.log('----here------');
-    //console.log(categoryID);
+    console.log(newDuedate);
+    console.log(categoryID);
     let UserID = 1007;
     let inputParameters =[];
     let CustomQuery:any;
@@ -149,7 +215,7 @@ export class TasksRepo implements ITasks {
        CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
       FROM MJ.Tasks  AS ts 
       LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-      WHERE ts.Status!=1 OR ts.Status IS NULL AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)`;
+      WHERE ts.Status!=1 AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)`;
       
     }else{
        inputParameters = [
@@ -160,7 +226,7 @@ export class TasksRepo implements ITasks {
        CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
       FROM MJ.Tasks  AS ts 
       LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-      WHERE ts.Status!=1 OR ts.Status IS NULL AND ts.CategoryID = @CategoryID AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)`;
+      WHERE ts.Status!=1 AND ts.CategoryID = @CategoryID AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) = CAST(@EndDate AS DATE)`;
       
     }
 
@@ -205,7 +271,7 @@ export class TasksRepo implements ITasks {
        CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
       FROM MJ.Tasks  AS ts 
       LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-      WHERE ts.Status!=1 OR ts.Status IS NULL AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(@EndDate AS DATE)`;
+      WHERE ts.Status!=1 AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(@EndDate AS DATE)`;
       
     }else{
        inputParameters = [
@@ -217,7 +283,7 @@ export class TasksRepo implements ITasks {
        CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
       FROM MJ.Tasks  AS ts 
       LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
-      WHERE ts.Status!=1 OR ts.Status IS NULL AND ts.CategoryID = @CategoryID AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(@EndDate AS DATE)`;
+      WHERE ts.Status!=1 AND ts.CategoryID = @CategoryID AND ts.UserID = @UserID AND  CAST(ts.EndDate AS DATE) BETWEEN CAST(@StartingDate AS DATE) AND CAST(@EndDate AS DATE)`;
       
     }
 

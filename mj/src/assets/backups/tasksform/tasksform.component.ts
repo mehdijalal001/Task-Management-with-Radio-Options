@@ -62,9 +62,9 @@ export class TasksformComponent implements OnInit {
    categoryID:number;
    startdate;
    enddate;
-   statusStartdate;
-   statusEnddate;
-   statusType;
+   isAllTasksView:boolean = false;
+   isCategoryAndDueDateView:boolean = false;
+   isCategoryStartdateDuedateView:boolean = false;
 
   //startDate = new FormControl(_moment());
   //CategoryID = new FormControl('', [Validators.required]);
@@ -79,9 +79,12 @@ export class TasksformComponent implements OnInit {
     private lookupService: LookupsService,
     private taskService:TasksService
     ) { }
+
     
   ngOnInit(): void {
-  
+
+
+
     this.sDate = new Date();
     this.taskForm = this._formBuilder.group({
       TaskID: [0, null],
@@ -108,13 +111,28 @@ export class TasksformComponent implements OnInit {
       //---in the route we created edit route we set id as param so we get it here---//
       const TaskID = +params.get('taskid');
       if (TaskID) {
+        if(this.categoryID && this.duedate){
+          this.isCategoryAndDueDateView = true;
+          this.isCategoryStartdateDuedateView = false;
+          this.isAllTasksView = false;
+        }else if(this.categoryID && this.startdate && this.enddate){
+          this.isCategoryAndDueDateView = false;
+          this.isCategoryStartdateDuedateView = true;
+          this.isAllTasksView = false;
+        }else{
+          this.isCategoryAndDueDateView = false;
+          this.isCategoryStartdateDuedateView = false;
+          this.isAllTasksView = true;
+        }
         this.id = TaskID;
         this.getTaskById(TaskID);
       }else if(this.categoryID && this.duedate){
+        this.isCategoryAndDueDateView = true;
         this.taskForm.patchValue({
           CategoryID:this.categoryID
         });
       }else if(this.categoryID && this.startdate && this.enddate){
+        this.isCategoryStartdateDuedateView = true;
         this.taskForm.patchValue({
           CategoryID:this.categoryID
         });
@@ -125,7 +143,7 @@ export class TasksformComponent implements OnInit {
     console.log('------'+this.categoryID);
     this.selected = this.categoryID;
     this.lookupService.getLookupByTableAlias((lookupTablename = 'category')).subscribe(
-      (icategory: any) => {
+      (icategory: ICategory) => {
         this.category = icategory;
         //console.log(icategory);
       },
@@ -249,20 +267,24 @@ export class TasksformComponent implements OnInit {
       //=========Startdate and enddate starts here==========//
       this.startdate = params.get('startdate');
       this.enddate = params.get('enddate');
-      //==========status view===============//
-      this.statusType = params.get('statustype');
-      this.statusStartdate = params.get('fromstatusstartdate');
-      this.statusEnddate = params.get('fromstatusenddate');
       //---in the route we created edit route we set id as param so we get it here---//
       const TaskID = +params.get('taskid');
       if (TaskID) {
         if(this.categoryID && this.duedate){
+          this.isCategoryAndDueDateView = true;
+          this.isCategoryStartdateDuedateView = false;
+          this.isAllTasksView = false;
           this._router.navigate(['./tasks/alltasks/category/'+this.categoryID+'/'+this.duedate]);
+          
         }else if(this.categoryID && this.startdate && this.enddate){
+          this.isCategoryAndDueDateView = false;
+          this.isCategoryStartdateDuedateView = true;
+          this.isAllTasksView = false;
           this._router.navigate(['./tasks/alltasks/categorywithstartend/'+this.categoryID+'/'+this.startdate+'/'+this.enddate]);
-        }else if(this.statusType && this.statusStartdate && this.statusEnddate){
-          this._router.navigate(['./tasks/alltasks/status/'+this.statusType+'/'+this.statusStartdate+'/'+this.statusEnddate]);
         }else{
+          this.isCategoryAndDueDateView = false;
+          this.isCategoryStartdateDuedateView = false;
+          this.isAllTasksView = true;
           this._router.navigate(['./tasks/alltasks']);
 
         }
@@ -273,8 +295,6 @@ export class TasksformComponent implements OnInit {
           this._router.navigate(['./tasks/alltasks/category/'+this.categoryID+'/'+this.duedate]);
         }else if(this.categoryID && this.startdate && this.enddate){
           this._router.navigate(['./tasks/alltasks/categorywithstartend/'+this.categoryID+'/'+this.startdate+'/'+this.enddate]);
-        }else if(this.statusType && this.statusStartdate && this.statusEnddate){
-          this._router.navigate(['./tasks/alltasks/status/'+this.statusType+'/'+this.statusStartdate+'/'+this.statusEnddate]);
         }else{
           this._router.navigate(['./tasks/alltasks']);
         }

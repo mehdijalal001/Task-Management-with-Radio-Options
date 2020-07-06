@@ -4,6 +4,7 @@ export interface ITasks {
     getAllMyTasksBetweenDates(req:any, res:any,next:any): Promise<any>;
     getTaskByCategoryIdAndDueDate(req?:any, res?:any,next?:any): Promise<any>;
     getTaskByCategoryIdStartEndDate(req?:any, res?:any,next?:any): Promise<any>;
+    getTaskByStatusTypeStartEndDate(req?:any, res?:any,next?:any): Promise<any>;
 
     getAllTasks(req:any, res:any,next:any): Promise<any>;
     getCompletedTasks(req?:any, res?:any,next?:any): Promise<any>;

@@ -28,6 +28,9 @@ export class TasksService {
   getAllTasksByCategoryIdStartdateEnddate(categoryID:number,startdate,enddate,urn: string) {
     return this.http.get(this.baseurl + urn +categoryID+'/'+startdate+'/'+enddate);
   }
+  getAlldataWithStatusStartdateEnddate(statusType,startdate,enddate,urn: string) {
+    return this.http.get(this.baseurl + urn +statusType+'/'+startdate+'/'+enddate);
+  }
   getTaskById(id: number, urn: string){
     try {
       return this.http.get(this.baseurl + urn + id);

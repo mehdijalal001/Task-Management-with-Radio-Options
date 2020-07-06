@@ -29,6 +29,9 @@ export class DashboardService {
   getAllMyTasksBetweenDates(urn: string,startdate:any,enddate:any) {
     return this.http.get(this.baseurl + urn +startdate+'/'+enddate);
   }
+  getAllStatusStartandEnd(statusType,startdate,enddate,urn: string) {
+    return this.http.get(this.baseurl + urn +statusType+'/'+startdate+'/'+enddate);
+  }
   getMyTasksDueTomorrow(urn: string) {
     return this.http.get(this.baseurl + urn);
   }

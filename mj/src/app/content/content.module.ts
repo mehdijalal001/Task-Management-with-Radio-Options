@@ -20,6 +20,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatListModule} from '@angular/material/list';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -70,6 +72,7 @@ import { DashboardsComponent } from './components/dashboards/dashboards.componen
     MatDatepickerModule,
     MatSelectModule,
     MatBadgeModule,
+    MatAutocompleteModule,
     QuillModule.forRoot(),
     FlexLayoutModule,
     ChartsModule

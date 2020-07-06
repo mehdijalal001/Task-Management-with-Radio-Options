@@ -102,7 +102,7 @@
               <div class="card-div-content"    fxLayout="column" fxFlexFill>
                 <div>
                   <div>
-                    <h3>Status last and next 7 days</h3>
+                    <h3>Status last and next 15 days</h3>
                   </div>
                   <canvas baseChart 
                     [data]="pieChartData" 
@@ -113,7 +113,7 @@
                     [legend]="pieChartLegend"
                     [colors]="pieChartColors"
                     (chartHover)="chartHovered($event)"
-                    (chartClick)="chartClicked($event)"
+                    (chartClick)="chartClicked($event,lastdays,nextdays)"
                     >
                   </canvas>
                 </div>

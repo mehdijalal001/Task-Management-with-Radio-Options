@@ -17,6 +17,9 @@ export class MockTasksRepo implements ITasks {
     getTaskByCategoryIdStartEndDate(): Promise<any> {
         throw new Error('Method not implemented.');
     }
+    getTaskByStatusTypeStartEndDate(): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
     getAllTasks(): Promise<any> {
         throw new Error('Method not implemented.');
     }

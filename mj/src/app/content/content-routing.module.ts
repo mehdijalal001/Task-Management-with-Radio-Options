@@ -41,6 +41,15 @@ const routes: Routes = [
           {
             path:'categorywithstartend/:categoryid/:startdate/:enddate/addtask/:taskid',component:TasksformComponent
           },
+          {
+            path:'status/:statustype/:fromstatusstartdate/:fromstatusenddate',component:TasksComponent
+          },
+          {
+            path:'status/:statustype/:fromstatusstartdate/:fromstatusenddate/addtask',component:TasksformComponent
+          },
+          {
+            path:'status/:statustype/:fromstatusstartdate/:fromstatusenddate/addtask/:taskid',component:TasksformComponent
+          },
         ]
       },
       {
