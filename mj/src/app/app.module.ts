@@ -40,6 +40,11 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { DefaultComponent } from './default/default.component';
 import {DialogComponent} from './shared/components/dialog/dialog.component';
 import {MysnackbarComponent} from './shared/components/mysnackbar/mysnackbar.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { FlatpickrModule } from 'angularx-flatpickr';
+
 
 const mats=[
   BrowserAnimationsModule,
@@ -92,7 +97,10 @@ const mats=[
       }
     }
     ),
-    FlexLayoutModule
+    FlexLayoutModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+    NgbModalModule,
+    FlatpickrModule.forRoot(),
   ],
   exports:[mats,HttpClientModule],
   providers: [

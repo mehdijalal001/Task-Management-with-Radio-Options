@@ -51,7 +51,7 @@ export class TasksformComponent implements OnInit {
   //statusName;
   //lookuptablename;
   editorStyle = {
-    height: '200px'
+    'min-height': '100px'
   };
   sDate:Date;
   mDate:Date;
@@ -86,16 +86,16 @@ export class TasksformComponent implements OnInit {
     this.taskForm = this._formBuilder.group({
       TaskID: [0, null],
       TaskName: ['', Validators.required],
-      //StartDate: ['', Validators.required],
+      StartDate: ['', Validators.required],
       EndDate: ['', Validators.required],
       Description: ['', null],
       Duration: ['',null],
       CategoryID: [0,null]
     });
 
-    // this.taskForm.valueChanges.subscribe(res=>{
-    //   this.mDate = new Date(res.StartDate);
-    // });
+     this.taskForm.valueChanges.subscribe(res=>{
+       this.mDate = new Date(res.StartDate);
+     });
     //----------for edit-----------------//
     this._activatedRoute.paramMap.subscribe(params => {
       console.log(params);
@@ -158,7 +158,7 @@ export class TasksformComponent implements OnInit {
     this.taskForm.patchValue({
       TaskID: thetask[0].TaskID,
       TaskName: thetask[0].TaskName,
-      //StartDate: thetask[0].StartDate,
+      StartDate: thetask[0].StartDate,
       EndDate: thetask[0].EndDate,
       Description: thetask[0].Description,
       Duration: thetask[0].Duration,

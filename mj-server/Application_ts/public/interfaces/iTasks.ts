@@ -7,6 +7,7 @@ export interface ITasks {
     getTaskByStatusTypeStartEndDate(req?:any, res?:any,next?:any): Promise<any>;
 
     getAllTasks(req:any, res:any,next:any): Promise<any>;
+    getAllMyPendingTasks(req:any, res:any,next:any): Promise<any>;
     getCompletedTasks(req?:any, res?:any,next?:any): Promise<any>;
     getCurrentTasks(req?:any, res?:any,next?:any): Promise<any>;
     getTaskById(req?:any, res?:any,next?:any): Promise<any>;

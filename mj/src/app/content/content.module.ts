@@ -38,8 +38,13 @@ import { UsersComponent } from './components/admin/users/users.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
-
-
+import { TaskscalendarviewComponent } from './components/tasks/taskscalendarview/taskscalendarview.component';
+//-------for calendar module-------------------//
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import { TaskspopupviewComponent } from './components/tasks/taskspopupview/taskspopupview.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +54,8 @@ import { DashboardsComponent } from './components/dashboards/dashboards.componen
     DashboardsComponent,
     TasksComponent,
     TasksformComponent,
+    TaskscalendarviewComponent,
+    TaskspopupviewComponent,
   ],
   imports: [
     CommonModule,
@@ -75,7 +82,10 @@ import { DashboardsComponent } from './components/dashboards/dashboards.componen
     MatAutocompleteModule,
     QuillModule.forRoot(),
     FlexLayoutModule,
-    ChartsModule
+    ChartsModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
+    NgbModalModule,
+    FlatpickrModule.forRoot(),
 
   ],
   exports:[
@@ -88,6 +98,9 @@ import { DashboardsComponent } from './components/dashboards/dashboards.componen
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule
+  ],
+  entryComponents:[
+    TaskspopupviewComponent
   ]
 })
 export class ContentModule { }

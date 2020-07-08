@@ -8,6 +8,7 @@ class TasksController implements ITasks {
       
 
         router.get('/', this.getAllTasks.bind(this));
+        router.get('/getallmypendingtasks', this.getAllMyPendingTasks.bind(this));
         router.get('/groupedtasksbyduedate/:duedate', this.getMyGroupedTasksByDueDate.bind(this));
         router.get('/groupedpendingtasksbetweendates/:startdate/:enddate', this.getMyGroupedPendingTasksBetweenDates.bind(this));
         router.get('/getallmytasksbetweendates/:startdate/:enddate', this.getAllMyTasksBetweenDates.bind(this));
@@ -60,6 +61,17 @@ class TasksController implements ITasks {
         console.log('-----all tasks------');
         return this.service
         .getAllTasks(req, res, next)
+        .then(results =>{
+            res.json(results)
+            })
+            .catch(err => {
+                next(err);
+            });
+    }
+    getAllMyPendingTasks(req: any, res: any, next: any): Promise<any> {
+        console.log('-----all my pending tasks------');
+        return this.service
+        .getAllMyPendingTasks(req, res, next)
         .then(results =>{
             res.json(results)
             })

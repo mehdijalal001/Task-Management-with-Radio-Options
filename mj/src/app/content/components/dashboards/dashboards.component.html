@@ -19,14 +19,14 @@
                     <div fxLayout="row wrap" fxLayoutAlign="space-between">
                       <div  >
                         <div  *ngFor="let rec of _myTasksDueToday_part1"  class="btn-div">
-                          <button mat-raised-button color="warn" 
+                          <button mat-stroked-button color="warn" 
                             [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,currentDate]">{{rec.CategoryName}}
                           </button>
                         </div>
                       </div>
                       <div  >
                         <div  *ngFor="let rec of _myTasksDueToday_part2"  class="btn-div">
-                          <button mat-raised-button color="warn" 
+                          <button mat-stroked-button color="warn" 
                             [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,currentDate]">{{rec.CategoryName}}
                           </button>
                         </div>
@@ -49,14 +49,14 @@
                     <div fxLayout="row wrap" fxLayoutAlign="space-between">
                       <div>
                         <div  *ngFor="let rec of _myTasksDueTomorrow_part1"  class="btn-div">
-                          <button mat-raised-button color="accent"
-                            [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="warn" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,tomorrow]">{{rec.CategoryName}}
+                          <button mat-stroked-button color="accent"
+                            [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,tomorrow]">{{rec.CategoryName}}
                           </button>
                         </div>
                       </div>
                       <div>
                         <div  *ngFor="let rec of _myTasksDueTomorrow_part2"  class="btn-div">
-                          <button mat-raised-button color="accent"
+                          <button mat-stroked-button color="accent"
                             [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="warn" class="btn-tasks" [routerLink]="['/tasks/alltasks/category/', rec.CategoryID,tomorrow]">{{rec.CategoryName}}
                           </button>
                         </div>
@@ -74,14 +74,14 @@
                     <div fxLayout="row wrap" fxLayoutAlign="space-between">
                       <div>
                         <div  *ngFor="let rec of _myTasksDueNext7days_part1"  class="btn-div">
-                          <button mat-raised-button color="primary"
+                          <button mat-stroked-button 
                             [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
                           </button>
                         </div>
                       </div>
                       <div>
                         <div  *ngFor="let rec of _myTasksDueNext7days_part2"  class="btn-div">
-                          <button mat-raised-button color="primary"
+                          <button mat-raised-button
                             [matBadge]="rec.totaltasks" matBadgePosition="after" matBadgeColor="accent" class="btn-tasks" [routerLink]="['/tasks/alltasks/categorywithstartend/', rec.CategoryID,currentDate,next7days]">{{rec.CategoryName}}
                           </button>
                         </div>

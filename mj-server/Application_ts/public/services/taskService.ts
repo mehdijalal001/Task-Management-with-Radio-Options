@@ -84,6 +84,16 @@ export class TasksService implements ITasks {
         });
         return modelClass;
     }
+    async getAllMyPendingTasks(req: any, res: any, next: any): Promise<any> {
+      let modelClass: TasksModel[] = [];
+      await this.repo
+      .getAllMyPendingTasks(req, res, next)
+      .then(results => (modelClass = results))
+      .catch(err => {
+          next(err);
+        });
+        return modelClass;
+    }
     async getCurrentTasks(req: any, res: any, next: any): Promise<any> {
       let modelClass: TasksModel[] = [];
       await this.repo

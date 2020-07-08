@@ -23,6 +23,9 @@ export class MockTasksRepo implements ITasks {
     getAllTasks(): Promise<any> {
         throw new Error('Method not implemented.');
     }
+    getAllMyPendingTasks(): Promise<any> {
+        throw new Error('Method not implemented.');
+    }
     getCurrentTasks(): Promise<any> {
         throw new Error('Method not implemented.');
     }

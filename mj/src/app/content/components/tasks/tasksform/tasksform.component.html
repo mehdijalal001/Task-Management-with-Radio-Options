@@ -37,16 +37,16 @@
                         </mat-form-field>
                     </div>
                     <div class="row-two input-row" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0px">
-                        <!-- <mat-form-field appearance="outline">
+                       <mat-form-field appearance="outline">
                             <input matInput [matDatepicker]="StartDate" placeholder="Start date *" [min]="sDate"
                                 formControlName="StartDate">
                                 <mat-label>Start Date *</mat-label>
                             <mat-datepicker-toggle matSuffix [for]="StartDate"></mat-datepicker-toggle>
                             <mat-datepicker #StartDate></mat-datepicker>
-                        </mat-form-field> -->
+                        </mat-form-field> 
         
                         <mat-form-field appearance="outline">
-                            <input matInput [matDatepicker]="EndDate" placeholder="Due date *" [min]="sDate"
+                            <input matInput [matDatepicker]="EndDate" placeholder="Due date *" [min]="mDate"
                                 formControlName="EndDate">
                                 <mat-label>Due date*</mat-label>
                             <mat-datepicker-toggle matSuffix [for]="EndDate"></mat-datepicker-toggle>

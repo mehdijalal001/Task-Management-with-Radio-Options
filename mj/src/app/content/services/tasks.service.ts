@@ -22,6 +22,9 @@ export class TasksService {
   getAllTasks(urn: string) {
     return this.http.get(this.baseurl + urn);
   }
+  getAllMyPendingTasks(urn: string) {
+    return this.http.get(this.baseurl + urn);
+  }
   getAllTasksByCategoryID(categoryID:number,DueDate,urn: string) {
     return this.http.get(this.baseurl + urn +categoryID+'/'+DueDate);
   }

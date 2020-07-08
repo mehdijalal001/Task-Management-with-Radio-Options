@@ -328,6 +328,32 @@ export class TasksRepo implements ITasks {
 
     return modelToArray;
   }
+  public async getAllMyPendingTasks(req:any,res:any,next:any): Promise<any> {
+
+    let modelToArray: TasksModel[] = [];
+    let provider = new SQLDBProvider();
+    let UserID = 1007;
+    let inputParameters = [
+      { name: 'UserId', dataType: TYPES.Int, value: UserID }
+    ];
+    let CustomQuery = `SELECT ts.*, ct.Name AS CategoryName
+    FROM MJ.Tasks AS ts
+    LEFT JOIN MJ.Lookup_Category AS ct ON ts.CategoryID = ct.ID
+    WHERE ts.UserID = @UserID AND ts.Status!=1
+    ORDER BY ts.TaskID DESC`;
+    await provider
+      .executeQuery(CustomQuery,inputParameters)
+      .then(results => {
+        if (results) {
+            modelToArray = TasksModel.MapDBToArray(results);
+        }
+      })
+      .catch(err => {
+        return LogErrors.logErrors(err);
+      });
+
+    return modelToArray;
+  }
 
   public async getCurrentTasks(req:any,res:any,next:any): Promise<any> {}
   public async getCompletedTasks(req:any,res:any,next:any): Promise<any> {}
@@ -396,7 +422,7 @@ export class TasksRepo implements ITasks {
     let ModifiedBy = 'Mehdi Jalal';
     let CreatedDate = new Date();
     let ModifiedDate = new Date();
-    //let StartDate = new Date(DataFormatter.formatDate(body.StartDate));
+    let StartDate = new Date(DataFormatter.formatDate(body.StartDate));
     let EndDate = new Date(DataFormatter.formatDate(body.EndDate));
 
     let provider = new SQLDBProvider();
@@ -404,7 +430,7 @@ export class TasksRepo implements ITasks {
     let inputParameters = [
       { name: 'TaskName', dataType: TYPES.VarChar, value: body.TaskName },
       { name: 'CategoryID', dataType: TYPES.VarChar, value: body.CategoryID },
-      //{ name: 'StartDate', dataType: TYPES.DateTime, value: StartDate },
+      { name: 'StartDate', dataType: TYPES.DateTime, value: StartDate },
       { name: 'EndDate', dataType: TYPES.DateTime, value: EndDate },
       { name: 'Description', dataType: TYPES.VarChar, value: body.Description },
       { name: 'CreatedDate', dataType: TYPES.DateTime, value: CreatedDate },
@@ -415,9 +441,9 @@ export class TasksRepo implements ITasks {
 
     ];
     let CustomQuery = `INSERT INTO MJ.Tasks
-    (TaskName, CategoryID, EndDate, Description, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy, UserID)
+    (TaskName, CategoryID, StartDate, EndDate, Description, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy, UserID)
      VALUES 
-    (@TaskName, @CategoryID, @EndDate, @Description, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy, @UserID); SELECT @@IDENTITY AS id`;
+    (@TaskName, @CategoryID, @StartDate, @EndDate, @Description, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy, @UserID); SELECT @@IDENTITY AS id`;
 
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
        LogErrors.logErrors(err);
@@ -440,19 +466,19 @@ export class TasksRepo implements ITasks {
     let ModifiedBy = 'Mehdi Jalal';
     //let ModifiedBy = req.authInfo.name;
     let ModifiedDate = new Date();
-    //let StartDate = new Date(DataFormatter.formatDate(body.StartDate));
+    let StartDate = new Date(DataFormatter.formatDate(body.StartDate));
     let EndDate = new Date(DataFormatter.formatDate(body.EndDate));
 
     let provider = new SQLDBProvider();
 
     let inputParameters = [
       { name: 'TaskID', dataType: TYPES.Int, value: body.TaskID },
+      { name: 'Status', dataType: TYPES.Int, value: 0 },
       { name: 'TaskName', dataType: TYPES.VarChar, value: body.TaskName },
       { name: 'CategoryID', dataType: TYPES.VarChar, value: body.CategoryID },
-      //{ name: 'StartDate', dataType: TYPES.DateTime, value: StartDate },
+      { name: 'StartDate', dataType: TYPES.DateTime, value: StartDate },
       { name: 'EndDate', dataType: TYPES.DateTime, value: EndDate },
       { name: 'Description', dataType: TYPES.VarChar, value: body.Description },
-      { name: 'Status', dataType: TYPES.VarChar, value: body.Status },
       { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
       { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy },
       { name: 'UserID', dataType: TYPES.VarChar, value: UserID }
@@ -462,6 +488,7 @@ export class TasksRepo implements ITasks {
     let CustomQuery = `UPDATE MJ.Tasks
     SET TaskName = @TaskName,
         CategoryID = @CategoryID,
+        StartDate = @StartDate,
         EndDate = @EndDate, 
         Description = @Description, 
         Status = @Status, 

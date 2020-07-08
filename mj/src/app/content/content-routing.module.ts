@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
+import { TaskscalendarviewComponent } from './components/tasks/taskscalendarview/taskscalendarview.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,12 @@ const routes: Routes = [
           },
           {
             path:'addtask',component:TasksformComponent
+          },
+          {
+            path:'calendar',component:TaskscalendarviewComponent
+          },
+          {
+            path:'calendar/updated',component:TaskscalendarviewComponent
           },
           {
             path:'addtask/:taskid',component:TasksformComponent
