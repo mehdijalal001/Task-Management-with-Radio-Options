@@ -70,6 +70,14 @@ export class AppComponent {
         isPanelParent: false
       },
       {
+        index: 0,
+        label: 'Calendarpc',
+        link: 'tasks/alltasks/calendarpc',
+        iconName: 'calendar_today',
+        isPanelHiddenParent: false,
+        isPanelParent: false
+      },
+      {
         index: 1,
         label: 'Admin Panel',
         link: './admin-panel',

@@ -6,6 +6,7 @@ import { DashboardsComponent } from './components/dashboards/dashboards.componen
 import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
 import { TaskscalendarviewComponent } from './components/tasks/taskscalendarview/taskscalendarview.component';
+import { TaskscalendarviewpcComponent } from './components/tasks/taskscalendarviewpc/taskscalendarviewpc.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,9 @@ const routes: Routes = [
           },
           {
             path:'calendar',component:TaskscalendarviewComponent
+          },
+          {
+            path:'calendarpc',component:TaskscalendarviewpcComponent
           },
           {
             path:'calendar/updated',component:TaskscalendarviewComponent

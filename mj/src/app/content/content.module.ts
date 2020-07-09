@@ -45,6 +45,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { TaskspopupviewComponent } from './components/tasks/taskspopupview/taskspopupview.component';
+import { TaskscalendarviewpcComponent } from './components/tasks/taskscalendarviewpc/taskscalendarviewpc.component';
+import { TaskspopupviewpcComponent } from './components/tasks/taskspopupviewpc/taskspopupviewpc.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { TaskspopupviewComponent } from './components/tasks/taskspopupview/tasks
     TasksformComponent,
     TaskscalendarviewComponent,
     TaskspopupviewComponent,
+    TaskscalendarviewpcComponent,
+    TaskspopupviewpcComponent,
   ],
   imports: [
     CommonModule,
@@ -100,7 +104,8 @@ import { TaskspopupviewComponent } from './components/tasks/taskspopupview/tasks
     MatFormFieldModule
   ],
   entryComponents:[
-    TaskspopupviewComponent
+    TaskspopupviewComponent,
+    TaskspopupviewpcComponent
   ]
 })
 export class ContentModule { }

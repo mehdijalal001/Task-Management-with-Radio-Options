@@ -1,6 +1,6 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Component, OnInit, Inject,SecurityContext } from '@angular/core';
-
+import { Component, OnInit, Inject,SecurityContext} from '@angular/core';
+import {TaskscalendarviewpcComponent} from '../taskscalendarviewpc/taskscalendarviewpc.component';
 import { DialogService } from '../../../../shared/services/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ITasks } from '../../../models/tasks.model';
@@ -15,14 +15,14 @@ import { ActivatedRoute,Router } from '@angular/router';
 export class TasksData {
   constructor(public dynamicdata: string, public id: number, public action: string, public text: string, public type: string) {}
 }
-
 @Component({
-  selector: 'app-taskspopupview',
-  templateUrl: './taskspopupview.component.html',
-  styleUrls: ['./taskspopupview.component.scss']
+  selector: 'app-taskspopupviewpc',
+  templateUrl: './taskspopupviewpc.component.html',
+  styleUrls: ['./taskspopupviewpc.component.scss'],
+  //template:`<app-taskscalendarviewpc #component1></app-taskscalendarviewpc>`
 })
-export class TaskspopupviewComponent implements OnInit {
-
+export class TaskspopupviewpcComponent implements OnInit {
+  
   action;
   close;
   taskId: number;
@@ -45,7 +45,7 @@ export class TaskspopupviewComponent implements OnInit {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private taskservice:TasksService,
-    public callRef: MatDialogRef<TaskspopupviewComponent>,
+    public callRef: MatDialogRef<TaskspopupviewpcComponent>,
     @Inject(MAT_DIALOG_DATA) public data: TasksData,
     private sanitizer?: DomSanitizer,
     ) { 
@@ -130,8 +130,10 @@ export class TaskspopupviewComponent implements OnInit {
     this.closeWindow();
     this._router.navigate(['./tasks/alltasks/addtask/',taskId]);
   }
+
+  
   onConfirm(): void {
-    console.log('----Hi calling Tasks dialog----');
+    console.log('----hi you clickes----');
     this.callRef.close(true);
   }
 

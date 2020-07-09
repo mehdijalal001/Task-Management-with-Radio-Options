@@ -9,9 +9,9 @@ import { TasksService } from '../../../services/tasks.service';
 import { DialogService } from '../../../../shared/services/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 //import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
-import { TasksData, TaskspopupviewComponent } from '../taskspopupview/taskspopupview.component';
-import {TasksdialogService} from '../../../services/tasksdialog.service';
+import { TasksData, TaskspopupviewpcComponent } from '../taskspopupviewpc/taskspopupviewpc.component';
 
+import {TasksdialogService} from '../../../services/tasksdialog.service';
 const colors: any = {
   red: {
     primary: '#ad2121',
@@ -28,12 +28,12 @@ const colors: any = {
 }; 
 
 @Component({
-  selector: 'app-taskscalendarview',
-  templateUrl: './taskscalendarview.component.html',
-  styleUrls: ['./taskscalendarview.component.scss'],
+  selector: 'app-taskscalendarviewpc',
+  templateUrl: './taskscalendarviewpc.component.html',
+  styleUrls: ['./taskscalendarviewpc.component.scss'],
   providers: [DialogService,TasksdialogService]
 })
-export class TaskscalendarviewComponent implements OnInit {
+export class TaskscalendarviewpcComponent implements OnInit {
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
@@ -67,46 +67,7 @@ export class TaskscalendarviewComponent implements OnInit {
 
   refresh: Subject<any> = new Subject();
 
-  events: CalendarEvent[] = [
-    // {
-    //   start: subDays(startOfDay(new Date()), 1),
-    //   end: addDays(new Date(), 1),
-    //   title: 'A 3 day event',
-    //   color: colors.red,
-    //   actions: this.actions,
-    //   allDay: true,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true,
-    //   },
-    //   draggable: true,
-    // },
-    // {
-    //   start: startOfDay(new Date()),
-    //   title: 'An event with no end date',
-    //   color: colors.yellow,
-    //   actions: this.actions,
-    // },
-    // {
-    //   start: subDays(endOfMonth(new Date()), 3),
-    //   end: addDays(endOfMonth(new Date()), 3),
-    //   title: 'A long event that spans 2 months',
-    //   color: colors.blue,
-    //   allDay: true,
-    // },
-    // {
-    //   start: addHours(startOfDay(new Date()), 2),
-    //   end: addHours(new Date(), 2),
-    //   title: 'A draggable and resizable event',
-    //   color: colors.yellow,
-    //   actions: this.actions,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true,
-    //   },
-    //   draggable: true,
-    // },
-  ];
+  events: CalendarEvent[] = [];
 
   activeDayIsOpen: boolean = true;
 
@@ -120,7 +81,6 @@ export class TaskscalendarviewComponent implements OnInit {
   ngOnInit(){
     console.log('---------Hi call db-----');
     this.getAllmyTasks();
-    
   }
 
   getAllmyTasks(){
@@ -151,22 +111,14 @@ export class TaskscalendarviewComponent implements OnInit {
     );
   }
 
-  openPreview(action: string, event: CalendarEvent): void {
-    let id:number = Number(event.id);
-    const res = new TasksData('{data}', id, 'open', 'X', 'view');
-    const req = this.dialog.open(TaskspopupviewComponent, { data: res, panelClass: 'mj-preview-modal' });
-    req.afterClosed().subscribe(dataBox => {
-      if (dataBox) {
-        const data = dataBox;
-      }
-    });
-  }
-
-  openEventInDialog(action: string, event: CalendarEvent){
+  
+  setStatusToComplete(action: string, event: CalendarEvent){
     let id:number = Number(event.id);
     const result = this.taskDialogService.openTasksDialog('',id,'myaction','Are you sure','mytype');
     result.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
+        //this.deleteTaskById(TaskID);
+        console.log('---------h--------dialog-----');
         this.markAsComplete(id);
       }
     });
@@ -204,6 +156,18 @@ export class TaskscalendarviewComponent implements OnInit {
         }
       );
     }
+  }
+
+
+  openPreview(action: string, event: CalendarEvent): void {
+    let id:number = Number(event.id);
+    const res = new TasksData('{data}', id, 'open', 'X', 'view');
+    const req = this.dialog.open(TaskspopupviewpcComponent, { data: res, panelClass: 'mj-preview-modal' });
+    req.afterClosed().subscribe(dataBox => {
+      if (dataBox) {
+        const data = dataBox;
+      }
+    });
   }
 
   //---------Calendar------------------------//
