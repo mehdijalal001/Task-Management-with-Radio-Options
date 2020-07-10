@@ -64,19 +64,35 @@ export class AppComponent {
       {
         index: 0,
         label: 'Calendar',
-        link: 'tasks/alltasks/calendar',
+        link: 'tasks/calendar',
         iconName: 'calendar_today',
         isPanelHiddenParent: false,
         isPanelParent: false
       },
+      // {
+      //   index: 0,
+      //   label: 'Calendar',
+      //   link: 'tasks/alltasks/calendar',
+      //   iconName: 'calendar_today',
+      //   isPanelHiddenParent: false,
+      //   isPanelParent: false
+      // },
       {
         index: 0,
-        label: 'Calendarpc',
-        link: 'tasks/alltasks/calendarpc',
-        iconName: 'calendar_today',
+        label: 'All Tasks',
+        link: 'tasks/alltasks',
+        iconName: 'list',
         isPanelHiddenParent: false,
         isPanelParent: false
       },
+      // {
+      //   index: 0,
+      //   label: 'Calendarpc',
+      //   link: 'tasks/alltasks/calendarpc',
+      //   iconName: 'calendar_today',
+      //   isPanelHiddenParent: false,
+      //   isPanelParent: false
+      // },
       {
         index: 1,
         label: 'Admin Panel',
@@ -99,34 +115,34 @@ export class AppComponent {
           }
         ]
       },
-      {
-        index: 1,
-        label: 'Tasks',
-        link: './tasks',
-        iconName: 'autorenew',
-        isPanelHiddenParent:true,
-        isPanelParent:true,
-        children:[
-          {
-            index:0,
-            label: 'Tasks',
-            link: '/tasks/alltasks',
-            iconName: 'customer'
-          },
-          {
-            index:0,
-            label: 'Office Tasks',
-            link: '/tasks/officetasks',
-            iconName: 'customer'
-          },
-          {
-            index:0,
-            label: 'Home Tasks',
-            link: '/tasks/hometasks',
-            iconName: 'home'
-          }
-        ]
-      }
+      // {
+      //   index: 1,
+      //   label: 'Tasks',
+      //   link: './tasks',
+      //   iconName: 'autorenew',
+      //   isPanelHiddenParent:true,
+      //   isPanelParent:true,
+      //   children:[
+      //     {
+      //       index:0,
+      //       label: 'Tasks',
+      //       link: '/tasks/alltasks',
+      //       iconName: 'customer'
+      //     },
+      //     {
+      //       index:0,
+      //       label: 'Office Tasks',
+      //       link: '/tasks/officetasks',
+      //       iconName: 'customer'
+      //     },
+      //     {
+      //       index:0,
+      //       label: 'Home Tasks',
+      //       link: '/tasks/hometasks',
+      //       iconName: 'home'
+      //     }
+      //   ]
+      // }
     ]
 
   }

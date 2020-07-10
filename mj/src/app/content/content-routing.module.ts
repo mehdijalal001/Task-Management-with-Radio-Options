@@ -2,12 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
 import { TaskscalendarviewComponent } from './components/tasks/taskscalendarview/taskscalendarview.component';
-import { TaskscalendarviewpcComponent } from './components/tasks/taskscalendarviewpc/taskscalendarviewpc.component';
-
 
 const routes: Routes = [
   {
@@ -21,15 +18,6 @@ const routes: Routes = [
           },
           {
             path:'addtask',component:TasksformComponent
-          },
-          {
-            path:'calendar',component:TaskscalendarviewComponent
-          },
-          {
-            path:'calendarpc',component:TaskscalendarviewpcComponent
-          },
-          {
-            path:'calendar/updated',component:TaskscalendarviewComponent
           },
           {
             path:'addtask/:taskid',component:TasksformComponent
@@ -64,17 +52,11 @@ const routes: Routes = [
         ]
       },
       {
-        path:'officetasks',
+        path:'calendar',
         children:[
-          // {
-          //   path:'',component:OfficetasksComponent
-          // },
-          // {
-          //   path:'addtask',component:OfficetaskformComponent
-          // },
-          // {
-          //   path:'addtask/:officetaskid',component:OfficetaskformComponent
-          // }
+          {
+            path:'',component:TaskscalendarviewComponent
+          },
         ]
       },
       {
