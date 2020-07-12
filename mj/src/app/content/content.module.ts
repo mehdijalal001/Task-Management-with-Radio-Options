@@ -21,6 +21,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatListModule} from '@angular/material/list';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatRadioModule} from '@angular/material/radio';
 
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -39,13 +40,16 @@ import { TasksComponent } from './components/tasks/tasks.component';
 import { TasksformComponent } from './components/tasks/tasksform/tasksform.component';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { TaskscalendarviewComponent } from './components/tasks/taskscalendarview/taskscalendarview.component';
+import { TaskspopupviewComponent } from './components/tasks/taskspopupview/taskspopupview.component';
+
 //-------for calendar module-------------------//
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlatpickrModule } from 'angularx-flatpickr';
-import { TaskspopupviewComponent } from './components/tasks/taskspopupview/taskspopupview.component';
-
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { TasksnewformComponent } from './components/tasks/tasksnewform/tasksnewform.component';
+import {MomentPipe} from './shared/pipes/moment-pipes';
 @NgModule({
   declarations: [
     AdminComponent, 
@@ -56,6 +60,8 @@ import { TaskspopupviewComponent } from './components/tasks/taskspopupview/tasks
     TasksformComponent,
     TaskscalendarviewComponent,
     TaskspopupviewComponent,
+    TasksnewformComponent,
+    MomentPipe,
   ],
   imports: [
     CommonModule,
@@ -80,13 +86,14 @@ import { TaskspopupviewComponent } from './components/tasks/taskspopupview/tasks
     MatSelectModule,
     MatBadgeModule,
     MatAutocompleteModule,
+    MatRadioModule,
     QuillModule.forRoot(),
     FlexLayoutModule,
     ChartsModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     NgbModalModule,
     FlatpickrModule.forRoot(),
-
+    NgxMaterialTimepickerModule
   ],
   exports:[
     MatGridListModule,

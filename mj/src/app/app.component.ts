@@ -47,6 +47,14 @@ export class AppComponent {
     this.navLinks = [
       {
         index: 0,
+        label: 'Add New',
+        link: 'tasks/alltasks/addnew',
+        iconName: 'playlist_add',
+        isPanelHiddenParent: false,
+        isPanelParent: false
+      },
+      {
+        index: 0,
         label: 'Add Task',
         link: 'tasks/alltasks/addtask',
         iconName: 'playlist_add',

@@ -12,6 +12,8 @@ import { TasksService } from './../../../services/tasks.service';
 import { ITasks } from './../../../models/tasks.model';
 import {ICategory} from '../../../../shared/models/lookup.model';
 import { LookupsService } from '../../../../shared/services/lookups.service';
+import { toDate } from 'date-fns';
+import { formatDate } from '@angular/common';
 
 
 
@@ -27,11 +29,10 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'YYYY'
   }
 };
-
 @Component({
-  selector: 'app-tasksform',
-  templateUrl: './tasksform.component.html',
-  styleUrls: ['./tasksform.component.scss'],
+  selector: 'app-tasksnewform',
+  templateUrl: './tasksnewform.component.html',
+  styleUrls: ['./tasksnewform.component.scss'],
   providers: [
     {
       provide: DateAdapter,
@@ -43,8 +44,12 @@ export const MY_FORMATS = {
     DialogService
   ]
 })
-export class TasksformComponent implements OnInit {
+
+export class TasksnewformComponent implements OnInit {
   private exportTime = { hour: 7, minute: 15, meriden: "PM", format: 12 };
+
+  favoriteSeason: string;
+  seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn'];
 
   taskForm: FormGroup;
   id = 0;
@@ -58,7 +63,8 @@ export class TasksformComponent implements OnInit {
   sDate:Date;
   mDate:Date;
   category;
-
+  schedule;
+  isScheduleSelected:boolean=false;
    //-------for display different views-----//
    duedate;
    categoryID:number;
@@ -88,6 +94,7 @@ export class TasksformComponent implements OnInit {
     this.taskForm = this._formBuilder.group({
       TaskID: [0, null],
       TaskName: ['', Validators.required],
+      Schedule: ['', null],
       StartDate: ['', Validators.required],
       EndDate: ['', Validators.required],
       Description: ['', null],
@@ -98,6 +105,7 @@ export class TasksformComponent implements OnInit {
      this.taskForm.valueChanges.subscribe(res=>{
        this.mDate = new Date(res.StartDate);
      });
+
     //----------for edit-----------------//
     this._activatedRoute.paramMap.subscribe(params => {
       console.log(params);
@@ -120,12 +128,21 @@ export class TasksformComponent implements OnInit {
         this.taskForm.patchValue({
           CategoryID:this.categoryID
         });
+      }else{
+        this.taskForm.patchValue({
+          CategoryID:1
+        });
       }
     });
 
     let lookupTablename: string;
     console.log('------'+this.categoryID);
-    //this.selected = this.categoryID;
+    if(this.categoryID==0){
+      console.log('---JONNI--------');
+      this.selected = 1;
+    }else{
+      this.selected = this.categoryID;
+    }
     this.lookupService.getLookupByTableAlias((lookupTablename = 'category')).subscribe(
       (icategory: any) => {
         this.category = icategory;
@@ -140,8 +157,35 @@ export class TasksformComponent implements OnInit {
         });
       }
     );
+
+    this.lookupService.getLookupByTableAlias((lookupTablename = 'schedule')).subscribe(
+      (ischedule: any) => {
+        this.schedule = ischedule;
+        console.log(ischedule);
+      },
+      error => {
+        const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try Again');
+        res.afterClosed().subscribe(dialogResult => {
+          if (dialogResult) {
+            this.callNext(4000);
+          }
+        });
+      }
+    );
   }
 
+  radioButtonChanged($event){
+    let radioValue = event.target['value'];
+    if(radioValue==3){
+      this.isScheduleSelected = true;
+      this.taskForm.controls['StartDate'].enable();
+      this.taskForm.controls['EndDate'].enable();
+    }else{
+      this.isScheduleSelected = false;
+      this.taskForm.controls['StartDate'].disable();
+      this.taskForm.controls['EndDate'].disable();
+    }
+  }
   getTaskById(id) {
     this.taskService.getTaskById(id,'/tasks/').subscribe(
       (thetask: ITasks) => this.editTask(thetask),
@@ -183,6 +227,29 @@ export class TasksformComponent implements OnInit {
   taskAction(){
     console.log('----action ----');
     const result = this.taskForm.value;
+    let scheduleType = result.Schedule;
+    if(scheduleType==1){
+      let datenow = _moment().format('YYYY-MM-DD');
+      console.log(datenow);
+      let _today = {'StartDate':datenow, 'EndDate': datenow}
+      Object.assign(result,_today);
+
+    }else if(scheduleType==2){
+
+      let _theTomorrow = _moment().add(1,'d').format('YYYY-MM-DD');
+      //console.log(_theTomorrow);
+      let _tommorrow = {'StartDate':_theTomorrow, 'EndDate': _theTomorrow}
+      Object.assign(result,_tommorrow);
+
+    }else{
+      let postedStartDate = _moment(result.StartDate).format('YYYY-MM-DD');
+      let postedEndDate = _moment(result.EndDate).format('YYYY-MM-DD');
+      //console.log(postedStartDate);
+      //console.log(postedEndDate);
+      let _newStartandEnddate = {'StartDate':postedStartDate, 'EndDate':postedEndDate}
+      Object.assign(result,_newStartandEnddate)
+    }
+    //console.log(scheduleType);
     console.log(result);
     if(result.TaskID>0){
       console.log('-----Update all task-----');

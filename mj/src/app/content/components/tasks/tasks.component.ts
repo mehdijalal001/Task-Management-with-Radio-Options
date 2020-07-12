@@ -126,7 +126,7 @@ export class TasksComponent implements OnInit {
     console.log('-----------got here iss--------');
     this.taskservice.getAllTasks('/tasks/').subscribe(
       (modelData: ITasks[]) => {
-        //console.log(modelData);
+        console.log(modelData);
         this.tasksList = modelData;
         this.ELEMENT_DATA = modelData;
         this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);

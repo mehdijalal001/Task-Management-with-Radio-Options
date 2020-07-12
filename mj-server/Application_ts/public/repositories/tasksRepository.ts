@@ -422,9 +422,16 @@ export class TasksRepo implements ITasks {
     let ModifiedBy = 'Mehdi Jalal';
     let CreatedDate = new Date();
     let ModifiedDate = new Date();
-    let StartDate = new Date(DataFormatter.formatDate(body.StartDate));
-    let EndDate = new Date(DataFormatter.formatDate(body.EndDate));
 
+    //let StartDate = new Date(DataFormatter.formatDate(body.StartDate));
+    //let EndDate = new Date(DataFormatter.formatDate(body.EndDate));
+
+    console.log(body.StartDate);
+    console.log(body.EndDate);
+    let StartDate = new Date(body.StartDate);
+    let EndDate = new Date(body.EndDate);
+    console.log(StartDate);
+    console.log(EndDate);
     let provider = new SQLDBProvider();
 
     let inputParameters = [

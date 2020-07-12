@@ -44,6 +44,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { FlatpickrModule } from 'angularx-flatpickr';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
 
 const mats=[
@@ -101,6 +102,7 @@ const mats=[
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     NgbModalModule,
     FlatpickrModule.forRoot(),
+    NgxMaterialTimepickerModule
   ],
   exports:[mats,HttpClientModule],
   providers: [
