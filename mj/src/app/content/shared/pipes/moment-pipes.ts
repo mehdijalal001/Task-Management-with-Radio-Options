@@ -1,11 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 
-@Pipe({ name: 'dateFormat' })
+@Pipe({ name: 'mjdateFormat' })
 export class MomentPipe implements PipeTransform {
-    transform(value: Date | moment.Moment, dateFormat: string): any {
-        let newDate = moment(value).startOf('date');
-        console.log(newDate);
-        return moment(value).format(dateFormat);
+    transform(value: any | moment.Moment, mjdateFormat: string): any {
+        //---Note I use the slice to remove the timezone -------//
+        let newDate = moment(value.slice(0,-14)).format(mjdateFormat);
+        //console.log(newDate);
+        return newDate;
+        //return moment(value).format(mjdateFormat);
     }
 }

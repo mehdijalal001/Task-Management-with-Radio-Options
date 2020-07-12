@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 //-----------date formater----------------------//
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MomentDateAdapter,MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS  } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 //---------dialog------------------/
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute,Router } from '@angular/router';
-import * as _moment from 'moment';
+//import * as _moment from 'moment';
+import * as _moment from 'moment-timezone';
 import { DialogService } from './../../../../shared/services/dialog.service';
 import { TasksService } from './../../../services/tasks.service';
 import { ITasks } from './../../../models/tasks.model';
@@ -37,19 +38,16 @@ export const MY_FORMATS = {
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE]
+      //deps: [MAT_DATE_LOCALE]
     },
-
+    //---Note: below proider will set utc to 2020-07-14T00:00:00.000Z so I used for all this format-----//
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     DialogService
   ]
 })
 
 export class TasksnewformComponent implements OnInit {
-  private exportTime = { hour: 7, minute: 15, meriden: "PM", format: 12 };
-
-  favoriteSeason: string;
-  seasons: string[] = ['Winter', 'Spring', 'Summer', 'Autumn'];
 
   taskForm: FormGroup;
   id = 0;
@@ -240,15 +238,15 @@ export class TasksnewformComponent implements OnInit {
       //console.log(_theTomorrow);
       let _tommorrow = {'StartDate':_theTomorrow, 'EndDate': _theTomorrow}
       Object.assign(result,_tommorrow);
-
-    }else{
-      let postedStartDate = _moment(result.StartDate).format('YYYY-MM-DD');
-      let postedEndDate = _moment(result.EndDate).format('YYYY-MM-DD');
-      //console.log(postedStartDate);
-      //console.log(postedEndDate);
-      let _newStartandEnddate = {'StartDate':postedStartDate, 'EndDate':postedEndDate}
-      Object.assign(result,_newStartandEnddate)
     }
+    // }else{
+    //   let postedStartDate = _moment(result.StartDate);
+    //   let postedEndDate = _moment(result.EndDate);
+    //   //console.log(postedStartDate);
+    //   //console.log(postedEndDate);
+    //   let _newStartandEnddate = {'StartDate':postedStartDate, 'EndDate':postedEndDate}
+    //   Object.assign(result,_newStartandEnddate)
+    // }
     //console.log(scheduleType);
     console.log(result);
     if(result.TaskID>0){

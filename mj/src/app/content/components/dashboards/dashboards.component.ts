@@ -8,6 +8,7 @@ import { ITasks } from './../../models/tasks.model';
 import { DashboardService } from './../../services/dashboard.service';
 import { formatDate } from '@angular/common';
 import { Router,ActivatedRoute} from '@angular/router';
+import * as _moment from 'moment-timezone';
 
 //---for charts------------------//
 import { ChartType, ChartOptions } from 'chart.js';
@@ -78,27 +79,18 @@ export class DashboardsComponent implements OnInit {
 
   ngOnInit(): void {
     
-    this.currentDate = formatDate(new Date(),'yyyy-MM-dd','en_US');
-    this.tomorrow = new Date();
-    this.tomorrow.setDate(this.tomorrow.getDate()+1);
-    this.tomorrow = formatDate(this.tomorrow, 'yyyy-MM-dd','en_US');
+    this.currentDate = _moment().format('YYYY-MM-DD');
+    this.tomorrow = _moment().add(1,'d').format('YYYY-MM-DD');
 
 
      //-----Next 7 days--------//
-    let todaysdate = new Date();
-    todaysdate.setDate(todaysdate.getDate()+7);
-    this.next7days = formatDate(todaysdate, 'yyyy-MM-dd','en_US');
+    this.next7days = _moment().add(7,'d').format('YYYY-MM-DD');
     //console.log(this.next7days);
 
-    let todaysdateforLastdays = new Date();
     //------Last  days----------//
-    todaysdateforLastdays.setDate(todaysdateforLastdays.getDate()-15);
-    this.lastdays = formatDate(todaysdateforLastdays, 'yyyy-MM-dd','en_US');
+    this.lastdays = _moment().add(-15,'d').format('YYYY-MM-DD');
     //------Next days--------//
-    let todaysdateforNextdays = new Date();
-    todaysdateforNextdays.setDate(todaysdateforNextdays.getDate()+15);
-    this.nextdays = formatDate(todaysdateforNextdays, 'yyyy-MM-dd','en_US');
-
+    this.nextdays = _moment().add(15,'d').format('YYYY-MM-DD');
 
     this.getMyTasksDueToday('/tasks/groupedtasksbyduedate/',this.currentDate);
     this.getMyTasksDueTomorrow('/tasks/groupedtasksbyduedate/',this.tomorrow);
@@ -219,7 +211,7 @@ export class DashboardsComponent implements OnInit {
       (modelData: ITasks[]) => {
         //console.log(modelData);
 
-        let TodayDate = formatDate(new Date(),'yyyy-MM-dd','en_US');
+        let TodayDate = _moment().format('YYYY-MM-DD');
  
         //let CompletedArr = [];
         //let NotCompletedArr = [];
@@ -234,8 +226,10 @@ export class DashboardsComponent implements OnInit {
           }else{
    
            
-            let _enddate = formatDate(item.EndDate,'yyyy-MM-dd','en_US');
-            if(_enddate<TodayDate){
+            let _enddate = item.EndDate;
+            let newEndDate = _moment(_enddate.slice(0,-14)).format('YYYY-MM-DD');
+            console.log(newEndDate);
+            if(newEndDate<TodayDate){
               //NotCompletedArr.push(item);
               ioverdue++;
             }else{

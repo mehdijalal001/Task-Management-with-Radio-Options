@@ -31,6 +31,7 @@
     "date-fns": "^2.14.0",
     "flatpickr": "4.6.3",
     "moment": "^2.26.0",
+    "moment-timezone": "^0.5.31",
     "ng2-charts": "^2.3.2",
     "ngx-material-timepicker": "^5.5.3",
     "ngx-quill": "^11.0.0",

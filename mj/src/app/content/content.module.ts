@@ -22,6 +22,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatListModule} from '@angular/material/list';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatRadioModule} from '@angular/material/radio';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -50,6 +51,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import { TasksnewformComponent } from './components/tasks/tasksnewform/tasksnewform.component';
 import {MomentPipe} from './shared/pipes/moment-pipes';
+
 @NgModule({
   declarations: [
     AdminComponent, 
@@ -93,7 +95,8 @@ import {MomentPipe} from './shared/pipes/moment-pipes';
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     NgbModalModule,
     FlatpickrModule.forRoot(),
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    MatNativeDateModule
   ],
   exports:[
     MatGridListModule,

@@ -7,6 +7,13 @@ import { Router } from './routes/router';
 import {LogErrors} from './public/common/logErrors.controller'
 import { ServerConstants } from './public/common/envConstants';
 var authMW = require ('./auth/auth-router');
+/*
+*-Note: I have added moment timezone and note used it yet
+*- this moment timezone needs to be explored more later
+*------
+*/
+var moment = require('moment-timezone');
+moment().tz("America/Los_Angeles").format();
 
 // This is the server's class.
 
