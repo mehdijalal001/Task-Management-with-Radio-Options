@@ -76,6 +76,7 @@ export class TasksnewformComponent implements OnInit {
   //CategoryID = new FormControl('', [Validators.required]);
   selected;
 
+
   constructor(
     private _formBuilder: FormBuilder,
     private _router:Router,
@@ -88,6 +89,7 @@ export class TasksnewformComponent implements OnInit {
     
   ngOnInit(): void {
   
+    
     this.sDate = new Date();
     this.taskForm = this._formBuilder.group({
       TaskID: [0, null],
