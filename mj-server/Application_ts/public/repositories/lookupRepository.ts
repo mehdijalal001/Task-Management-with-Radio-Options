@@ -12,7 +12,7 @@ export class LookupRepository implements ILookupRepository {
 
         console.log(tbl);
         var tablename = "";
-        var tableArray: string[] = ['status', 'category','schedule', 'country', 'province'];
+        var tableArray: string[] = ['status', 'category','schedule', 'time','remindertype', 'country', 'province'];
         if (tableArray.includes(tbl)) {
             switch (tbl) {
                 case "status":
@@ -23,6 +23,12 @@ export class LookupRepository implements ILookupRepository {
                     break;
                 case "schedule":
                     tablename = "MJ.Lookup_Schedule";
+                    break;
+                case "time":
+                    tablename = "MJ.Lookup_Time";
+                    break;
+                case "remindertype":
+                    tablename = "MJ.Lookup_ReminderType";
                     break;
                 case "country":
                     tablename = "MJ.Lookup_Countries";

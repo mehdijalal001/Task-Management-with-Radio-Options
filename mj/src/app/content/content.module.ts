@@ -23,13 +23,14 @@ import {MatListModule} from '@angular/material/list';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatRadioModule} from '@angular/material/radio';
 import { MatNativeDateModule } from '@angular/material/core';
-
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 
-import {MatTooltipModule} from '@angular/material/tooltip';
+
 import { QuillModule } from 'ngx-quill';
 import { ReplacePipe } from './shared/pipes/replace-pipes';
 //--------charts--------------//
@@ -96,7 +97,9 @@ import {MomentPipe} from './shared/pipes/moment-pipes';
     NgbModalModule,
     FlatpickrModule.forRoot(),
     NgxMaterialTimepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatExpansionModule,
+    MatTooltipModule,
   ],
   exports:[
     MatGridListModule,

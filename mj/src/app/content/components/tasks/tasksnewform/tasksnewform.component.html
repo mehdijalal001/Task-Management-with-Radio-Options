@@ -79,6 +79,98 @@
                 <mat-datepicker #EndDate></mat-datepicker>
               </mat-form-field>
             </div>
+
+            <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                  <div>
+                    <button type="button" (click)="AddTime();" *ngIf="!isTimeRequired" mat-button color="primary" aria-label="Add time">
+                      <mat-icon>more_time</mat-icon> Add time
+                    </button>
+                    <button type="button" (click)="removeTime();" *ngIf="isTimeRequired" mat-button color="accent" aria-label="Add time">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </div>
+                  <div>
+                     <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                      <div>
+                        <mat-form-field id="taskstarttime" appearance="outline" class="timefield" *ngIf="isTimeRequired">
+                          <input type="time" matInput placeholder="Start time " formControlName="TaskStartTime" required>
+                          <mat-label>Start Time</mat-label>
+                           <mat-error>Start time is required</mat-error> 
+                        </mat-form-field>
+                      </div>
+                      <div>
+                        <div style="margin-left: 2px;">
+                          <mat-form-field id="tasktime" appearance="outline" class="timefield" *ngIf="isTimeRequired">
+                            <input type="time" matInput placeholder="End time " formControlName="TaskEndTime" required>
+                            <mat-label>End Time</mat-label>
+                             <mat-error>End time is required</mat-error> 
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      
+                     </div>
+                  </div>
+                </div>
+                <div>
+                  &nbsp;
+                </div>
+            </div>
+
+             <div fxLayout="row wrap" fxLayoutAlign="space-between" >
+                <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                  <div>
+                    <button type="button" (click)="AddReminder();"  *ngIf="!isReminderRequired" mat-button color="primary" aria-label="Add time">
+                      <mat-icon>more_time</mat-icon> Add reminder
+                    </button>
+                    <button type="button" matTooltip="Remove reminder" matTooltipClass="mj-small-tooltip" (click)="removeReminder();" *ngIf="isReminderRequired" mat-button color="accent" aria-label="Remove reminder">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </div>
+                  <div fxLayout="row wrap" fxLayoutAlign="space-between">
+                    <div>
+                      <mat-form-field id="taskreminderdate" appearance="outline" class="reminderdatefield" *ngIf="isReminderRequired">
+                          <input matInput [matDatepicker]="TaskReminderDate" placeholder="Reminder date *" [min]="sDate"  [max]="mDateReminder" formControlName="TaskReminderDate">
+                            <mat-label>Reminder date *</mat-label>
+                            <mat-datepicker-toggle matSuffix [for]="TaskReminderDate"></mat-datepicker-toggle>
+                            <mat-datepicker #TaskReminderDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                      <div style="margin-left: 2px;">
+                        <mat-form-field id="taskremindertime" appearance="outline" class="timefield" *ngIf="isReminderRequired">
+                          <input type="time" matInput placeholder="Reminder time " formControlName="TaskReminderTime" required>
+                          <mat-label>Reminder Time</mat-label>
+                           <mat-error>Reminder time is required</mat-error> 
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>&nbsp;</div>
+            </div>
+            <div class="mj-task-description">
+              <mat-accordion>           
+                  <mat-expansion-panel (opened)="panelOpenState = true"
+                                       (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                       
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        Add details {{panelOpenState ? 'open' : 'closed'}}
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="row-foure">
+                      <div id="quill">
+                        <quill-editor [styles]="editorStyle" placeholder="Enter Description" 
+                            formControlName="Description" >
+                        </quill-editor>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+            </div>
             <!-- <div class="row-foure">
                       <div id="quill">
                         <quill-editor [styles]="editorStyle" placeholder="Enter Description" 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 //-----------date formater----------------------//
 import { MomentDateAdapter,MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS  } from '@angular/material-moment-adapter';
@@ -13,8 +13,10 @@ import { TasksService } from './../../../services/tasks.service';
 import { ITasks } from './../../../models/tasks.model';
 import {ICategory} from '../../../../shared/models/lookup.model';
 import { LookupsService } from '../../../../shared/services/lookups.service';
-import { toDate } from 'date-fns';
-import { formatDate } from '@angular/common';
+import { Subscription } from 'rxjs';
+//import { toDate } from 'date-fns';
+//import { formatDate } from '@angular/common';
+//import {TooltipPosition} from '@angular/material/tooltip';
 
 
 
@@ -60,9 +62,15 @@ export class TasksnewformComponent implements OnInit {
   };
   sDate:Date;
   mDate:Date;
+  mDateReminder:Date;
+  radioValue;
   category;
   schedule;
+  starttime;
   isScheduleSelected:boolean=false;
+  isTimeRequired:boolean=false;
+  enableReminderBtn:boolean=false;
+  isReminderRequired:boolean=false;
    //-------for display different views-----//
    duedate;
    categoryID:number;
@@ -76,6 +84,9 @@ export class TasksnewformComponent implements OnInit {
   //CategoryID = new FormControl('', [Validators.required]);
   selected;
 
+  panelOpenState = false;
+
+  private myformSubscribe:Subscription;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -84,7 +95,8 @@ export class TasksnewformComponent implements OnInit {
     public dialog: MatDialog,
     private dialogService: DialogService,
     private lookupService: LookupsService,
-    private taskService:TasksService
+    private taskService:TasksService,
+    private cdr: ChangeDetectorRef
     ) { }
     
   ngOnInit(): void {
@@ -99,13 +111,23 @@ export class TasksnewformComponent implements OnInit {
       EndDate: ['', Validators.required],
       Description: ['', null],
       Duration: ['',null],
-      CategoryID: [0,null]
+      CategoryID: [0,null],
+      TaskStartTime: ['',null],
+      TaskEndTime: ['',null],
+      ReminderTypeID: ['', null],
+      TaskReminderDate: ['',null],
+      TaskReminderTime: ['',null]
     });
 
-     this.taskForm.valueChanges.subscribe(res=>{
+    
+     this.myformSubscribe = this.taskForm.valueChanges.subscribe(res=>{
        this.mDate = new Date(res.StartDate);
      });
 
+    //  this.taskForm.controls['StartDate'].valueChanges.subscribe(res=>{
+    //    console.log('---The changes----');
+    //    this.mDate = new Date(res.StartDate);
+    //  })
     //----------for edit-----------------//
     this._activatedRoute.paramMap.subscribe(params => {
       console.log(params);
@@ -172,19 +194,102 @@ export class TasksnewformComponent implements OnInit {
         });
       }
     );
+
+    this.lookupService.getLookupByTableAlias((lookupTablename = 'time')).subscribe(
+      (istarttime: any) => {
+        this.starttime = istarttime;
+        console.log(istarttime);
+      },
+      error => {
+        const res = this.dialogService.ErrorDialog('Server Error', 'Sorry, the system is unavailable at the moment.', 'Close', 'Try Again');
+        res.afterClosed().subscribe(dialogResult => {
+          if (dialogResult) {
+            this.callNext(4000);
+          }
+        });
+      }
+    );
   }
 
+/*
+***Note: this is an important function if you remove it
+*** You will get error when you select add reminder
+*/
+  ngAfterViewChecked(){
+    //your code to update the model
+    //console.log('----detect change-xxx----');
+    this.cdr.detectChanges();
+  }
+
+  // ngDoCheck() {
+  //   this.cdr.markForCheck()
+  // }
   radioButtonChanged($event){
-    let radioValue = event.target['value'];
-    if(radioValue==3){
+    this.radioValue = event.target['value'];
+    this.taskForm.get('TaskReminderDate').reset();
+    //this.taskForm.controls['TaskReminderDate'].disable();
+    //this.taskForm.controls['TaskReminderTime'].disable();
+    this.isReminderRequired = false;
+    //this.enableReminderBtn = true;
+    
+    console.log(this.radioValue);
+    if(this.radioValue==3){
       this.isScheduleSelected = true;
       this.taskForm.controls['StartDate'].enable();
       this.taskForm.controls['EndDate'].enable();
+      
+      this.myformSubscribe = this.taskForm.valueChanges.subscribe(res=>{
+        this.mDate = new Date(res.StartDate);
+        this.mDateReminder = new Date(res.EndDate);
+      });
+ 
     }else{
+      
+      //this.myformSubscribe.unsubscribe();
+  
+        //this.mDateReminder = new Date();
+    
       this.isScheduleSelected = false;
       this.taskForm.controls['StartDate'].disable();
       this.taskForm.controls['EndDate'].disable();
     }
+  }
+
+  AddTime(){
+    this.isTimeRequired = true;
+    this.taskForm.controls['TaskStartTime'].enable();
+    this.taskForm.controls['TaskEndTime'].enable();
+  }
+  removeTime(){
+    this.isTimeRequired = false;
+    this.taskForm.controls['TaskStartTime'].disable();
+    this.taskForm.controls['TaskEndTime'].disable();
+  }
+  AddReminder(){
+    this.isReminderRequired = true;
+    this.taskForm.controls['TaskReminderDate'].enable();
+    this.taskForm.controls['TaskReminderTime'].enable();
+    console.log(this.radioValue);
+    if(this.radioValue==1){
+      this.taskForm.controls['TaskReminderDate'].reset();
+      let today = new Date();
+      this.mDateReminder = today;
+    }else if(this.radioValue==2){
+      this.taskForm.controls['TaskReminderDate'].reset();
+      let tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      console.log(tomorrow);
+
+      this.mDateReminder = tomorrow;
+      console.log(this.mDateReminder);
+    }else if(this.radioValue==3){
+      this.taskForm.controls['TaskReminderDate'].reset();
+    }
+  }
+  removeReminder(){
+    this.isReminderRequired = false;
+    this.taskForm.controls['TaskReminderDate'].disable();
+    this.taskForm.controls['TaskReminderTime'].disable();
   }
   getTaskById(id) {
     this.taskService.getTaskById(id,'/tasks/').subscribe(
@@ -350,6 +455,8 @@ export class TasksnewformComponent implements OnInit {
       } 
     });
   }
+
+
 
 
 }

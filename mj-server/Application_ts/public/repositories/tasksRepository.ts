@@ -428,10 +428,15 @@ export class TasksRepo implements ITasks {
 
     console.log(body.StartDate);
     console.log(body.EndDate);
+    console.log('------');
+    console.log(body.TaskReminderDate);
     let StartDate = new Date(body.StartDate);
     let EndDate = new Date(body.EndDate);
+    let TaskReminderDate = new Date(body.TaskReminderDate);
+   
     console.log(StartDate);
     console.log(EndDate);
+    console.log(TaskReminderDate);
     let provider = new SQLDBProvider();
 
     let inputParameters = [
@@ -444,13 +449,18 @@ export class TasksRepo implements ITasks {
       { name: 'ModifiedDate', dataType: TYPES.DateTime, value: ModifiedDate },
       { name: 'CreatedBy', dataType: TYPES.VarChar, value: CreatedBy },
       { name: 'ModifiedBy', dataType: TYPES.VarChar, value: ModifiedBy },
+      { name: 'TaskStartTime', dataType: TYPES.VarChar, value: body.TaskStartTime },
+      { name: 'TaskEndTime', dataType: TYPES.VarChar, value: body.TaskEndTime },
+      { name: 'TaskReminderDate', dataType: TYPES.DateTime, value: TaskReminderDate },
+      { name: 'TaskReminderTime', dataType: TYPES.VarChar, value: body.TaskReminderTime },
       { name: 'UserID', dataType: TYPES.VarChar, value: UserID }
+
 
     ];
     let CustomQuery = `INSERT INTO MJ.Tasks
-    (TaskName, CategoryID, StartDate, EndDate, Description, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy, UserID)
+    (TaskName, CategoryID, StartDate, EndDate, Description, CreatedDate, ModifiedDate, CreatedBy, ModifiedBy, TaskStartTime, TaskEndTime, TaskReminderDate, TaskReminderTime, UserID)
      VALUES 
-    (@TaskName, @CategoryID, @StartDate, @EndDate, @Description, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy, @UserID); SELECT @@IDENTITY AS id`;
+    (@TaskName, @CategoryID, @StartDate, @EndDate, @Description, @CreatedDate, @ModifiedDate, @CreatedBy, @ModifiedBy, @TaskStartTime, @TaskEndTime, @TaskReminderDate, @TaskReminderTime, @UserID); SELECT @@IDENTITY AS id`;
 
     const result = await provider.executeQuery(CustomQuery, inputParameters).catch(err => {
        LogErrors.logErrors(err);
